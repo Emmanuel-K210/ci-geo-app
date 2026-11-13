@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>CI-Geo · défi du jour</title>
+    <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="scene.css" />
+    <script src="demo.js"></script>
+    <script src="scene.js"></script>
+  </head>
+  <body
+    style="
+      background:
+        radial-gradient(
+          circle at 85% 8%,
+          rgba(224, 104, 10, 0.2),
+          transparent 45%
+        ),
+        var(--paper);
+    "
+  >
+    <div class="bar">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+
+    <div data-in="0.1" data-out="19.4" data-fx="left" class="caption">
+      Le défi du jour
+      <small>5 villes à placer sur la carte, sans les noms</small>
+    </div>
+    <div data-in="19.4" data-out="21.4" data-fx="left" class="caption">
+      Et toi, tu fais combien&nbsp;?
+      <small>Le même défi pour tout le monde, chaque jour</small>
+    </div>
+
+    <div data-in="0.4" data-out="21.4" data-fx="up" class="layer">
+      <div
+        class="phone"
+        style="left: 220px; top: 430px; --w: 640px; --s: 1.5426"
+      >
+        <div class="screen">
+          <iframe id="app" src="/#/jeux/du-jour"></iframe>
+        </div>
+      </div>
+    </div>
+    <div id="tap" class="tap"></div>
+
+    <div data-in="21.4" data-fadein="0.3" class="layer dark">
+      <div class="bar">
+        <div class="flag"><span></span><span></span><span></span></div>
+      </div>
+      <div class="layer center">
+        <div
+          data-in="21.6"
+          data-fx="zoom"
+          class="logo"
+          style="font-size: 110px"
+        >
+          <svg viewBox="0 0 34 34" aria-hidden="true">
+            <path
+              d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z"
+              fill="#e0680a"
+            />
+            <circle cx="17" cy="13.3" r="4" fill="#fff" />
+          </svg>
+          CI-Geo
+        </div>
+        <span data-in="22" data-fx="pop" class="badge"
+          >Relève le défi du jour</span
+        >
+        <p data-in="22.4" data-fx="up" class="url">ci-geo-app.vercel.app</p>
+        <p
+          data-in="22.7"
+          data-fx="fade"
+          style="margin: 0; font-size: 38px; color: #9db0a5"
+        >
+          Gratuit · sans inscription
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Same projection as the app (src/geo/projection.ts).
+      const B = { west: -8.75, east: -2.35, south: 4.15, north: 10.85 }
+      const KX = Math.cos((7.5 * Math.PI) / 180)
+      const MAP_W = 560
+      const MAP_H = Math.round(
+        (MAP_W * (B.north - B.south)) / ((B.east - B.west) * KX)
+      )
+      const px = (lon) => ((lon - B.west) / (B.east - B.west)) * MAP_W
+      const py = (lat) => ((B.north - lat) / (B.north - B.south)) * MAP_H
+
+      let villes = []
+      fetch("ci-geo.json")
+        .then((r) => r.json())
+        .then((data) => (villes = data.villes))
+
+      const frame = () => document.getElementById("app")
+      const doc = () => frame().contentDocument
+      const SCALE = 1.5426
+
+      /** Iframe client point → point on the video. */
+      function onVideo(x, y) {
+        const box = frame().getBoundingClientRect()
+        return { x: box.left + x * SCALE, y: box.top + y * SCALE }
+      }
+
+      // The finger: shown at a point for half a second.
+      let tapAt = -10
+      let tapPoint = { x: 0, y: 0 }
+      function tap(point, t) {
+        tapPoint = point
+        tapAt = t
+      }
+      onFrame.push((t) => {
+        const el = document.getElementById("tap")
+        const k = (t - tapAt) / 0.5
+        el.style.opacity = k >= 0 && k <= 1 ? String(1 - k * 0.7) : "0"
+        el.style.transform = `scale(${1 + Math.max(0, k) * 0.5})`
+        el.style.left = `${tapPoint.x}px`
+        el.style.top = `${tapPoint.y}px`
+      })
+
+      function mapPoint() {
+        const question = doc().querySelector("main h2")?.textContent ?? ""
+        const ville = villes.find((v) => question.includes(v.nom))
+        const svg = doc().querySelector("main svg[role=img]")
+        if (!ville || !svg) return null
+        return { ville, svg }
+      }
+
+      // Slightly off, like a real player: from about 4 to 45 km away.
+      const MISS = [
+        [0.05, 0.04],
+        [-0.12, 0.1],
+        [0.18, -0.14],
+        [0.03, -0.02],
+        [-0.32, 0.24],
+      ]
+
+      function button(text) {
+        return [...doc().querySelectorAll("main button")].find((b) =>
+          b.textContent.includes(text)
+        )
+      }
+
+      function pressAt(t, text) {
+        cue(t, () => {
+          const b = button(text)
+          if (!b) return
+          const r = b.getBoundingClientRect()
+          tap(onVideo(r.left + r.width / 2, r.top + r.height / 2), t)
+        })
+        cue(t + 0.2, () => button(text)?.click())
+      }
+
+      const START = 2.4
+      const PERIOD = 3.4
+      for (let i = 0; i < 5; i++) {
+        const T = START + i * PERIOD
+        let point
+        cue(T + 0.7, () => {
+          const found = mapPoint()
+          if (!found) return
+          const { ville, svg } = found
+          const [dLon, dLat] = MISS[i]
+          const local = new DOMPoint(
+            px(ville.lon + dLon),
+            py(ville.lat + dLat)
+          ).matrixTransform(svg.getScreenCTM())
+          point = { svg, x: local.x, y: local.y }
+          tap(onVideo(local.x, local.y), T + 0.7)
+        })
+        cue(T + 0.9, () => {
+          if (!point) return
+          point.svg.dispatchEvent(
+            new (frame().contentWindow.MouseEvent)("click", {
+              bubbles: true,
+              clientX: point.x,
+              clientY: point.y,
+            })
+          )
+        })
+        pressAt(T + 1.6, "Valider")
+        pressAt(T + 2.9, i < 4 ? "suivante" : "résultat")
+      }
+      onFrame.push((t) => {
+        if (t > START + 5 * PERIOD + 0.6)
+          frame().contentWindow.scrollTo(0, span(t, 20, 21.3) * 250)
+      })
+    </script>
+  </body>
+</html>

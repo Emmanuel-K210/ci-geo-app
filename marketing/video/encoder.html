@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Encodeur</title>
+    <script src="mp4-muxer.js"></script>
+  </head>
+  <body>
+    <script>
+      // H.264 in an MP4, encoded by the browser (WebCodecs): no ffmpeg needed.
+      let muxer
+      let encoder
+      let fps
+
+      window.init = (width, height, rate) => {
+        fps = rate
+        muxer = new Mp4Muxer.Muxer({
+          target: new Mp4Muxer.ArrayBufferTarget(),
+          video: { codec: "avc", width, height },
+          fastStart: "in-memory",
+        })
+        encoder = new VideoEncoder({
+          output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
+          error: (error) => console.error(error),
+        })
+        encoder.configure({
+          codec: "avc1.640028",
+          width,
+          height,
+          bitrate: 10_000_000,
+          framerate: rate,
+          avc: { format: "avc" },
+        })
+      }
+
+      window.addFrame = async (base64, index) => {
+        const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
+        const bitmap = await createImageBitmap(
+          new Blob([bytes], { type: "image/jpeg" })
+        )
+        const frame = new VideoFrame(bitmap, {
+          timestamp: Math.round((index * 1e6) / fps),
+          duration: Math.round(1e6 / fps),
+        })
+        encoder.encode(frame, { keyFrame: index % (fps * 2) === 0 })
+        frame.close()
+        bitmap.close()
+        while (encoder.encodeQueueSize > 10)
+          await new Promise((r) => setTimeout(r, 5))
+      }
+
+      window.finish = async () => {
+        await encoder.flush()
+        muxer.finalize()
+        const bytes = new Uint8Array(muxer.target.buffer)
+        let binary = ""
+        for (let i = 0; i < bytes.length; i += 0x8000)
+          binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
+        return btoa(binary)
+      }
+    </script>
+  </body>
+</html>

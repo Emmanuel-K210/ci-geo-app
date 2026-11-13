@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>CI-Geo · présentation</title>
+    <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="scene.css" />
+    <script src="demo.js"></script>
+    <script src="scene.js"></script>
+  </head>
+  <body>
+    <!-- 3 → 16 s: the phone with the real app -->
+    <div data-in="3" data-out="16" data-fx="up" class="layer">
+      <div
+        class="phone"
+        style="left: 200px; top: 420px; --w: 680px; --s: 1.639"
+      >
+        <div class="screen">
+          <iframe
+            id="preload"
+            src="/#/decouvrir/sites/tai"
+            style="z-index: 0"
+          ></iframe>
+          <iframe
+            id="app"
+            src="/#/atlas?ville=ci-v-bouake"
+            style="z-index: 1"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+
+    <div data-in="3" data-out="7.6" data-fx="left" class="caption">
+      📍 Les 14 districts
+      <small>sur une vraie carte, ville par ville</small>
+    </div>
+    <div data-in="7.6" data-out="12" data-fx="left" class="caption">
+      📖 L'histoire des peuples
+      <small>et 15 sites à visiter, avec leurs photos</small>
+    </div>
+    <div data-in="12" data-out="16" data-fx="left" class="caption">
+      🎮 10 jeux
+      <small>et un défi chaque jour, le même pour tous</small>
+    </div>
+
+    <!-- 0 → 3.2 s: the hook -->
+    <div data-in="0" data-out="3.2" data-fadein="0.01" class="layer dark">
+      <div class="bar">
+        <div class="flag"><span></span><span></span><span></span></div>
+      </div>
+      <img
+        src="carte.svg"
+        alt=""
+        style="
+          position: absolute;
+          left: 90px;
+          top: 520px;
+          width: 900px;
+          opacity: 0.12;
+        "
+      />
+      <div class="layer center" style="gap: 10px">
+        <p data-in="0.15" data-fx="pop" class="big" style="font-size: 150px">
+          Tu connais
+        </p>
+        <p data-in="0.6" data-fx="pop" class="big" style="font-size: 150px">
+          vraiment
+        </p>
+        <p
+          data-in="1.1"
+          data-fx="pop"
+          class="big accent"
+          style="font-size: 132px"
+        >
+          la Côte d'Ivoire&nbsp;?
+        </p>
+      </div>
+    </div>
+
+    <!-- 16 → 19 s: the shared score -->
+    <div
+      data-in="16"
+      data-out="19"
+      data-fadein="0.25"
+      class="layer"
+      style="background: var(--paper)"
+    >
+      <div class="layer center">
+        <p data-in="16.2" data-fx="up" class="big" style="font-size: 92px">
+          Partage ton score
+        </p>
+        <div style="display: flex; gap: 18px; font-size: 130px; line-height: 1">
+          <span data-in="16.5" data-fx="pop">🟩</span>
+          <span data-in="16.75" data-fx="pop">🟨</span>
+          <span data-in="17" data-fx="pop">🟩</span>
+          <span data-in="17.25" data-fx="pop">🟧</span>
+          <span data-in="17.5" data-fx="pop">🟩</span>
+        </div>
+        <p
+          data-in="17.8"
+          data-fx="up"
+          class="big"
+          style="font-size: 110px; color: var(--green)"
+        >
+          412 / 500
+        </p>
+        <p
+          data-in="18"
+          data-fx="fade"
+          style="margin: 0; font-size: 40px; color: var(--muted)"
+        >
+          Et défie tes amis 😄
+        </p>
+      </div>
+    </div>
+
+    <!-- 19 → 22 s: where to find it -->
+    <div data-in="19" data-fadein="0.3" class="layer dark">
+      <div class="bar">
+        <div class="flag"><span></span><span></span><span></span></div>
+      </div>
+      <div class="layer center">
+        <div
+          data-in="19.2"
+          data-fx="zoom"
+          class="logo"
+          style="font-size: 110px"
+        >
+          <svg viewBox="0 0 34 34" aria-hidden="true">
+            <path
+              d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z"
+              fill="#e0680a"
+            />
+            <circle cx="17" cy="13.3" r="4" fill="#fff" />
+          </svg>
+          CI-Geo
+        </div>
+        <p
+          data-in="19.6"
+          data-fx="up"
+          class="story"
+          style="font-size: 56px; opacity: 0.85"
+        >
+          La Côte d'Ivoire en jeux,<br />en récits et en cartes
+        </p>
+        <span data-in="20.1" data-fx="pop" class="badge"
+          >Gratuit · sans inscription</span
+        >
+        <p data-in="20.5" data-fx="up" class="url">ci-geo-app.vercel.app</p>
+      </div>
+    </div>
+
+    <script>
+      const go = (hash) => (app("app").location.hash = hash)
+      cue(4.6, () => go("#/atlas?district=ci-d-savanes"))
+      cue(5.7, () => go("#/atlas?ville=ci-v-korhogo"))
+      cue(6.7, () => go("#/atlas?district=ci-d-montagnes"))
+      cue(7.6, () => go("#/decouvrir/sites/tai"))
+      cue(12, () => go("#/jeux"))
+      onFrame.push((t) => {
+        const w = app("app")
+        if (t >= 7.6 && t < 12) w.scrollTo(0, span(t, 8.4, 11.6) * 950)
+        else if (t >= 12 && t < 16) w.scrollTo(0, span(t, 12.8, 15.6) * 800)
+        else w.scrollTo(0, 0)
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,95 @@
+/* Shared look of the videos; fonts and phone frames come from poster.css. */
+body {
+  width: 1080px;
+  height: 1920px;
+}
+.layer {
+  position: absolute;
+  inset: 0;
+}
+.dark {
+  background: #17241e;
+  color: #eef2ee;
+}
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 40px;
+  padding: 0 90px;
+}
+.caption {
+  position: absolute;
+  left: 70px;
+  right: 70px;
+  top: 150px;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 74px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.caption small {
+  display: block;
+  margin-top: 18px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 400;
+  font-size: 36px;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+.dark .caption small {
+  color: #9db0a5;
+}
+.big {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0;
+}
+.story {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  font-size: 66px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.bar {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 16px;
+}
+.url {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 58px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 30px;
+  border-radius: 999px;
+  background: var(--orange);
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 46px;
+}
+/* A finger tap, drawn over the phone. */
+.tap {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  margin: -45px 0 0 -45px;
+  border-radius: 50%;
+  background: rgba(224, 104, 10, 0.35);
+  border: 5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  opacity: 0;
+}

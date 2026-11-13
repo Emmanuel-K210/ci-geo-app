@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>CI-Geo · le saviez-vous</title>
+    <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="scene.css" />
+    <script src="demo.js"></script>
+    <script src="scene.js"></script>
+    <style>
+      .story-card {
+        position: absolute;
+        left: 90px;
+        right: 90px;
+        top: 640px;
+        color: #eef2ee;
+      }
+      .story-card .story {
+        font-size: 72px;
+      }
+      .story-card em {
+        font-style: normal;
+        color: var(--orange);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layer dark"></div>
+    <img
+      id="map"
+      src="carte.svg"
+      alt=""
+      style="
+        position: absolute;
+        left: 60px;
+        top: 420px;
+        width: 960px;
+        opacity: 0.1;
+      "
+    />
+    <div class="bar">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+
+    <div
+      data-in="0.1"
+      data-out="17.5"
+      data-fx="up"
+      style="position: absolute; left: 90px; top: 200px"
+    >
+      <span class="badge">Le saviez-vous ?</span>
+    </div>
+
+    <div data-in="0.6" data-out="4.6" data-fx="up" class="story-card">
+      <p class="story">D'où vient le nom des <em>Baoulé</em>&nbsp;?</p>
+    </div>
+    <div data-in="4.6" data-out="8.6" data-fx="up" class="story-card">
+      <p class="story">
+        Au XVIII<sup>e</sup> siècle, après une guerre de succession, la
+        princesse <em>Abla Pokou</em> fuit le royaume ashanti avec les siens.
+      </p>
+    </div>
+    <div data-in="8.6" data-out="12.2" data-fx="up" class="story-card">
+      <p class="story">
+        Devant le fleuve <em>Comoé</em> en crue, impossible de passer.
+      </p>
+    </div>
+    <div data-in="12.2" data-out="15.4" data-fx="up" class="story-card">
+      <p class="story">
+        Selon la légende, elle offre ce qu'elle a de plus précieux&nbsp;:
+        <em>son fils</em>.
+      </p>
+    </div>
+    <div data-in="15.4" data-out="18" data-fx="up" class="story-card">
+      <p class="story">
+        Puis elle murmure <em>«&nbsp;ba ouli&nbsp;»</em>&nbsp;: l'enfant est
+        mort.
+      </p>
+    </div>
+
+    <!-- 18 → 25 s: the people page in the app, then where to read more -->
+    <div
+      data-in="18"
+      data-fx="up"
+      class="caption"
+      style="top: 140px; color: #eef2ee"
+    >
+      Son peuple s'appelle depuis <span class="accent">les Baoulé.</span>
+    </div>
+    <div data-in="18.3" data-fx="up" class="layer">
+      <div
+        class="phone"
+        style="left: 270px; top: 390px; --w: 540px; --s: 1.3015"
+      >
+        <div class="screen">
+          <iframe id="app" src="/#/decouvrir/peuples/baoule"></iframe>
+        </div>
+      </div>
+    </div>
+    <div
+      data-in="21.5"
+      data-fx="up"
+      style="
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 70px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+      "
+    >
+      <span class="badge" style="font-size: 40px"
+        >16 peuples · 15 sites · leurs histoires</span
+      >
+      <p class="url" style="margin: 0; color: #eef2ee">ci-geo-app.vercel.app</p>
+    </div>
+
+    <script>
+      onFrame.push((t) => {
+        // The map drifts slowly behind the story.
+        document.getElementById("map").style.transform =
+          `scale(${1 + t * 0.012}) translateY(${-t * 4}px)`
+        app("app").scrollTo(0, span(t, 19.5, 24.5) * 700)
+      })
+    </script>
+  </body>
+</html>

@@ -25,3 +25,4 @@ dist-ssr
 .env
 .tanstack
 superbasepws.txt
+marketing/video/out/
