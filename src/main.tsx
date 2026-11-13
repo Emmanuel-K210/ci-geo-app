@@ -6,6 +6,7 @@ import {
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
+import { startAnalytics } from "@/lib/analytics"
 import { routeTree } from "@/routeTree.gen"
 import { startCloud } from "@/stores/cloud"
 import "@/styles.css"
@@ -25,6 +26,7 @@ declare module "@tanstack/react-router" {
 }
 
 startCloud()
+startAnalytics(router)
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
