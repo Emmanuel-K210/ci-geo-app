@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ci-geo.schema.json",
+  "title": "Référentiel géographique de la Côte d'Ivoire",
+  "description": "District → Région → Ville → Localité → Quartier. Chaque élément porte l'id de son parent ; les ids sont stables (préfixe + nom sans accents).",
+  "type": "object",
+  "required": [
+    "version",
+    "pays",
+    "districts",
+    "regions",
+    "villes",
+    "localites",
+    "quartiers"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string",
+      "format": "date"
+    },
+    "source": {
+      "type": "string"
+    },
+    "pays": {
+      "type": "object",
+      "required": ["code", "nom"],
+      "properties": {
+        "code": {
+          "const": "CI"
+        },
+        "nom": {
+          "type": "string"
+        }
+      }
+    },
+    "districts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "nom", "autonome"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ci-d-[a-z0-9-]+$"
+          },
+          "nom": {
+            "type": "string"
+          },
+          "autonome": {
+            "type": "boolean",
+            "description": "District autonome (Abidjan, Yamoussoukro) : sans région."
+          }
+        }
+      }
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "nom", "districtId", "chefLieuVilleId"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ci-r-[a-z0-9-]+$"
+          },
+          "nom": {
+            "type": "string"
+          },
+          "districtId": {
+            "type": "string"
+          },
+          "chefLieuVilleId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "villes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "nom",
+          "lat",
+          "lon",
+          "districtId",
+          "regionId",
+          "chefLieuDe",
+          "quartiersComplets"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ci-v-[a-z0-9-]+$"
+          },
+          "nom": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "number",
+            "minimum": 4,
+            "maximum": 11,
+            "description": "Latitude du centre-ville (WGS 84), arrondie au centième de degré."
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -9,
+            "maximum": -2,
+            "description": "Longitude du centre-ville (WGS 84), arrondie au centième de degré."
+          },
+          "districtId": {
+            "type": "string"
+          },
+          "regionId": {
+            "type": ["string", "null"],
+            "description": "Null pour les villes des districts autonomes."
+          },
+          "chefLieuDe": {
+            "enum": ["district", "region", null]
+          },
+          "quartiersComplets": {
+            "type": "boolean",
+            "description": "Faux tant que la liste des quartiers n'a pas été vérifiée sur le terrain."
+          }
+        }
+      }
+    },
+    "localites": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "nom", "type", "villeId"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ci-l-[a-z0-9-]+$"
+          },
+          "nom": {
+            "type": "string"
+          },
+          "type": {
+            "enum": ["commune", "sous-prefecture"]
+          },
+          "villeId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "quartiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "nom", "localiteId", "villeId"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ci-q-[a-z0-9-]+$"
+          },
+          "nom": {
+            "type": "string"
+          },
+          "localiteId": {
+            "type": "string"
+          },
+          "villeId": {
+            "type": "string",
+            "description": "Recopié pour filtrer les quartiers d'une ville sans passer par la localité."
+          }
+        }
+      }
+    }
+  }
+}

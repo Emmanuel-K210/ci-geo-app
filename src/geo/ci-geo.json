@@ -1,0 +1,2097 @@
+{
+  "$schema": "./ci-geo.schema.json",
+  "version": "2026-11-13",
+  "source": "Découpage administratif (14 districts, 31 régions). Coordonnées des centres-villes arrondies au centième de degré (environ 1 km), à vérifier. Quartiers les plus connus, liste non exhaustive à compléter et à vérifier.",
+  "pays": {
+    "code": "CI",
+    "nom": "Côte d'Ivoire"
+  },
+  "districts": [
+    {
+      "id": "ci-d-abidjan",
+      "nom": "Abidjan",
+      "autonome": true
+    },
+    {
+      "id": "ci-d-yamoussoukro",
+      "nom": "Yamoussoukro",
+      "autonome": true
+    },
+    {
+      "id": "ci-d-bas-sassandra",
+      "nom": "Bas-Sassandra",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-comoe",
+      "nom": "Comoé",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-denguele",
+      "nom": "Denguélé",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-goh-djiboua",
+      "nom": "Gôh-Djiboua",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-lacs",
+      "nom": "Lacs",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-lagunes",
+      "nom": "Lagunes",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-montagnes",
+      "nom": "Montagnes",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-sassandra-marahoue",
+      "nom": "Sassandra-Marahoué",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-savanes",
+      "nom": "Savanes",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-vallee-du-bandama",
+      "nom": "Vallée du Bandama",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-woroba",
+      "nom": "Woroba",
+      "autonome": false
+    },
+    {
+      "id": "ci-d-zanzan",
+      "nom": "Zanzan",
+      "autonome": false
+    }
+  ],
+  "regions": [
+    {
+      "id": "ci-r-san-pedro",
+      "nom": "San-Pédro",
+      "districtId": "ci-d-bas-sassandra",
+      "chefLieuVilleId": "ci-v-san-pedro"
+    },
+    {
+      "id": "ci-r-gbokle",
+      "nom": "Gbôklé",
+      "districtId": "ci-d-bas-sassandra",
+      "chefLieuVilleId": "ci-v-sassandra"
+    },
+    {
+      "id": "ci-r-nawa",
+      "nom": "Nawa",
+      "districtId": "ci-d-bas-sassandra",
+      "chefLieuVilleId": "ci-v-soubre"
+    },
+    {
+      "id": "ci-r-indenie-djuablin",
+      "nom": "Indénié-Djuablin",
+      "districtId": "ci-d-comoe",
+      "chefLieuVilleId": "ci-v-abengourou"
+    },
+    {
+      "id": "ci-r-sud-comoe",
+      "nom": "Sud-Comoé",
+      "districtId": "ci-d-comoe",
+      "chefLieuVilleId": "ci-v-aboisso"
+    },
+    {
+      "id": "ci-r-folon",
+      "nom": "Folon",
+      "districtId": "ci-d-denguele",
+      "chefLieuVilleId": "ci-v-minignan"
+    },
+    {
+      "id": "ci-r-kabadougou",
+      "nom": "Kabadougou",
+      "districtId": "ci-d-denguele",
+      "chefLieuVilleId": "ci-v-odienne"
+    },
+    {
+      "id": "ci-r-goh",
+      "nom": "Gôh",
+      "districtId": "ci-d-goh-djiboua",
+      "chefLieuVilleId": "ci-v-gagnoa"
+    },
+    {
+      "id": "ci-r-loh-djiboua",
+      "nom": "Lôh-Djiboua",
+      "districtId": "ci-d-goh-djiboua",
+      "chefLieuVilleId": "ci-v-divo"
+    },
+    {
+      "id": "ci-r-belier",
+      "nom": "Bélier",
+      "districtId": "ci-d-lacs",
+      "chefLieuVilleId": "ci-v-toumodi"
+    },
+    {
+      "id": "ci-r-iffou",
+      "nom": "Iffou",
+      "districtId": "ci-d-lacs",
+      "chefLieuVilleId": "ci-v-daoukro"
+    },
+    {
+      "id": "ci-r-moronou",
+      "nom": "Moronou",
+      "districtId": "ci-d-lacs",
+      "chefLieuVilleId": "ci-v-bongouanou"
+    },
+    {
+      "id": "ci-r-n-zi",
+      "nom": "N'Zi",
+      "districtId": "ci-d-lacs",
+      "chefLieuVilleId": "ci-v-dimbokro"
+    },
+    {
+      "id": "ci-r-agneby-tiassa",
+      "nom": "Agnéby-Tiassa",
+      "districtId": "ci-d-lagunes",
+      "chefLieuVilleId": "ci-v-agboville"
+    },
+    {
+      "id": "ci-r-grands-ponts",
+      "nom": "Grands-Ponts",
+      "districtId": "ci-d-lagunes",
+      "chefLieuVilleId": "ci-v-dabou"
+    },
+    {
+      "id": "ci-r-la-me",
+      "nom": "La Mé",
+      "districtId": "ci-d-lagunes",
+      "chefLieuVilleId": "ci-v-adzope"
+    },
+    {
+      "id": "ci-r-cavally",
+      "nom": "Cavally",
+      "districtId": "ci-d-montagnes",
+      "chefLieuVilleId": "ci-v-guiglo"
+    },
+    {
+      "id": "ci-r-guemon",
+      "nom": "Guémon",
+      "districtId": "ci-d-montagnes",
+      "chefLieuVilleId": "ci-v-duekoue"
+    },
+    {
+      "id": "ci-r-tonkpi",
+      "nom": "Tonkpi",
+      "districtId": "ci-d-montagnes",
+      "chefLieuVilleId": "ci-v-man"
+    },
+    {
+      "id": "ci-r-haut-sassandra",
+      "nom": "Haut-Sassandra",
+      "districtId": "ci-d-sassandra-marahoue",
+      "chefLieuVilleId": "ci-v-daloa"
+    },
+    {
+      "id": "ci-r-marahoue",
+      "nom": "Marahoué",
+      "districtId": "ci-d-sassandra-marahoue",
+      "chefLieuVilleId": "ci-v-bouafle"
+    },
+    {
+      "id": "ci-r-bagoue",
+      "nom": "Bagoué",
+      "districtId": "ci-d-savanes",
+      "chefLieuVilleId": "ci-v-boundiali"
+    },
+    {
+      "id": "ci-r-poro",
+      "nom": "Poro",
+      "districtId": "ci-d-savanes",
+      "chefLieuVilleId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-r-tchologo",
+      "nom": "Tchologo",
+      "districtId": "ci-d-savanes",
+      "chefLieuVilleId": "ci-v-ferkessedougou"
+    },
+    {
+      "id": "ci-r-gbeke",
+      "nom": "Gbêkê",
+      "districtId": "ci-d-vallee-du-bandama",
+      "chefLieuVilleId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-r-hambol",
+      "nom": "Hambol",
+      "districtId": "ci-d-vallee-du-bandama",
+      "chefLieuVilleId": "ci-v-katiola"
+    },
+    {
+      "id": "ci-r-bafing",
+      "nom": "Bafing",
+      "districtId": "ci-d-woroba",
+      "chefLieuVilleId": "ci-v-touba"
+    },
+    {
+      "id": "ci-r-bere",
+      "nom": "Béré",
+      "districtId": "ci-d-woroba",
+      "chefLieuVilleId": "ci-v-mankono"
+    },
+    {
+      "id": "ci-r-worodougou",
+      "nom": "Worodougou",
+      "districtId": "ci-d-woroba",
+      "chefLieuVilleId": "ci-v-seguela"
+    },
+    {
+      "id": "ci-r-bounkani",
+      "nom": "Bounkani",
+      "districtId": "ci-d-zanzan",
+      "chefLieuVilleId": "ci-v-bouna"
+    },
+    {
+      "id": "ci-r-gontougo",
+      "nom": "Gontougo",
+      "districtId": "ci-d-zanzan",
+      "chefLieuVilleId": "ci-v-bondoukou"
+    }
+  ],
+  "villes": [
+    {
+      "id": "ci-v-abengourou",
+      "nom": "Abengourou",
+      "lat": 6.73,
+      "lon": -3.49,
+      "districtId": "ci-d-comoe",
+      "regionId": "ci-r-indenie-djuablin",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-abidjan",
+      "nom": "Abidjan",
+      "lat": 5.32,
+      "lon": -4.02,
+      "districtId": "ci-d-abidjan",
+      "regionId": null,
+      "chefLieuDe": "district",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-aboisso",
+      "nom": "Aboisso",
+      "lat": 5.47,
+      "lon": -3.21,
+      "districtId": "ci-d-comoe",
+      "regionId": "ci-r-sud-comoe",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-adzope",
+      "nom": "Adzopé",
+      "lat": 6.11,
+      "lon": -3.86,
+      "districtId": "ci-d-lagunes",
+      "regionId": "ci-r-la-me",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-agboville",
+      "nom": "Agboville",
+      "lat": 5.93,
+      "lon": -4.22,
+      "districtId": "ci-d-lagunes",
+      "regionId": "ci-r-agneby-tiassa",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-akoupe",
+      "nom": "Akoupé",
+      "lat": 6.38,
+      "lon": -3.89,
+      "districtId": "ci-d-lagunes",
+      "regionId": "ci-r-la-me",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-beoumi",
+      "nom": "Béoumi",
+      "lat": 7.67,
+      "lon": -5.58,
+      "districtId": "ci-d-vallee-du-bandama",
+      "regionId": "ci-r-gbeke",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-bondoukou",
+      "nom": "Bondoukou",
+      "lat": 8.04,
+      "lon": -2.8,
+      "districtId": "ci-d-zanzan",
+      "regionId": "ci-r-gontougo",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-bongouanou",
+      "nom": "Bongouanou",
+      "lat": 6.65,
+      "lon": -4.2,
+      "districtId": "ci-d-lacs",
+      "regionId": "ci-r-moronou",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-bonoua",
+      "nom": "Bonoua",
+      "lat": 5.27,
+      "lon": -3.6,
+      "districtId": "ci-d-comoe",
+      "regionId": "ci-r-sud-comoe",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-bouafle",
+      "nom": "Bouaflé",
+      "lat": 6.99,
+      "lon": -5.75,
+      "districtId": "ci-d-sassandra-marahoue",
+      "regionId": "ci-r-marahoue",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-bouake",
+      "nom": "Bouaké",
+      "lat": 7.69,
+      "lon": -5.03,
+      "districtId": "ci-d-vallee-du-bandama",
+      "regionId": "ci-r-gbeke",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-bouna",
+      "nom": "Bouna",
+      "lat": 9.27,
+      "lon": -3.0,
+      "districtId": "ci-d-zanzan",
+      "regionId": "ci-r-bounkani",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-boundiali",
+      "nom": "Boundiali",
+      "lat": 9.52,
+      "lon": -6.49,
+      "districtId": "ci-d-savanes",
+      "regionId": "ci-r-bagoue",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-dabou",
+      "nom": "Dabou",
+      "lat": 5.32,
+      "lon": -4.38,
+      "districtId": "ci-d-lagunes",
+      "regionId": "ci-r-grands-ponts",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-daloa",
+      "nom": "Daloa",
+      "lat": 6.88,
+      "lon": -6.45,
+      "districtId": "ci-d-sassandra-marahoue",
+      "regionId": "ci-r-haut-sassandra",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-danane",
+      "nom": "Danané",
+      "lat": 7.26,
+      "lon": -8.15,
+      "districtId": "ci-d-montagnes",
+      "regionId": "ci-r-tonkpi",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-daoukro",
+      "nom": "Daoukro",
+      "lat": 7.06,
+      "lon": -3.96,
+      "districtId": "ci-d-lacs",
+      "regionId": "ci-r-iffou",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-dimbokro",
+      "nom": "Dimbokro",
+      "lat": 6.65,
+      "lon": -4.71,
+      "districtId": "ci-d-lacs",
+      "regionId": "ci-r-n-zi",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-divo",
+      "nom": "Divo",
+      "lat": 5.84,
+      "lon": -5.36,
+      "districtId": "ci-d-goh-djiboua",
+      "regionId": "ci-r-loh-djiboua",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-duekoue",
+      "nom": "Duékoué",
+      "lat": 6.74,
+      "lon": -7.35,
+      "districtId": "ci-d-montagnes",
+      "regionId": "ci-r-guemon",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-ferkessedougou",
+      "nom": "Ferkessédougou",
+      "lat": 9.59,
+      "lon": -5.2,
+      "districtId": "ci-d-savanes",
+      "regionId": "ci-r-tchologo",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-gagnoa",
+      "nom": "Gagnoa",
+      "lat": 6.13,
+      "lon": -5.95,
+      "districtId": "ci-d-goh-djiboua",
+      "regionId": "ci-r-goh",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-grand-bassam",
+      "nom": "Grand-Bassam",
+      "lat": 5.21,
+      "lon": -3.74,
+      "districtId": "ci-d-comoe",
+      "regionId": "ci-r-sud-comoe",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-guiglo",
+      "nom": "Guiglo",
+      "lat": 6.54,
+      "lon": -7.49,
+      "districtId": "ci-d-montagnes",
+      "regionId": "ci-r-cavally",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-issia",
+      "nom": "Issia",
+      "lat": 6.49,
+      "lon": -6.59,
+      "districtId": "ci-d-sassandra-marahoue",
+      "regionId": "ci-r-haut-sassandra",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-jacqueville",
+      "nom": "Jacqueville",
+      "lat": 5.2,
+      "lon": -4.42,
+      "districtId": "ci-d-lagunes",
+      "regionId": "ci-r-grands-ponts",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-katiola",
+      "nom": "Katiola",
+      "lat": 8.14,
+      "lon": -5.1,
+      "districtId": "ci-d-vallee-du-bandama",
+      "regionId": "ci-r-hambol",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-korhogo",
+      "nom": "Korhogo",
+      "lat": 9.46,
+      "lon": -5.63,
+      "districtId": "ci-d-savanes",
+      "regionId": "ci-r-poro",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-lakota",
+      "nom": "Lakota",
+      "lat": 5.85,
+      "lon": -5.68,
+      "districtId": "ci-d-goh-djiboua",
+      "regionId": "ci-r-loh-djiboua",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-man",
+      "nom": "Man",
+      "lat": 7.41,
+      "lon": -7.55,
+      "districtId": "ci-d-montagnes",
+      "regionId": "ci-r-tonkpi",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-mankono",
+      "nom": "Mankono",
+      "lat": 8.06,
+      "lon": -6.19,
+      "districtId": "ci-d-woroba",
+      "regionId": "ci-r-bere",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-minignan",
+      "nom": "Minignan",
+      "lat": 9.99,
+      "lon": -7.84,
+      "districtId": "ci-d-denguele",
+      "regionId": "ci-r-folon",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-odienne",
+      "nom": "Odienné",
+      "lat": 9.51,
+      "lon": -7.56,
+      "districtId": "ci-d-denguele",
+      "regionId": "ci-r-kabadougou",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-san-pedro",
+      "nom": "San-Pédro",
+      "lat": 4.75,
+      "lon": -6.64,
+      "districtId": "ci-d-bas-sassandra",
+      "regionId": "ci-r-san-pedro",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-sassandra",
+      "nom": "Sassandra",
+      "lat": 4.95,
+      "lon": -6.09,
+      "districtId": "ci-d-bas-sassandra",
+      "regionId": "ci-r-gbokle",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-seguela",
+      "nom": "Séguéla",
+      "lat": 7.96,
+      "lon": -6.67,
+      "districtId": "ci-d-woroba",
+      "regionId": "ci-r-worodougou",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-sinfra",
+      "nom": "Sinfra",
+      "lat": 6.62,
+      "lon": -5.91,
+      "districtId": "ci-d-sassandra-marahoue",
+      "regionId": "ci-r-marahoue",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-soubre",
+      "nom": "Soubré",
+      "lat": 5.78,
+      "lon": -6.61,
+      "districtId": "ci-d-bas-sassandra",
+      "regionId": "ci-r-nawa",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-tabou",
+      "nom": "Tabou",
+      "lat": 4.42,
+      "lon": -7.35,
+      "districtId": "ci-d-bas-sassandra",
+      "regionId": "ci-r-san-pedro",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-tiassale",
+      "nom": "Tiassalé",
+      "lat": 5.9,
+      "lon": -4.82,
+      "districtId": "ci-d-lagunes",
+      "regionId": "ci-r-agneby-tiassa",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-tiebissou",
+      "nom": "Tiébissou",
+      "lat": 7.16,
+      "lon": -5.22,
+      "districtId": "ci-d-lacs",
+      "regionId": "ci-r-belier",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-touba",
+      "nom": "Touba",
+      "lat": 8.28,
+      "lon": -7.68,
+      "districtId": "ci-d-woroba",
+      "regionId": "ci-r-bafing",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-toumodi",
+      "nom": "Toumodi",
+      "lat": 6.56,
+      "lon": -5.02,
+      "districtId": "ci-d-lacs",
+      "regionId": "ci-r-belier",
+      "chefLieuDe": "region",
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-vavoua",
+      "nom": "Vavoua",
+      "lat": 7.38,
+      "lon": -6.48,
+      "districtId": "ci-d-sassandra-marahoue",
+      "regionId": "ci-r-haut-sassandra",
+      "chefLieuDe": null,
+      "quartiersComplets": false
+    },
+    {
+      "id": "ci-v-yamoussoukro",
+      "nom": "Yamoussoukro",
+      "lat": 6.82,
+      "lon": -5.28,
+      "districtId": "ci-d-yamoussoukro",
+      "regionId": null,
+      "chefLieuDe": "district",
+      "quartiersComplets": false
+    }
+  ],
+  "localites": [
+    {
+      "id": "ci-l-abidjan-abobo",
+      "nom": "Abobo",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-adjame",
+      "nom": "Adjamé",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-attecoube",
+      "nom": "Attécoubé",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-cocody",
+      "nom": "Cocody",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-koumassi",
+      "nom": "Koumassi",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-marcory",
+      "nom": "Marcory",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-plateau",
+      "nom": "Plateau",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-port-bouet",
+      "nom": "Port-Bouët",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-treichville",
+      "nom": "Treichville",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-yopougon",
+      "nom": "Yopougon",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-anyama",
+      "nom": "Anyama",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-bingerville",
+      "nom": "Bingerville",
+      "type": "commune",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-abidjan-songon",
+      "nom": "Songon",
+      "type": "sous-prefecture",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-l-yamoussoukro",
+      "nom": "Yamoussoukro",
+      "type": "commune",
+      "villeId": "ci-v-yamoussoukro"
+    },
+    {
+      "id": "ci-l-san-pedro",
+      "nom": "San-Pédro",
+      "type": "commune",
+      "villeId": "ci-v-san-pedro"
+    },
+    {
+      "id": "ci-l-sassandra",
+      "nom": "Sassandra",
+      "type": "commune",
+      "villeId": "ci-v-sassandra"
+    },
+    {
+      "id": "ci-l-soubre",
+      "nom": "Soubré",
+      "type": "commune",
+      "villeId": "ci-v-soubre"
+    },
+    {
+      "id": "ci-l-abengourou",
+      "nom": "Abengourou",
+      "type": "commune",
+      "villeId": "ci-v-abengourou"
+    },
+    {
+      "id": "ci-l-aboisso",
+      "nom": "Aboisso",
+      "type": "commune",
+      "villeId": "ci-v-aboisso"
+    },
+    {
+      "id": "ci-l-minignan",
+      "nom": "Minignan",
+      "type": "commune",
+      "villeId": "ci-v-minignan"
+    },
+    {
+      "id": "ci-l-odienne",
+      "nom": "Odienné",
+      "type": "commune",
+      "villeId": "ci-v-odienne"
+    },
+    {
+      "id": "ci-l-gagnoa",
+      "nom": "Gagnoa",
+      "type": "commune",
+      "villeId": "ci-v-gagnoa"
+    },
+    {
+      "id": "ci-l-divo",
+      "nom": "Divo",
+      "type": "commune",
+      "villeId": "ci-v-divo"
+    },
+    {
+      "id": "ci-l-toumodi",
+      "nom": "Toumodi",
+      "type": "commune",
+      "villeId": "ci-v-toumodi"
+    },
+    {
+      "id": "ci-l-daoukro",
+      "nom": "Daoukro",
+      "type": "commune",
+      "villeId": "ci-v-daoukro"
+    },
+    {
+      "id": "ci-l-bongouanou",
+      "nom": "Bongouanou",
+      "type": "commune",
+      "villeId": "ci-v-bongouanou"
+    },
+    {
+      "id": "ci-l-dimbokro",
+      "nom": "Dimbokro",
+      "type": "commune",
+      "villeId": "ci-v-dimbokro"
+    },
+    {
+      "id": "ci-l-agboville",
+      "nom": "Agboville",
+      "type": "commune",
+      "villeId": "ci-v-agboville"
+    },
+    {
+      "id": "ci-l-dabou",
+      "nom": "Dabou",
+      "type": "commune",
+      "villeId": "ci-v-dabou"
+    },
+    {
+      "id": "ci-l-adzope",
+      "nom": "Adzopé",
+      "type": "commune",
+      "villeId": "ci-v-adzope"
+    },
+    {
+      "id": "ci-l-guiglo",
+      "nom": "Guiglo",
+      "type": "commune",
+      "villeId": "ci-v-guiglo"
+    },
+    {
+      "id": "ci-l-duekoue",
+      "nom": "Duékoué",
+      "type": "commune",
+      "villeId": "ci-v-duekoue"
+    },
+    {
+      "id": "ci-l-man",
+      "nom": "Man",
+      "type": "commune",
+      "villeId": "ci-v-man"
+    },
+    {
+      "id": "ci-l-daloa",
+      "nom": "Daloa",
+      "type": "commune",
+      "villeId": "ci-v-daloa"
+    },
+    {
+      "id": "ci-l-bouafle",
+      "nom": "Bouaflé",
+      "type": "commune",
+      "villeId": "ci-v-bouafle"
+    },
+    {
+      "id": "ci-l-boundiali",
+      "nom": "Boundiali",
+      "type": "commune",
+      "villeId": "ci-v-boundiali"
+    },
+    {
+      "id": "ci-l-korhogo",
+      "nom": "Korhogo",
+      "type": "commune",
+      "villeId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-l-ferkessedougou",
+      "nom": "Ferkessédougou",
+      "type": "commune",
+      "villeId": "ci-v-ferkessedougou"
+    },
+    {
+      "id": "ci-l-bouake",
+      "nom": "Bouaké",
+      "type": "commune",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-l-katiola",
+      "nom": "Katiola",
+      "type": "commune",
+      "villeId": "ci-v-katiola"
+    },
+    {
+      "id": "ci-l-touba",
+      "nom": "Touba",
+      "type": "commune",
+      "villeId": "ci-v-touba"
+    },
+    {
+      "id": "ci-l-mankono",
+      "nom": "Mankono",
+      "type": "commune",
+      "villeId": "ci-v-mankono"
+    },
+    {
+      "id": "ci-l-seguela",
+      "nom": "Séguéla",
+      "type": "commune",
+      "villeId": "ci-v-seguela"
+    },
+    {
+      "id": "ci-l-bouna",
+      "nom": "Bouna",
+      "type": "commune",
+      "villeId": "ci-v-bouna"
+    },
+    {
+      "id": "ci-l-bondoukou",
+      "nom": "Bondoukou",
+      "type": "commune",
+      "villeId": "ci-v-bondoukou"
+    },
+    {
+      "id": "ci-l-grand-bassam",
+      "nom": "Grand-Bassam",
+      "type": "commune",
+      "villeId": "ci-v-grand-bassam"
+    },
+    {
+      "id": "ci-l-bonoua",
+      "nom": "Bonoua",
+      "type": "commune",
+      "villeId": "ci-v-bonoua"
+    },
+    {
+      "id": "ci-l-tabou",
+      "nom": "Tabou",
+      "type": "commune",
+      "villeId": "ci-v-tabou"
+    },
+    {
+      "id": "ci-l-lakota",
+      "nom": "Lakota",
+      "type": "commune",
+      "villeId": "ci-v-lakota"
+    },
+    {
+      "id": "ci-l-tiassale",
+      "nom": "Tiassalé",
+      "type": "commune",
+      "villeId": "ci-v-tiassale"
+    },
+    {
+      "id": "ci-l-jacqueville",
+      "nom": "Jacqueville",
+      "type": "commune",
+      "villeId": "ci-v-jacqueville"
+    },
+    {
+      "id": "ci-l-akoupe",
+      "nom": "Akoupé",
+      "type": "commune",
+      "villeId": "ci-v-akoupe"
+    },
+    {
+      "id": "ci-l-tiebissou",
+      "nom": "Tiébissou",
+      "type": "commune",
+      "villeId": "ci-v-tiebissou"
+    },
+    {
+      "id": "ci-l-beoumi",
+      "nom": "Béoumi",
+      "type": "commune",
+      "villeId": "ci-v-beoumi"
+    },
+    {
+      "id": "ci-l-danane",
+      "nom": "Danané",
+      "type": "commune",
+      "villeId": "ci-v-danane"
+    },
+    {
+      "id": "ci-l-issia",
+      "nom": "Issia",
+      "type": "commune",
+      "villeId": "ci-v-issia"
+    },
+    {
+      "id": "ci-l-vavoua",
+      "nom": "Vavoua",
+      "type": "commune",
+      "villeId": "ci-v-vavoua"
+    },
+    {
+      "id": "ci-l-sinfra",
+      "nom": "Sinfra",
+      "type": "commune",
+      "villeId": "ci-v-sinfra"
+    }
+  ],
+  "quartiers": [
+    {
+      "id": "ci-q-abidjan-abobo-abobo-baoule",
+      "nom": "Abobo-Baoulé",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-abobo-gare",
+      "nom": "Abobo-Gare",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-abobo-te",
+      "nom": "Abobo-Té",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-akeikoi",
+      "nom": "Akéikoi",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-anador",
+      "nom": "Anador",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-avocatier",
+      "nom": "Avocatier",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-belleville",
+      "nom": "Belleville",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-clouetcha",
+      "nom": "Clouetcha",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-dokui",
+      "nom": "Dokui",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-kennedy",
+      "nom": "Kennedy",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-n-dotre",
+      "nom": "N'Dotré",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-pk-18",
+      "nom": "PK 18",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-sagbe",
+      "nom": "Sagbé",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-abobo-samake",
+      "nom": "Samaké",
+      "localiteId": "ci-l-abidjan-abobo",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-adjame-220-logements",
+      "nom": "220 Logements",
+      "localiteId": "ci-l-abidjan-adjame",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-adjame-adjame-village",
+      "nom": "Adjamé-Village",
+      "localiteId": "ci-l-abidjan-adjame",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-adjame-bracodi",
+      "nom": "Bracodi",
+      "localiteId": "ci-l-abidjan-adjame",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-adjame-dallas",
+      "nom": "Dallas",
+      "localiteId": "ci-l-abidjan-adjame",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-adjame-habitat-extension",
+      "nom": "Habitat Extension",
+      "localiteId": "ci-l-abidjan-adjame",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-adjame-liberte",
+      "nom": "Liberté",
+      "localiteId": "ci-l-abidjan-adjame",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-adjame-marie-therese",
+      "nom": "Marie-Thérèse",
+      "localiteId": "ci-l-abidjan-adjame",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-adjame-paillet",
+      "nom": "Paillet",
+      "localiteId": "ci-l-abidjan-adjame",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-adjame-williamsville",
+      "nom": "Williamsville",
+      "localiteId": "ci-l-abidjan-adjame",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-attecoube-abobodoume",
+      "nom": "Abobodoumé",
+      "localiteId": "ci-l-abidjan-attecoube",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-attecoube-agban",
+      "nom": "Agban",
+      "localiteId": "ci-l-abidjan-attecoube",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-attecoube-attecoube-village",
+      "nom": "Attécoubé-Village",
+      "localiteId": "ci-l-abidjan-attecoube",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-attecoube-boribana",
+      "nom": "Boribana",
+      "localiteId": "ci-l-abidjan-attecoube",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-attecoube-locodjoro",
+      "nom": "Locodjoro",
+      "localiteId": "ci-l-abidjan-attecoube",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-attecoube-mossikro",
+      "nom": "Mossikro",
+      "localiteId": "ci-l-abidjan-attecoube",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-attecoube-sante",
+      "nom": "Santé",
+      "localiteId": "ci-l-abidjan-attecoube",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-attecoube-sebroko",
+      "nom": "Sebroko",
+      "localiteId": "ci-l-abidjan-attecoube",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-akouedo",
+      "nom": "Akouédo",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-ambassades",
+      "nom": "Ambassades",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-angre",
+      "nom": "Angré",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-anono",
+      "nom": "Anono",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-attoban",
+      "nom": "Attoban",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-blockhaus",
+      "nom": "Blockhaus",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-bonoumin",
+      "nom": "Bonoumin",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-cocody-village",
+      "nom": "Cocody-Village",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-danga",
+      "nom": "Danga",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-deux-plateaux",
+      "nom": "Deux-Plateaux",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-faya",
+      "nom": "Faya",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-golf",
+      "nom": "Golf",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-les-lauriers",
+      "nom": "Les Lauriers",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-m-badon",
+      "nom": "M'Badon",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-m-pouto",
+      "nom": "M'Pouto",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-mermoz",
+      "nom": "Mermoz",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-palmeraie",
+      "nom": "Palmeraie",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-riviera-1",
+      "nom": "Riviera 1",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-riviera-2",
+      "nom": "Riviera 2",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-riviera-3",
+      "nom": "Riviera 3",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-cocody-saint-jean",
+      "nom": "Saint-Jean",
+      "localiteId": "ci-l-abidjan-cocody",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-koumassi-divo",
+      "nom": "Divo",
+      "localiteId": "ci-l-abidjan-koumassi",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-koumassi-grand-campement",
+      "nom": "Grand-Campement",
+      "localiteId": "ci-l-abidjan-koumassi",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-koumassi-prodomo",
+      "nom": "Prodomo",
+      "localiteId": "ci-l-abidjan-koumassi",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-koumassi-remblais",
+      "nom": "Remblais",
+      "localiteId": "ci-l-abidjan-koumassi",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-koumassi-sicogi",
+      "nom": "Sicogi",
+      "localiteId": "ci-l-abidjan-koumassi",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-koumassi-soweto",
+      "nom": "Soweto",
+      "localiteId": "ci-l-abidjan-koumassi",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-koumassi-zone-industrielle",
+      "nom": "Zone industrielle",
+      "localiteId": "ci-l-abidjan-koumassi",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-marcory-anoumabo",
+      "nom": "Anoumabo",
+      "localiteId": "ci-l-abidjan-marcory",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-marcory-bietry",
+      "nom": "Biétry",
+      "localiteId": "ci-l-abidjan-marcory",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-marcory-champroux",
+      "nom": "Champroux",
+      "localiteId": "ci-l-abidjan-marcory",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-marcory-remblais",
+      "nom": "Remblais",
+      "localiteId": "ci-l-abidjan-marcory",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-marcory-residentiel",
+      "nom": "Résidentiel",
+      "localiteId": "ci-l-abidjan-marcory",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-marcory-sans-fil",
+      "nom": "Sans-Fil",
+      "localiteId": "ci-l-abidjan-marcory",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-marcory-zone-4",
+      "nom": "Zone 4",
+      "localiteId": "ci-l-abidjan-marcory",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-plateau-centre-des-affaires",
+      "nom": "Centre des affaires",
+      "localiteId": "ci-l-abidjan-plateau",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-plateau-cite-administrative",
+      "nom": "Cité administrative",
+      "localiteId": "ci-l-abidjan-plateau",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-plateau-indenie",
+      "nom": "Indénié",
+      "localiteId": "ci-l-abidjan-plateau",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-port-bouet-adjahui",
+      "nom": "Adjahui",
+      "localiteId": "ci-l-abidjan-port-bouet",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-port-bouet-aeroport",
+      "nom": "Aéroport",
+      "localiteId": "ci-l-abidjan-port-bouet",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-port-bouet-anani",
+      "nom": "Anani",
+      "localiteId": "ci-l-abidjan-port-bouet",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-port-bouet-derriere-wharf",
+      "nom": "Derrière-Wharf",
+      "localiteId": "ci-l-abidjan-port-bouet",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-port-bouet-gonzagueville",
+      "nom": "Gonzagueville",
+      "localiteId": "ci-l-abidjan-port-bouet",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-port-bouet-jean-folly",
+      "nom": "Jean-Folly",
+      "localiteId": "ci-l-abidjan-port-bouet",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-port-bouet-petit-bassam",
+      "nom": "Petit-Bassam",
+      "localiteId": "ci-l-abidjan-port-bouet",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-port-bouet-vridi",
+      "nom": "Vridi",
+      "localiteId": "ci-l-abidjan-port-bouet",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-port-bouet-vridi-canal",
+      "nom": "Vridi-Canal",
+      "localiteId": "ci-l-abidjan-port-bouet",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-treichville-arras",
+      "nom": "Arras",
+      "localiteId": "ci-l-abidjan-treichville",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-treichville-belleville",
+      "nom": "Belleville",
+      "localiteId": "ci-l-abidjan-treichville",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-treichville-biafra",
+      "nom": "Biafra",
+      "localiteId": "ci-l-abidjan-treichville",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-treichville-gare-de-bassam",
+      "nom": "Gare de Bassam",
+      "localiteId": "ci-l-abidjan-treichville",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-treichville-habitat",
+      "nom": "Habitat",
+      "localiteId": "ci-l-abidjan-treichville",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-treichville-zone-portuaire",
+      "nom": "Zone portuaire",
+      "localiteId": "ci-l-abidjan-treichville",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-ananeraie",
+      "nom": "Ananeraie",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-andokoi",
+      "nom": "Andokoi",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-azito",
+      "nom": "Azito",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-banco",
+      "nom": "Banco",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-camp-militaire",
+      "nom": "Camp militaire",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-doukoure",
+      "nom": "Doukouré",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-gesco",
+      "nom": "Gesco",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-koute",
+      "nom": "Kouté",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-koweit",
+      "nom": "Koweït",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-lubafrique",
+      "nom": "Lubafrique",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-mamie-adjoua",
+      "nom": "Mamie Adjoua",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-maroc",
+      "nom": "Maroc",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-niangon-nord",
+      "nom": "Niangon Nord",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-niangon-sud",
+      "nom": "Niangon Sud",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-port-bouet-2",
+      "nom": "Port-Bouët 2",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-selmer",
+      "nom": "Selmer",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-sicogi",
+      "nom": "Sicogi",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-sideci",
+      "nom": "Sideci",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-siporex",
+      "nom": "Siporex",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-toits-rouges",
+      "nom": "Toits Rouges",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-wassakara",
+      "nom": "Wassakara",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-yopougon-attie",
+      "nom": "Yopougon-Attié",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-yopougon-zone-industrielle",
+      "nom": "Zone industrielle",
+      "localiteId": "ci-l-abidjan-yopougon",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-abidjan-bingerville-akandje",
+      "nom": "Akandjé",
+      "localiteId": "ci-l-abidjan-bingerville",
+      "villeId": "ci-v-abidjan"
+    },
+    {
+      "id": "ci-q-yamoussoukro-220-logements",
+      "nom": "220 Logements",
+      "localiteId": "ci-l-yamoussoukro",
+      "villeId": "ci-v-yamoussoukro"
+    },
+    {
+      "id": "ci-q-yamoussoukro-assabou",
+      "nom": "Assabou",
+      "localiteId": "ci-l-yamoussoukro",
+      "villeId": "ci-v-yamoussoukro"
+    },
+    {
+      "id": "ci-q-yamoussoukro-dioulakro",
+      "nom": "Dioulakro",
+      "localiteId": "ci-l-yamoussoukro",
+      "villeId": "ci-v-yamoussoukro"
+    },
+    {
+      "id": "ci-q-yamoussoukro-habitat",
+      "nom": "Habitat",
+      "localiteId": "ci-l-yamoussoukro",
+      "villeId": "ci-v-yamoussoukro"
+    },
+    {
+      "id": "ci-q-yamoussoukro-kokrenou",
+      "nom": "Kokrenou",
+      "localiteId": "ci-l-yamoussoukro",
+      "villeId": "ci-v-yamoussoukro"
+    },
+    {
+      "id": "ci-q-yamoussoukro-millionnaire",
+      "nom": "Millionnaire",
+      "localiteId": "ci-l-yamoussoukro",
+      "villeId": "ci-v-yamoussoukro"
+    },
+    {
+      "id": "ci-q-yamoussoukro-morofe",
+      "nom": "Morofé",
+      "localiteId": "ci-l-yamoussoukro",
+      "villeId": "ci-v-yamoussoukro"
+    },
+    {
+      "id": "ci-q-yamoussoukro-n-zuessy",
+      "nom": "N'Zuessy",
+      "localiteId": "ci-l-yamoussoukro",
+      "villeId": "ci-v-yamoussoukro"
+    },
+    {
+      "id": "ci-q-san-pedro-balmer",
+      "nom": "Balmer",
+      "localiteId": "ci-l-san-pedro",
+      "villeId": "ci-v-san-pedro"
+    },
+    {
+      "id": "ci-q-san-pedro-bardot",
+      "nom": "Bardot",
+      "localiteId": "ci-l-san-pedro",
+      "villeId": "ci-v-san-pedro"
+    },
+    {
+      "id": "ci-q-san-pedro-cite",
+      "nom": "Cité",
+      "localiteId": "ci-l-san-pedro",
+      "villeId": "ci-v-san-pedro"
+    },
+    {
+      "id": "ci-q-san-pedro-lac",
+      "nom": "Lac",
+      "localiteId": "ci-l-san-pedro",
+      "villeId": "ci-v-san-pedro"
+    },
+    {
+      "id": "ci-q-san-pedro-seweke",
+      "nom": "Séwéké",
+      "localiteId": "ci-l-san-pedro",
+      "villeId": "ci-v-san-pedro"
+    },
+    {
+      "id": "ci-q-san-pedro-zone-industrielle",
+      "nom": "Zone industrielle",
+      "localiteId": "ci-l-san-pedro",
+      "villeId": "ci-v-san-pedro"
+    },
+    {
+      "id": "ci-q-abengourou-commerce",
+      "nom": "Commerce",
+      "localiteId": "ci-l-abengourou",
+      "villeId": "ci-v-abengourou"
+    },
+    {
+      "id": "ci-q-abengourou-dioulakro",
+      "nom": "Dioulakro",
+      "localiteId": "ci-l-abengourou",
+      "villeId": "ci-v-abengourou"
+    },
+    {
+      "id": "ci-q-abengourou-residentiel",
+      "nom": "Résidentiel",
+      "localiteId": "ci-l-abengourou",
+      "villeId": "ci-v-abengourou"
+    },
+    {
+      "id": "ci-q-gagnoa-babre",
+      "nom": "Babré",
+      "localiteId": "ci-l-gagnoa",
+      "villeId": "ci-v-gagnoa"
+    },
+    {
+      "id": "ci-q-gagnoa-barouhio",
+      "nom": "Barouhio",
+      "localiteId": "ci-l-gagnoa",
+      "villeId": "ci-v-gagnoa"
+    },
+    {
+      "id": "ci-q-gagnoa-commerce",
+      "nom": "Commerce",
+      "localiteId": "ci-l-gagnoa",
+      "villeId": "ci-v-gagnoa"
+    },
+    {
+      "id": "ci-q-gagnoa-dioulabougou",
+      "nom": "Dioulabougou",
+      "localiteId": "ci-l-gagnoa",
+      "villeId": "ci-v-gagnoa"
+    },
+    {
+      "id": "ci-q-gagnoa-garahio",
+      "nom": "Garahio",
+      "localiteId": "ci-l-gagnoa",
+      "villeId": "ci-v-gagnoa"
+    },
+    {
+      "id": "ci-q-gagnoa-sokoura",
+      "nom": "Sokoura",
+      "localiteId": "ci-l-gagnoa",
+      "villeId": "ci-v-gagnoa"
+    },
+    {
+      "id": "ci-q-man-air-france",
+      "nom": "Air France",
+      "localiteId": "ci-l-man",
+      "villeId": "ci-v-man"
+    },
+    {
+      "id": "ci-q-man-commerce",
+      "nom": "Commerce",
+      "localiteId": "ci-l-man",
+      "villeId": "ci-v-man"
+    },
+    {
+      "id": "ci-q-man-domoraud",
+      "nom": "Domoraud",
+      "localiteId": "ci-l-man",
+      "villeId": "ci-v-man"
+    },
+    {
+      "id": "ci-q-man-grand-gbapleu",
+      "nom": "Grand-Gbapleu",
+      "localiteId": "ci-l-man",
+      "villeId": "ci-v-man"
+    },
+    {
+      "id": "ci-q-man-libreville",
+      "nom": "Libreville",
+      "localiteId": "ci-l-man",
+      "villeId": "ci-v-man"
+    },
+    {
+      "id": "ci-q-man-petit-gbapleu",
+      "nom": "Petit-Gbapleu",
+      "localiteId": "ci-l-man",
+      "villeId": "ci-v-man"
+    },
+    {
+      "id": "ci-q-daloa-commerce",
+      "nom": "Commerce",
+      "localiteId": "ci-l-daloa",
+      "villeId": "ci-v-daloa"
+    },
+    {
+      "id": "ci-q-daloa-gbeuliville",
+      "nom": "Gbeuliville",
+      "localiteId": "ci-l-daloa",
+      "villeId": "ci-v-daloa"
+    },
+    {
+      "id": "ci-q-daloa-kennedy",
+      "nom": "Kennedy",
+      "localiteId": "ci-l-daloa",
+      "villeId": "ci-v-daloa"
+    },
+    {
+      "id": "ci-q-daloa-labia",
+      "nom": "Labia",
+      "localiteId": "ci-l-daloa",
+      "villeId": "ci-v-daloa"
+    },
+    {
+      "id": "ci-q-daloa-lobia",
+      "nom": "Lobia",
+      "localiteId": "ci-l-daloa",
+      "villeId": "ci-v-daloa"
+    },
+    {
+      "id": "ci-q-daloa-orly",
+      "nom": "Orly",
+      "localiteId": "ci-l-daloa",
+      "villeId": "ci-v-daloa"
+    },
+    {
+      "id": "ci-q-daloa-tazibouo",
+      "nom": "Tazibouo",
+      "localiteId": "ci-l-daloa",
+      "villeId": "ci-v-daloa"
+    },
+    {
+      "id": "ci-q-korhogo-banaforo",
+      "nom": "Banaforo",
+      "localiteId": "ci-l-korhogo",
+      "villeId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-q-korhogo-delafosse",
+      "nom": "Delafosse",
+      "localiteId": "ci-l-korhogo",
+      "villeId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-q-korhogo-haoussabougou",
+      "nom": "Haoussabougou",
+      "localiteId": "ci-l-korhogo",
+      "villeId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-q-korhogo-koko",
+      "nom": "Koko",
+      "localiteId": "ci-l-korhogo",
+      "villeId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-q-korhogo-petit-paris",
+      "nom": "Petit-Paris",
+      "localiteId": "ci-l-korhogo",
+      "villeId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-q-korhogo-residentiel",
+      "nom": "Résidentiel",
+      "localiteId": "ci-l-korhogo",
+      "villeId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-q-korhogo-soba",
+      "nom": "Soba",
+      "localiteId": "ci-l-korhogo",
+      "villeId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-q-korhogo-tchekelezo",
+      "nom": "Tchekelezo",
+      "localiteId": "ci-l-korhogo",
+      "villeId": "ci-v-korhogo"
+    },
+    {
+      "id": "ci-q-bouake-ahougnansou",
+      "nom": "Ahougnansou",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-air-france",
+      "nom": "Air France",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-belleville",
+      "nom": "Belleville",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-broukro",
+      "nom": "Broukro",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-commerce",
+      "nom": "Commerce",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-dar-es-salam",
+      "nom": "Dar-Es-Salam",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-kennedy",
+      "nom": "Kennedy",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-koko",
+      "nom": "Koko",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-n-gattakro",
+      "nom": "N'Gattakro",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-nimbo",
+      "nom": "Nimbo",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-sokoura",
+      "nom": "Sokoura",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-bouake-zone-industrielle",
+      "nom": "Zone industrielle",
+      "localiteId": "ci-l-bouake",
+      "villeId": "ci-v-bouake"
+    },
+    {
+      "id": "ci-q-grand-bassam-imperial",
+      "nom": "Impérial",
+      "localiteId": "ci-l-grand-bassam",
+      "villeId": "ci-v-grand-bassam"
+    },
+    {
+      "id": "ci-q-grand-bassam-moossou",
+      "nom": "Moossou",
+      "localiteId": "ci-l-grand-bassam",
+      "villeId": "ci-v-grand-bassam"
+    },
+    {
+      "id": "ci-q-grand-bassam-petit-paris",
+      "nom": "Petit-Paris",
+      "localiteId": "ci-l-grand-bassam",
+      "villeId": "ci-v-grand-bassam"
+    },
+    {
+      "id": "ci-q-grand-bassam-phare",
+      "nom": "Phare",
+      "localiteId": "ci-l-grand-bassam",
+      "villeId": "ci-v-grand-bassam"
+    },
+    {
+      "id": "ci-q-grand-bassam-quartier-france",
+      "nom": "Quartier France",
+      "localiteId": "ci-l-grand-bassam",
+      "villeId": "ci-v-grand-bassam"
+    }
+  ]
+}
