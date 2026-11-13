@@ -15,7 +15,7 @@ export type WikiImage = {
 }
 
 const API = "https://fr.wikipedia.org/w/api.php"
-const CACHE_KEY = "ci-geo-wiki-v2"
+const CACHE_KEY = "ci-geo-wiki-v3"
 const TTL_MS = 7 * 24 * 3600 * 1000
 const THUMB = 800
 
@@ -98,7 +98,13 @@ async function load(titles: string[]) {
 
   const found = new Map<string, WikiImage>()
   for (const page of data.query?.pages ?? [])
-    if (page.thumbnail && page.pageimage)
+    // Only free files from Commons: a file stored on fr.wikipedia itself is a
+    // non-free image used there under fair use, which the app may not reuse.
+    if (
+      page.thumbnail &&
+      page.pageimage &&
+      page.thumbnail.source.includes("/wikipedia/commons/")
+    )
       found.set(original(page.title), {
         src: page.thumbnail.source,
         width: page.thumbnail.width,
@@ -132,6 +138,9 @@ async function load(titles: string[]) {
       Object.assign(image, byFile.get(image.file.replace(/ /g, "_")))
   }
 
+  for (const [title, image] of found)
+    if (image.license && /non[ -]libre|non-free|fair use/i.test(image.license))
+      found.delete(title)
   for (const title of titles) cache.set(title, found.get(title) ?? null)
   writeCache()
 }

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Carré</title>
+    <link rel="stylesheet" href="poster.css" />
+    <script src="demo.js"></script>
+    <style>
+      body {
+        width: 1080px;
+        height: 1080px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="position: absolute; inset: 0 0 auto 0; height: 12px">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <img
+      class="map"
+      src="carte.svg"
+      style="right: -60px; top: 120px; width: 620px; opacity: 0.6"
+      alt=""
+    />
+    <div
+      style="
+        position: absolute;
+        left: 72px;
+        top: 76px;
+        width: 540px;
+        display: flex;
+        flex-direction: column;
+        gap: 26px;
+      "
+    >
+      <div class="logo" style="font-size: 36px">
+        <svg viewBox="0 0 34 34" aria-hidden="true">
+          <path
+            d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z"
+            fill="#e0680a"
+          />
+          <circle cx="17" cy="13.3" r="4" fill="#fff" />
+        </svg>
+        CI-Geo
+      </div>
+      <h1 class="display" style="font-size: 72px">
+        Apprends la Côte d'Ivoire <span class="accent">en jouant.</span>
+      </h1>
+      <ul
+        style="
+          margin: 0;
+          padding: 0;
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          font-size: 26px;
+          font-weight: 600;
+        "
+      >
+        <li>📍 Les 14 districts sur une vraie carte</li>
+        <li>📖 L'histoire des peuples et des sites</li>
+        <li>🎮 10 jeux, un défi chaque jour</li>
+        <li>🏆 Niveaux, badges et duels entre amis</li>
+      </ul>
+      <span class="cta" style="font-size: 30px; align-self: flex-start"
+        >Gratuit · sans inscription</span
+      >
+    </div>
+    <div
+      class="phone"
+      style="
+        left: 665px;
+        top: 300px;
+        --w: 320px;
+        --s: 0.7713;
+        transform: rotate(4deg);
+      "
+    >
+      <div class="screen"><iframe src="/#/jeux" scrolling="no"></iframe></div>
+    </div>
+    <p class="credit" style="left: 72px; bottom: 20px">
+      Limites des districts : geoBoundaries (Banque mondiale, CC BY 4.0)
+    </p>
+  </body>
+</html>

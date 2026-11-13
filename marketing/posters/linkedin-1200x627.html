@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>LinkedIn paysage</title>
+    <link rel="stylesheet" href="poster.css" />
+    <script src="demo.js"></script>
+    <style>
+      body {
+        width: 1200px;
+        height: 627px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="position: absolute; inset: 0 0 auto 0; height: 8px">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <img
+      class="map"
+      src="carte.svg"
+      style="right: -60px; top: 20px; width: 620px; opacity: 0.55"
+      alt=""
+    />
+    <div
+      style="
+        position: absolute;
+        left: 64px;
+        top: 52px;
+        width: 610px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      "
+    >
+      <div class="logo" style="font-size: 30px">
+        <svg viewBox="0 0 34 34" aria-hidden="true">
+          <path
+            d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z"
+            fill="#e0680a"
+          />
+          <circle cx="17" cy="13.3" r="4" fill="#fff" />
+        </svg>
+        CI-Geo
+      </div>
+      <p class="eyebrow" style="font-size: 15px">
+        Nouvelle application · gratuite
+      </p>
+      <h1 class="display" style="font-size: 54px">
+        La Côte d'Ivoire, <span class="accent">ville par ville,</span> peuple
+        par peuple.
+      </h1>
+      <p
+        style="
+          margin: 0;
+          font-size: 20px;
+          line-height: 1.45;
+          color: var(--muted);
+        "
+      >
+        Un atlas des 14 districts, les récits des peuples et des sites, et 10
+        jeux pour apprendre la géographie du pays en s'amusant.
+      </p>
+      <div class="chips" style="font-size: 16px">
+        <span class="chip"><b>46</b> villes</span
+        ><span class="chip"><b>16</b> peuples</span
+        ><span class="chip"><b>15</b> sites</span
+        ><span class="chip"><b>10</b> jeux</span>
+      </div>
+    </div>
+    <div
+      class="phone"
+      style="
+        left: 745px;
+        top: 66px;
+        --w: 236px;
+        --s: 0.5688;
+        transform: rotate(-6deg);
+      "
+    >
+      <div class="screen"><iframe src="/#/" scrolling="no"></iframe></div>
+    </div>
+    <div
+      class="phone"
+      style="
+        left: 945px;
+        top: 112px;
+        --w: 236px;
+        --s: 0.5688;
+        transform: rotate(5deg);
+      "
+    >
+      <div class="screen">
+        <iframe src="/#/decouvrir/sites/tai" scrolling="no"></iframe>
+      </div>
+    </div>
+    <p class="credit" style="left: 64px; bottom: 12px">
+      Limites des districts : geoBoundaries (Banque mondiale, CC BY 4.0) ·
+      Photos : Wikimedia Commons
+    </p>
+  </body>
+</html>

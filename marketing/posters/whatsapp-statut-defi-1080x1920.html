@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>WhatsApp statut défi</title>
+    <link rel="stylesheet" href="poster.css" />
+    <script src="demo.js"></script>
+    <style>
+      body {
+        width: 1080px;
+        height: 1920px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      style="
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            circle at 85% 12%,
+            rgba(224, 104, 10, 0.22),
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 10% 90%,
+            rgba(11, 122, 75, 0.18),
+            transparent 45%
+          );
+      "
+    ></div>
+    <div style="position: absolute; inset: 0 0 auto 0; height: 14px">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <div
+      style="
+        position: absolute;
+        left: 80px;
+        right: 80px;
+        top: 110px;
+        display: flex;
+        flex-direction: column;
+        gap: 26px;
+        align-items: flex-start;
+      "
+    >
+      <div class="logo" style="font-size: 40px">
+        <svg viewBox="0 0 34 34" aria-hidden="true">
+          <path
+            d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z"
+            fill="#e0680a"
+          />
+          <circle cx="17" cy="13.3" r="4" fill="#fff" />
+        </svg>
+        CI-Geo
+      </div>
+      <h1 class="display" style="font-size: 104px">
+        Tu connais vraiment <span class="accent">ton pays&nbsp;?</span>
+      </h1>
+      <p
+        style="
+          margin: 0;
+          font-size: 34px;
+          line-height: 1.4;
+          color: var(--muted);
+        "
+      >
+        Chaque jour, 5 villes à placer sur la carte. Le même défi pour tout le
+        monde. Partage ton score 🟩🟨🟧
+      </p>
+    </div>
+    <div
+      class="phone"
+      style="
+        left: 310px;
+        top: 690px;
+        --w: 460px;
+        --s: 1.1087;
+        transform: rotate(0deg);
+      "
+    >
+      <div class="screen"><iframe src="/#/" scrolling="no"></iframe></div>
+    </div>
+    <div
+      style="
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 64px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+      "
+    >
+      <span
+        class="cta"
+        style="
+          font-size: 40px;
+          box-shadow: 0 20px 40px -18px rgba(224, 104, 10, 0.8);
+        "
+        >Relève le défi du jour</span
+      >
+      <p style="margin: 0; font-size: 26px; color: var(--muted)">
+        Gratuit · sans inscription · sur ton téléphone
+      </p>
+    </div>
+  </body>
+</html>

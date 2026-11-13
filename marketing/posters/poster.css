@@ -1,0 +1,184 @@
+@font-face {
+  font-family: "Space Grotesk";
+  font-weight: 600;
+  src: url(fonts/space-grotesk-latin-600-normal.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-weight: 700;
+  src: url(fonts/space-grotesk-latin-700-normal.woff2) format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-weight: 400;
+  src: url(fonts/ibm-plex-sans-latin-400-normal.woff2) format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-weight: 600;
+  src: url(fonts/ibm-plex-sans-latin-600-normal.woff2) format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-weight: 500;
+  src: url(fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2");
+}
+
+:root {
+  --paper: #eef2ee;
+  --ink: #17241e;
+  --muted: #56675e;
+  --orange: #e0680a;
+  --green: #0b7a4b;
+  --green-soft: #e1f1e8;
+  --line: #d3ddd5;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+}
+body {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "IBM Plex Sans", sans-serif;
+}
+
+.display {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  margin: 0;
+}
+.eyebrow {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin: 0;
+}
+.accent {
+  color: var(--orange);
+}
+
+/* The flag, as a thin band. */
+.flag {
+  display: flex;
+  height: 100%;
+}
+.flag span {
+  flex: 1;
+}
+.flag span:nth-child(1) {
+  background: #f77f00;
+}
+.flag span:nth-child(2) {
+  background: #ffffff;
+}
+.flag span:nth-child(3) {
+  background: #009e60;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+}
+.logo svg {
+  height: 1.3em;
+  width: auto;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.45em 0.9em;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1.5px solid var(--line);
+  font-weight: 600;
+}
+.chip b {
+  color: var(--orange);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em 1.2em;
+  border-radius: 999px;
+  background: var(--orange);
+  color: #fff;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+}
+
+/* A phone with the real app inside: a 390 × 844 frame, scaled. */
+.phone {
+  --w: 300px;
+  position: absolute;
+  width: var(--w);
+  height: calc(var(--w) * 844 / 390);
+  border-radius: calc(var(--w) * 0.13);
+  background: #0f1714;
+  padding: calc(var(--w) * 0.03);
+  box-shadow:
+    0 40px 80px -30px rgba(23, 36, 30, 0.55),
+    0 0 0 2px #2a3b33 inset;
+}
+.phone .screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: calc(var(--w) * 0.105);
+  background: var(--paper);
+}
+.phone iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 390px;
+  height: 844px;
+  border: 0;
+  transform-origin: 0 0;
+  /* --s = width × 0.94 ÷ 390, set next to --w on each phone. */
+  transform: scale(var(--s));
+}
+.phone .notch {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--w) * 0.045);
+  left: 50%;
+  width: 28%;
+  height: calc(var(--w) * 0.075);
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: #0f1714;
+}
+
+.map {
+  position: absolute;
+  opacity: 0.95;
+}
+.credit {
+  position: absolute;
+  font-size: 11px;
+  color: var(--muted);
+}

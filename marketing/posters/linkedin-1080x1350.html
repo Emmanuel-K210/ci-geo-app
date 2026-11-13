@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>LinkedIn portrait</title>
+    <link rel="stylesheet" href="poster.css" />
+    <script src="demo.js"></script>
+    <style>
+      body {
+        width: 1080px;
+        height: 1350px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="position: absolute; inset: 0 0 auto 0; height: 12px">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <div
+      style="
+        position: absolute;
+        left: 80px;
+        top: 76px;
+        right: 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      "
+    >
+      <div class="logo" style="font-size: 36px">
+        <svg viewBox="0 0 34 34" aria-hidden="true">
+          <path
+            d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z"
+            fill="#e0680a"
+          />
+          <circle cx="17" cy="13.3" r="4" fill="#fff" />
+        </svg>
+        CI-Geo
+      </div>
+      <h1 class="display" style="font-size: 76px">
+        Connaissez-vous vraiment
+        <span class="accent">la Côte d'Ivoire&nbsp;?</span>
+      </h1>
+      <p
+        style="
+          margin: 0;
+          font-size: 26px;
+          line-height: 1.45;
+          color: var(--muted);
+          max-width: 840px;
+        "
+      >
+        Atlas, histoire des peuples, sites à visiter et jeux de géographie : une
+        application gratuite, pensée pour le téléphone.
+      </p>
+    </div>
+    <img
+      class="map"
+      src="carte.svg"
+      style="left: 290px; top: 470px; width: 700px; opacity: 0.5"
+      alt=""
+    />
+    <div
+      class="phone"
+      style="
+        left: 60px;
+        top: 560px;
+        --w: 290px;
+        --s: 0.699;
+        transform: rotate(-5deg);
+      "
+    >
+      <div class="screen">
+        <iframe src="/#/atlas?ville=ci-v-korhogo" scrolling="no"></iframe>
+      </div>
+    </div>
+    <div
+      class="phone"
+      style="
+        left: 395px;
+        top: 515px;
+        --w: 290px;
+        --s: 0.699;
+        transform: rotate(0deg);
+      "
+    >
+      <div class="screen"><iframe src="/#/" scrolling="no"></iframe></div>
+    </div>
+    <div
+      class="phone"
+      style="
+        left: 730px;
+        top: 560px;
+        --w: 290px;
+        --s: 0.699;
+        transform: rotate(5deg);
+      "
+    >
+      <div class="screen">
+        <iframe src="/#/decouvrir/sites" scrolling="no"></iframe>
+      </div>
+    </div>
+    <div
+      style="
+        position: absolute;
+        left: 80px;
+        right: 80px;
+        bottom: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      "
+    >
+      <div class="chips" style="font-size: 22px">
+        <span class="chip"><b>14</b> districts</span
+        ><span class="chip"><b>16</b> peuples</span
+        ><span class="chip"><b>10</b> jeux</span>
+      </div>
+      <span class="cta" style="font-size: 26px"
+        >Gratuit · sans inscription</span
+      >
+    </div>
+    <p class="credit" style="left: 80px; bottom: 18px">
+      Limites des districts : geoBoundaries (Banque mondiale, CC BY 4.0) ·
+      Photos : Wikimedia Commons
+    </p>
+  </body>
+</html>
