@@ -8,6 +8,7 @@ export const GAME_IDS = [
   "chrono",
   "pin",
   "compass",
+  "sites",
 ] as const
 export type GameId = (typeof GAME_IDS)[number]
 
@@ -19,3 +20,4 @@ export type GameEvent =
   | { game: "clues"; points: number; firstClue: number }
   | { game: "closer"; streak: number }
   | { game: "compass"; score: number; total: number }
+  | { game: "sites"; distances: number[] }

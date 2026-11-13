@@ -19,6 +19,8 @@ import { Route as JeuxBoussoleRouteImport } from './routes/jeux/boussole'
 import { Route as JeuxCarteATrousRouteImport } from './routes/jeux/carte-a-trous'
 import { Route as JeuxChronoRouteImport } from './routes/jeux/chrono'
 import { Route as JeuxDuJourRouteImport } from './routes/jeux/du-jour'
+import { Route as JeuxDuelRouteImport } from './routes/jeux/duel'
+import { Route as JeuxOuEstCeSiteRouteImport } from './routes/jeux/ou-est-ce-site'
 import { Route as JeuxPlusPresPlusLoinRouteImport } from './routes/jeux/plus-pres-plus-loin'
 import { Route as JeuxQuizRouteImport } from './routes/jeux/quiz'
 import { Route as JeuxVilleMystereRouteImport } from './routes/jeux/ville-mystere'
@@ -80,6 +82,16 @@ const JeuxChronoRoute = JeuxChronoRouteImport.update({
 const JeuxDuJourRoute = JeuxDuJourRouteImport.update({
   id: '/jeux/du-jour',
   path: '/jeux/du-jour',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JeuxDuelRoute = JeuxDuelRouteImport.update({
+  id: '/jeux/duel',
+  path: '/jeux/duel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JeuxOuEstCeSiteRoute = JeuxOuEstCeSiteRouteImport.update({
+  id: '/jeux/ou-est-ce-site',
+  path: '/jeux/ou-est-ce-site',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JeuxPlusPresPlusLoinRoute = JeuxPlusPresPlusLoinRouteImport.update({
@@ -152,6 +164,8 @@ export interface FileRoutesByFullPath {
   '/jeux/carte-a-trous': typeof JeuxCarteATrousRoute
   '/jeux/chrono': typeof JeuxChronoRoute
   '/jeux/du-jour': typeof JeuxDuJourRoute
+  '/jeux/duel': typeof JeuxDuelRoute
+  '/jeux/ou-est-ce-site': typeof JeuxOuEstCeSiteRoute
   '/jeux/plus-pres-plus-loin': typeof JeuxPlusPresPlusLoinRoute
   '/jeux/quiz': typeof JeuxQuizRoute
   '/jeux/ville-mystere': typeof JeuxVilleMystereRoute
@@ -176,6 +190,8 @@ export interface FileRoutesByTo {
   '/jeux/carte-a-trous': typeof JeuxCarteATrousRoute
   '/jeux/chrono': typeof JeuxChronoRoute
   '/jeux/du-jour': typeof JeuxDuJourRoute
+  '/jeux/duel': typeof JeuxDuelRoute
+  '/jeux/ou-est-ce-site': typeof JeuxOuEstCeSiteRoute
   '/jeux/plus-pres-plus-loin': typeof JeuxPlusPresPlusLoinRoute
   '/jeux/quiz': typeof JeuxQuizRoute
   '/jeux/ville-mystere': typeof JeuxVilleMystereRoute
@@ -201,6 +217,8 @@ export interface FileRoutesById {
   '/jeux/carte-a-trous': typeof JeuxCarteATrousRoute
   '/jeux/chrono': typeof JeuxChronoRoute
   '/jeux/du-jour': typeof JeuxDuJourRoute
+  '/jeux/duel': typeof JeuxDuelRoute
+  '/jeux/ou-est-ce-site': typeof JeuxOuEstCeSiteRoute
   '/jeux/plus-pres-plus-loin': typeof JeuxPlusPresPlusLoinRoute
   '/jeux/quiz': typeof JeuxQuizRoute
   '/jeux/ville-mystere': typeof JeuxVilleMystereRoute
@@ -227,6 +245,8 @@ export interface FileRouteTypes {
     | '/jeux/carte-a-trous'
     | '/jeux/chrono'
     | '/jeux/du-jour'
+    | '/jeux/duel'
+    | '/jeux/ou-est-ce-site'
     | '/jeux/plus-pres-plus-loin'
     | '/jeux/quiz'
     | '/jeux/ville-mystere'
@@ -251,6 +271,8 @@ export interface FileRouteTypes {
     | '/jeux/carte-a-trous'
     | '/jeux/chrono'
     | '/jeux/du-jour'
+    | '/jeux/duel'
+    | '/jeux/ou-est-ce-site'
     | '/jeux/plus-pres-plus-loin'
     | '/jeux/quiz'
     | '/jeux/ville-mystere'
@@ -275,6 +297,8 @@ export interface FileRouteTypes {
     | '/jeux/carte-a-trous'
     | '/jeux/chrono'
     | '/jeux/du-jour'
+    | '/jeux/duel'
+    | '/jeux/ou-est-ce-site'
     | '/jeux/plus-pres-plus-loin'
     | '/jeux/quiz'
     | '/jeux/ville-mystere'
@@ -300,6 +324,8 @@ export interface RootRouteChildren {
   JeuxCarteATrousRoute: typeof JeuxCarteATrousRoute
   JeuxChronoRoute: typeof JeuxChronoRoute
   JeuxDuJourRoute: typeof JeuxDuJourRoute
+  JeuxDuelRoute: typeof JeuxDuelRoute
+  JeuxOuEstCeSiteRoute: typeof JeuxOuEstCeSiteRoute
   JeuxPlusPresPlusLoinRoute: typeof JeuxPlusPresPlusLoinRoute
   JeuxQuizRoute: typeof JeuxQuizRoute
   JeuxVilleMystereRoute: typeof JeuxVilleMystereRoute
@@ -386,6 +412,20 @@ declare module '@tanstack/react-router' {
       path: '/jeux/du-jour'
       fullPath: '/jeux/du-jour'
       preLoaderRoute: typeof JeuxDuJourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jeux/duel': {
+      id: '/jeux/duel'
+      path: '/jeux/duel'
+      fullPath: '/jeux/duel'
+      preLoaderRoute: typeof JeuxDuelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jeux/ou-est-ce-site': {
+      id: '/jeux/ou-est-ce-site'
+      path: '/jeux/ou-est-ce-site'
+      fullPath: '/jeux/ou-est-ce-site'
+      preLoaderRoute: typeof JeuxOuEstCeSiteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/jeux/plus-pres-plus-loin': {
@@ -484,6 +524,8 @@ const rootRouteChildren: RootRouteChildren = {
   JeuxCarteATrousRoute: JeuxCarteATrousRoute,
   JeuxChronoRoute: JeuxChronoRoute,
   JeuxDuJourRoute: JeuxDuJourRoute,
+  JeuxDuelRoute: JeuxDuelRoute,
+  JeuxOuEstCeSiteRoute: JeuxOuEstCeSiteRoute,
   JeuxPlusPresPlusLoinRoute: JeuxPlusPresPlusLoinRoute,
   JeuxQuizRoute: JeuxQuizRoute,
   JeuxVilleMystereRoute: JeuxVilleMystereRoute,

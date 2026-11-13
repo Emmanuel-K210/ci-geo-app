@@ -97,6 +97,11 @@ function scoreOf(event: GameEvent): [key: string, score: number] {
         "daily",
         event.distances.reduce((sum, km) => sum + dailyPoints(km), 0),
       ]
+    case "sites":
+      return [
+        "sites",
+        event.distances.reduce((sum, km) => sum + dailyPoints(km), 0),
+      ]
     case "clues":
       return ["clues", event.points]
     case "closer":
@@ -110,6 +115,7 @@ export function xpFor(event: GameEvent): number {
   const [, score] = scoreOf(event)
   switch (event.game) {
     case "daily":
+    case "sites":
       return Math.round(score / 5)
     case "clues":
       return score * 4

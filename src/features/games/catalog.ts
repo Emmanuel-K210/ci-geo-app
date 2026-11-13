@@ -2,13 +2,16 @@ import {
   Brain,
   Compass,
   Crosshair,
+  Landmark,
   Search,
+  Swords,
   Timer,
   TrendingUpDown,
   type LucideIcon,
 } from "lucide-react"
 
 import { DAILY_MAX } from "@/features/games/daily"
+import { SITES_MAX } from "@/features/games/sites-game"
 
 export type GamePath =
   | "/jeux/ville-mystere"
@@ -17,6 +20,8 @@ export type GamePath =
   | "/jeux/chrono"
   | "/jeux/carte-a-trous"
   | "/jeux/boussole"
+  | "/jeux/ou-est-ce-site"
+  | "/jeux/duel"
 
 export type GameCard = {
   id: string
@@ -36,6 +41,15 @@ const quizBest = (best: Record<string, number>) =>
   )
 
 export const GAMES: GameCard[] = [
+  {
+    id: "sites",
+    to: "/jeux/ou-est-ce-site",
+    title: "Où est ce site ?",
+    description: "La photo d'un lieu célèbre : placez-le sur la carte.",
+    icon: Landmark,
+    best: (best) =>
+      best.sites ? `Record : ${best.sites} / ${SITES_MAX} points` : null,
+  },
   {
     id: "clues",
     to: "/jeux/ville-mystere",
@@ -86,6 +100,14 @@ export const GAMES: GameCard[] = [
     description: "Depuis cette ville, dans quelle direction est l'autre ?",
     icon: Compass,
     best: (best) => (best.compass ? `Record : ${best.compass} / 10` : null),
+  },
+  {
+    id: "duel",
+    to: "/jeux/duel",
+    title: "Duel entre amis",
+    description: "Les mêmes 10 questions pour vous et un ami, par un lien.",
+    icon: Swords,
+    best: () => null,
   },
 ]
 

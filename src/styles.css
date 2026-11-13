@@ -99,11 +99,47 @@
 }
 
 /* The SVG map */
-.map-svg .country {
+.map-svg .edge {
   fill: var(--land);
   stroke: var(--green);
-  stroke-width: 1.5;
+  stroke-width: 3;
   stroke-linejoin: round;
+}
+.map-svg .district {
+  fill: var(--land);
+  stroke: color-mix(in srgb, var(--green) 40%, transparent);
+  stroke-width: 0.8;
+  stroke-linejoin: round;
+  transition: fill 0.2s;
+}
+.map-svg .district[role="button"] {
+  cursor: pointer;
+}
+.map-svg .district[role="button"]:hover {
+  fill: var(--land-2);
+}
+/* Mastery: the share of the district's cities already opened. */
+.map-svg .district.m1 {
+  fill: color-mix(in srgb, var(--green) 14%, var(--land));
+}
+.map-svg .district.m2 {
+  fill: color-mix(in srgb, var(--green) 30%, var(--land));
+}
+.map-svg .district.m3 {
+  fill: color-mix(in srgb, var(--green) 50%, var(--land));
+}
+.map-svg .district.on {
+  fill: color-mix(in srgb, var(--orange) 55%, var(--land));
+  stroke: var(--orange);
+  stroke-width: 1.5;
+}
+.map-svg .dname {
+  font: 600 9.5px var(--font-sans);
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 2.5px;
+  pointer-events: none;
 }
 .map-svg .sea {
   fill: none;

@@ -13,10 +13,13 @@ import {
   shareText,
   square,
 } from "@/features/games/daily"
+import { DUEL_ROUND, duelQuestions } from "@/features/games/duel"
 import { makeQuestion, QUIZ_MODES } from "@/features/games/questions"
+import { sitesRound } from "@/features/games/sites-game"
 import { ABIDJAN, distanceKm, geo, villes, YAMOUSSOUKRO } from "@/geo"
 import { bearing, direction, sectorMargin } from "@/geo/compass"
 import { BOUNDS, px, py, unproject } from "@/geo/projection"
+import { COAST, DISTRICT_PATHS } from "@/geo/shapes"
 import { seededRng } from "@/lib/random"
 import { groupeById, PEUPLES } from "@/culture/peuples"
 import { SITES } from "@/culture/sites"
@@ -251,5 +254,40 @@ describe("culture", () => {
   it("has unique ids and a story of the day", () => {
     expect(new Set(STORIES.map((story) => story.key)).size).toBe(STORIES.length)
     expect(storyOfTheDay("2026-11-13")).toBe(storyOfTheDay("2026-11-13"))
+  })
+})
+
+describe("new games", () => {
+  it("gives both duel players the same questions", () => {
+    const a = duelQuestions("tout", 12345)
+    const b = duelQuestions("tout", 12345)
+    expect(a).toEqual(b)
+    expect(a).toHaveLength(DUEL_ROUND)
+    expect(new Set(a.map((q) => q.text)).size).toBe(DUEL_ROUND)
+  })
+
+  it("draws five different sites", () => {
+    const round = sitesRound(seededRng(3))
+    expect(new Set(round.map((site) => site.id)).size).toBe(round.length)
+  })
+
+  it("scores the sites game like the daily challenge", () => {
+    expect(xpFor({ game: "sites", distances: [0, 0, 0, 0, 0] })).toBe(100)
+  })
+})
+
+describe("district outlines", () => {
+  it("draws every district of the reference", () => {
+    const ids = DISTRICT_PATHS.map((shape) => shape.id).sort()
+    expect(ids).toEqual(geo.districts.map((d) => d.id).sort())
+    for (const shape of DISTRICT_PATHS) expect(shape.d).toMatch(/^M[\d.]+,/)
+  })
+
+  it("keeps each city inside the map frame", () => {
+    for (const ville of villes) {
+      expect(px(ville.lon)).toBeGreaterThan(0)
+      expect(py(ville.lat)).toBeGreaterThan(0)
+    }
+    expect(COAST.length).toBeGreaterThan(20)
   })
 })

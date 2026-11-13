@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
 import type { AtlasSearch } from "@/features/atlas/search"
+import { CountryMap } from "@/components/country-map"
 import { MapTabs } from "@/components/map-tabs"
 import { Button, Empty, Pill } from "@/components/ui"
 import {
@@ -24,22 +25,14 @@ import { pick } from "@/lib/random"
 import { copyText } from "@/lib/share"
 import { useProgress } from "@/stores/progress"
 
-/** The schematic map: each district where it roughly lies. */
-const AREAS: Record<string, string> = {
-  "ci-d-denguele": "den",
-  "ci-d-savanes": "sav",
-  "ci-d-zanzan": "zan",
-  "ci-d-woroba": "wor",
-  "ci-d-vallee-du-bandama": "vdb",
-  "ci-d-montagnes": "mon",
-  "ci-d-sassandra-marahoue": "sma",
-  "ci-d-yamoussoukro": "yam",
-  "ci-d-lacs": "lac",
-  "ci-d-comoe": "com",
-  "ci-d-goh-djiboua": "goh",
-  "ci-d-bas-sassandra": "bas",
-  "ci-d-lagunes": "lag",
-  "ci-d-abidjan": "abj",
+/** m1 to m3: how many of the district's cities were opened. */
+function masteryClass(districtId: string, visited: string[]) {
+  const item = districtById(districtId)
+  if (!item?.villes.length) return ""
+  const share =
+    item.villes.filter((v) => visited.includes(v.id)).length /
+    item.villes.length
+  return share >= 1 ? "m3" : share >= 0.5 ? "m2" : share > 0 ? "m1" : ""
 }
 
 const QUARTIERS_PREVIEW = 24
@@ -83,6 +76,7 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
   const panel = useRef<HTMLDivElement>(null)
   const visit = useProgress((state) => state.visit)
   const devMode = useProgress((state) => state.settings.devMode)
+  const visited = useProgress((state) => state.visited)
 
   const ville =
     villeById(search.ville) ?? (search.district ? undefined : ABIDJAN)
@@ -141,12 +135,40 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
       </div>
 
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-        <div className="overflow-hidden card bg-[radial-gradient(circle_at_1px_1px,var(--line)_1px,transparent_0)] bg-size-[18px_18px] p-3 sm:p-4">
-          <div
-            role="group"
-            aria-label="Carte schématique des districts"
-            className="grid auto-rows-[minmax(64px,auto)] grid-cols-5 gap-1.5 [grid-template-areas:'den_sav_sav_zan_zan''wor_wor_vdb_zan_zan''mon_sma_yam_lac_com''mon_sma_goh_lac_com''bas_bas_goh_lag_abj'] sm:auto-rows-[minmax(76px,auto)]"
-          >
+        <div className="overflow-hidden card p-2 sm:p-3">
+          <CountryMap
+            labelled={district.villes}
+            muted
+            snapKm={12}
+            cityClass={(item) =>
+              cn(
+                item === ville && "on",
+                item.district === district && item !== ville && "good"
+              )
+            }
+            districtClass={(id) =>
+              id === district.id ? "on" : masteryClass(id, visited)
+            }
+            districtLabel={(id) => districtById(id)?.nom ?? id}
+            onDistrict={(id) => {
+              const item = districtById(id)
+              if (!item) return
+              void navigate({
+                to: "/atlas",
+                search: {
+                  district: item.id,
+                  ville: item.autonome ? item.villes[0].id : undefined,
+                },
+              })
+              reveal()
+            }}
+            onCity={(item) => {
+              void navigate({ to: "/atlas", search: { ville: item.id } })
+              reveal()
+            }}
+            label="Carte des districts de Côte d'Ivoire"
+          />
+          <div className="flex flex-wrap gap-1.5 px-1 pt-2">
             {geo.districts.map((item) => (
               <Link
                 key={item.id}
@@ -157,33 +179,21 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
                 }}
                 onClick={reveal}
                 aria-current={item === district ? "true" : undefined}
-                style={{ gridArea: AREAS[item.id] }}
-                className={cn(
-                  "flex min-w-0 flex-col justify-between gap-1 rounded-xl border p-1.5 text-left transition-colors sm:p-2.5",
-                  item.autonome && "border-dashed",
-                  item === district
-                    ? "border-orange bg-orange text-orange-ink"
-                    : "border-land-2 bg-land hover:bg-land-2"
-                )}
+                className="inline-flex min-h-8 items-center rounded-full border border-line px-2.5 text-[12px] font-medium aria-[current]:border-orange aria-[current]:bg-orange aria-[current]:text-orange-ink"
               >
-                <span className="font-display text-[10.5px] leading-tight font-semibold [overflow-wrap:break-word] hyphens-auto sm:text-[13px]">
-                  {item.nom}
-                </span>
-                <span className="font-mono text-[10px] opacity-75">
-                  {item.autonome
-                    ? "autonome"
-                    : plural(item.regions.length, "rég.", "rég.")}
-                </span>
+                {item.nom}
               </Link>
             ))}
           </div>
-          <div
-            aria-hidden
-            className="mt-2.5 h-1.5 rounded-b-xl bg-[repeating-linear-gradient(90deg,var(--coast)_0_14px,transparent_14px_20px)] opacity-80"
-          />
-          <p className="mt-2 text-[11px] text-muted">
-            Carte schématique · Golfe de Guinée au sud · pointillés : district
-            autonome
+          <p className="mt-2 px-1 text-[11px] text-muted">
+            Plus un district est vert, plus vous avez ouvert de ses villes ·{" "}
+            {
+              geo.districts.filter(
+                (item) => masteryClass(item.id, visited) === "m3"
+              ).length
+            }
+            /{geo.districts.length} complets. Limites : geoBoundaries (Banque
+            mondiale, CC BY 4.0).
           </p>
         </div>
 

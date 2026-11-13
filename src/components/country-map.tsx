@@ -5,11 +5,11 @@ import {
   LABEL_POSITIONS,
   MAP_H,
   MAP_W,
-  OUTLINE,
   px,
   py,
   unproject,
 } from "@/geo/projection"
+import { COAST, DISTRICT_PATHS } from "@/geo/shapes"
 import { cn } from "@/lib/cn"
 
 type Point = { lat: number; lon: number }
@@ -47,6 +47,9 @@ export function CountryMap({
   muted = false,
   labelled,
   cityClass,
+  districtClass,
+  onDistrict,
+  districtLabel,
   onCity,
   onPoint,
   snapKm = 35,
@@ -62,6 +65,11 @@ export function CountryMap({
   /** Name only these cities. */
   labelled?: Ville[]
   cityClass?: (ville: Ville) => string
+  /** Extra classes per district id (selection, mastery). */
+  districtClass?: (id: string) => string
+  /** Makes the districts buttons. */
+  onDistrict?: (id: string) => void
+  districtLabel?: (id: string) => string
   onCity?: (ville: Ville) => void
   onPoint?: (point: Point) => void
   snapKm?: number
@@ -88,9 +96,7 @@ export function CountryMap({
     }
   }
 
-  const coast = OUTLINE.slice(17, 24)
-    .map(([lon, lat]) => `${px(lon)},${py(lat) + 7}`)
-    .join(" ")
+  const coast = COAST.map(([lon, lat]) => `${px(lon)},${py(lat) + 6}`).join(" ")
 
   return (
     <svg
@@ -121,10 +127,43 @@ export function CountryMap({
         </g>
       ))}
       <polyline className="sea" points={coast} />
-      <polygon
-        className="country"
-        points={OUTLINE.map(([lon, lat]) => `${px(lon)},${py(lat)}`).join(" ")}
-      />
+      {/* Thick strokes under the fills: only the outer half shows, which
+          draws the national border; the fills keep thin inner borders. */}
+      <g aria-hidden>
+        {DISTRICT_PATHS.map((shape) => (
+          <path key={shape.id} className="edge" d={shape.d} />
+        ))}
+      </g>
+      <g>
+        {DISTRICT_PATHS.map((shape) => (
+          <path
+            key={shape.id}
+            className={cn("district", districtClass?.(shape.id))}
+            d={shape.d}
+            role={onDistrict ? "button" : undefined}
+            tabIndex={onDistrict ? 0 : undefined}
+            aria-label={onDistrict ? districtLabel?.(shape.id) : undefined}
+            onClick={
+              onDistrict
+                ? (event) => {
+                    event.stopPropagation()
+                    onDistrict(shape.id)
+                  }
+                : undefined
+            }
+            onKeyDown={
+              onDistrict
+                ? (event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault()
+                      onDistrict(shape.id)
+                    }
+                  }
+                : undefined
+            }
+          />
+        ))}
+      </g>
       {under}
       {showCities &&
         villes.map((ville) => (

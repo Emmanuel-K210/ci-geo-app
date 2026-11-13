@@ -15,7 +15,8 @@ npm test
 - **Accueil** : le défi du jour, l'objectif de 50 XP par jour, la série des 7
   derniers jours, le jeu à reprendre, un jeu à découvrir et la ville du jour.
   Trois écrans d'accueil à la première visite.
-- **Atlas** : carte schématique des 14 districts, puis région, ville, commune et
+- **Atlas** : vraie carte des 14 districts, colorés selon les villes déjà
+  ouvertes, puis région, ville, commune et
   quartiers ; villes les plus proches. Les id et le JSON à copier s'affichent
   avec le mode développeur (Profil › Réglages).
 - **Découvrir** : les 5 grands groupes et 16 peuples (origines, histoire,
@@ -32,21 +33,33 @@ npm test
   - le quiz en 8 catégories, dont peuples et sites ;
   - le défi chrono ;
   - la carte à trous ;
-  - la boussole.
-- **Profil** : points d'expérience, 6 niveaux, 21 badges, sons et vibrations.
+  - la boussole ;
+  - où est ce site ? : la photo d'un lieu célèbre, à placer sur la carte ;
+  - le duel : les mêmes 10 questions pour deux joueurs, par un lien.
+- **Profil** : points d'expérience, 6 niveaux, 22 badges, sons et vibrations.
   Tout est gardé dans le navigateur (localStorage, clé `ci-geo-progress`) et,
   si un projet Supabase est configuré, en ligne après connexion par lien
   magique.
 - **Plus** : la liste complète, des statistiques, les exports (CSV, SQL
   PostgreSQL, JSON) et la démo du sélecteur ville → quartier.
 
+## Application installable
+
+L'app s'installe sur l'écran d'accueil (PWA) et fonctionne hors ligne ; les
+photos déjà vues restent en cache. Icônes : `public/app-icon.svg`, régénérées
+avec `npm run icons`.
+
 ## Données
 
 `src/geo/ci-geo.json`, validé par `src/geo/ci-geo.schema.json`, avec son modèle
 objet `src/geo/ci-geo.ts` (mode d'emploi dans `src/geo/README.md`). Le découpage
 administratif est complet ; les quartiers ne le sont pas. Les coordonnées sont
-celles des centres-villes, arrondies à environ 1 km, et le contour du pays est
-simplifié.
+celles des centres-villes, arrondies à environ 1 km.
+
+Les limites des districts (`src/geo/shapes.json`) viennent de geoBoundaries
+(ADM1, Banque mondiale, CC BY 4.0) et le trait de côte de Natural Earth
+(domaine public), simplifiés à environ 1 km par `scripts/geo-shapes.mjs` à
+partir des fichiers `_simplified.geojson` de geoBoundaries.
 
 ## Sauvegarde en ligne et API
 

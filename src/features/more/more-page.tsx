@@ -70,13 +70,17 @@ export function MorePage() {
         <p className="text-muted">
           Le découpage administratif est complet ; les quartiers ne le sont pas.
           Les coordonnées sont celles des centres-villes, arrondies à environ 1
-          km, et le contour du pays est simplifié : à vérifier avant un usage de
-          précision.
+          km : à vérifier avant un usage de précision.
         </p>
         <p className="text-muted">
           Les récits de « Découvrir » sont des résumés à vocation de découverte
           ; chacun renvoie à son article Wikipédia. Les photos viennent de
           Wikimedia Commons, avec le nom de leur auteur et leur licence.
+        </p>
+        <p className="text-muted">
+          Limites des districts : geoBoundaries, d'après la Banque mondiale
+          (licence CC BY 4.0), simplifiées à environ 1 km ; trait de côte :
+          Natural Earth (domaine public).
         </p>
       </section>
     </div>

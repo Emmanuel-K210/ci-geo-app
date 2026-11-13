@@ -13,6 +13,7 @@ import {
   Gem,
   Goal,
   Map,
+  Plane,
   Medal,
   Search,
   Shapes,
@@ -174,10 +175,18 @@ export const BADGES: Badge[] = [
   {
     id: "touche-a-tout",
     title: "Touche-à-tout",
-    description: "Jouer au moins une fois à chacun des 7 jeux.",
+    description: `Jouer au moins une fois à chacun des ${GAME_IDS.length} jeux.`,
     icon: Shapes,
     earned: (_, state) =>
       GAME_IDS.every((game) => (state.played[game] ?? 0) > 0),
+  },
+  {
+    id: "globe-trotteur",
+    title: "Globe-trotteur",
+    description: "Placer 5 sites à moins de 50 km chacun.",
+    icon: Plane,
+    earned: (event) =>
+      event?.game === "sites" && event.distances.every((km) => km < 50),
   },
   {
     id: "curieux",
