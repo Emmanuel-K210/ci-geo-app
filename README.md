@@ -12,8 +12,16 @@ npm test
 
 ## Ce qu'il y a dedans
 
+- **Accueil** : le défi du jour, l'objectif de 50 XP par jour, la série des 7
+  derniers jours, le jeu à reprendre, un jeu à découvrir et la ville du jour.
+  Trois écrans d'accueil à la première visite.
 - **Atlas** : carte schématique des 14 districts, puis région, ville, commune et
-  quartiers ; villes les plus proches ; id et JSON à copier.
+  quartiers ; villes les plus proches. Les id et le JSON à copier s'affichent
+  avec le mode développeur (Profil › Réglages).
+- **Découvrir** : les 5 grands groupes et 16 peuples (origines, histoire,
+  traditions, où ils vivent) et 15 sites à visiter avec leur histoire, un récit
+  du jour, et des photos de Wikimedia Commons créditées (chargées depuis
+  Wikipédia, gardées une semaine dans le navigateur).
 - **Carte** : les 46 villes à leur position GPS, distance à vol d'oiseau entre
   deux villes.
 - **Jeux** :
@@ -21,12 +29,14 @@ npm test
     à partager en carrés ;
   - la ville mystère, avec des indices ;
   - plus près ou plus loin ;
-  - le quiz en 6 catégories ;
+  - le quiz en 8 catégories, dont peuples et sites ;
   - le défi chrono ;
   - la carte à trous ;
   - la boussole.
-- **Profil** : points d'expérience, 6 niveaux, 15 badges, sons et vibrations.
-  Tout est gardé dans le navigateur (localStorage, clé `ci-geo-progress`).
+- **Profil** : points d'expérience, 6 niveaux, 21 badges, sons et vibrations.
+  Tout est gardé dans le navigateur (localStorage, clé `ci-geo-progress`) et,
+  si un projet Supabase est configuré, en ligne après connexion par lien
+  magique.
 - **Plus** : la liste complète, des statistiques, les exports (CSV, SQL
   PostgreSQL, JSON) et la démo du sélecteur ville → quartier.
 
@@ -37,4 +47,9 @@ objet `src/geo/ci-geo.ts` (mode d'emploi dans `src/geo/README.md`). Le découpag
 administratif est complet ; les quartiers ne le sont pas. Les coordonnées sont
 celles des centres-villes, arrondies à environ 1 km, et le contour du pays est
 simplifié.
-"# ci-geo-app" 
+
+## Sauvegarde en ligne et API
+
+Optionnelles, avec Supabase : connexion par lien magique, progression
+synchronisée entre appareils, et API REST publique du référentiel pour d'autres
+applications. Mise en place et exemples : [docs/supabase.md](docs/supabase.md).

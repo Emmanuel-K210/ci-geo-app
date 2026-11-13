@@ -84,6 +84,7 @@ export function CompassPage() {
                 : "On s'oriente avec la carte, puis on recommence."
           }
           outcome={outcome}
+          share={`La boussole : ${score}/${COMPASS_ROUND}`}
           actions={<Button onClick={restart}>Rejouer</Button>}
         />
       </GameLayout>

@@ -1,5 +1,6 @@
 import {
   Award,
+  BookOpen,
   CalendarCheck,
   CalendarHeart,
   Compass,
@@ -7,8 +8,12 @@ import {
   Eye,
   Flame,
   Footprints,
+  Landmark,
+  Feather,
   Gem,
+  Goal,
   Map,
+  Medal,
   Search,
   Shapes,
   Sparkles,
@@ -17,7 +22,14 @@ import {
   type LucideIcon,
 } from "lucide-react"
 
-import { dailyPoints, dailyStreak } from "@/features/games/daily"
+import {
+  DAILY_GOAL,
+  dailyPoints,
+  dailyStreak,
+  dayKey,
+} from "@/features/games/daily"
+import { PEUPLES } from "@/culture/peuples"
+import { SITES } from "@/culture/sites"
 import { GAME_IDS, type GameEvent } from "@/stores/events"
 
 /** What the badges look at: the progress after the game was recorded. */
@@ -25,6 +37,10 @@ export type BadgeState = {
   played: Partial<Record<string, number>>
   daily: Record<string, number[]>
   visited: string[]
+  /** Stories read in « Découvrir » (« peuple:baoule », « site:tai »). */
+  read: string[]
+  /** XP earned per day (UTC date). */
+  xpByDay: Record<string, number>
 }
 
 export type Badge = {
@@ -59,6 +75,27 @@ export const BADGES: Badge[] = [
     description: "Jouer le défi du jour 3 jours de suite.",
     icon: CalendarHeart,
     earned: (_, state) => dailyStreak(Object.keys(state.daily)) >= 3,
+  },
+  {
+    id: "assidu",
+    title: "Assidu",
+    description: "Jouer le défi du jour 7 jours de suite.",
+    icon: Flame,
+    earned: (_, state) => dailyStreak(Object.keys(state.daily)) >= 7,
+  },
+  {
+    id: "inconditionnel",
+    title: "Inconditionnel",
+    description: "Jouer le défi du jour 30 jours de suite.",
+    icon: Medal,
+    earned: (_, state) => dailyStreak(Object.keys(state.daily)) >= 30,
+  },
+  {
+    id: "objectif",
+    title: "Objectif atteint",
+    description: `Gagner ${DAILY_GOAL} XP dans la journée.`,
+    icon: Goal,
+    earned: (_, state) => (state.xpByDay[dayKey()] ?? 0) >= DAILY_GOAL,
   },
   {
     id: "coup-parfait",
@@ -141,6 +178,29 @@ export const BADGES: Badge[] = [
     icon: Shapes,
     earned: (_, state) =>
       GAME_IDS.every((game) => (state.played[game] ?? 0) > 0),
+  },
+  {
+    id: "curieux",
+    title: "Curieux",
+    description: "Lire 5 récits dans « Découvrir ».",
+    icon: BookOpen,
+    earned: (_, state) => state.read.length >= 5,
+  },
+  {
+    id: "griot",
+    title: "Griot",
+    description: "Lire l'histoire de tous les peuples.",
+    icon: Feather,
+    earned: (_, state) =>
+      PEUPLES.every((peuple) => state.read.includes(`peuple:${peuple.id}`)),
+  },
+  {
+    id: "guide",
+    title: "Guide touristique",
+    description: "Lire le récit de tous les sites.",
+    icon: Landmark,
+    earned: (_, state) =>
+      SITES.every((site) => state.read.includes(`site:${site.id}`)),
   },
   {
     id: "explorateur",

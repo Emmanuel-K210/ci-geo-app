@@ -10,7 +10,7 @@ export const Route = createRootRoute({
       <h1 className="font-display text-2xl font-bold">Page introuvable</h1>
       <p className="text-muted">Ce lieu n'existe pas sur notre carte.</p>
       <Link to="/" className={buttonClass()}>
-        Retour à l'atlas
+        Retour à l'accueil
       </Link>
     </div>
   ),

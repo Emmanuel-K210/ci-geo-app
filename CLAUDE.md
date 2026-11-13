@@ -22,10 +22,14 @@ Avant de considérer un changement terminé : `typecheck`, `lint`, `test`,
 ```
 src/
   geo/            # données (ci-geo.json), modèle objet (ci-geo.ts), projection, boussole
-  features/       # atlas, carte, games, profile, more : pages et logique
+  culture/        # peuples.ts, sites.ts (textes + titre Wikipédia), wiki.ts (photos)
+  features/       # today (accueil), atlas, carte, decouvrir, games, profile, more
   features/games/ # logique pure testée (daily.ts, clues.ts, closer.ts, compass-game.ts,
                   # questions.ts) + une page par jeu
-  stores/         # progress.ts (XP, records, badges, réglages), badges.ts, levels.ts
+  stores/         # progress.ts (XP, records, badges, réglages), badges.ts, levels.ts,
+                  # cloud.ts + merge-progress.ts (sauvegarde Supabase, optionnelle)
+supabase/         # migration SQL (référentiel + progress, RLS) ; seed.sql généré
+                  # par `npm run db:seed` depuis src/geo/ci-geo.json
   components/     # app-shell (en-tête + barre du bas), country-map (SVG), ui
   routes/         # fichiers de route fins ; routeTree.gen.ts est généré
 ```
@@ -42,4 +46,9 @@ src/
 - Tirages aléatoires par `lib/random.ts` ; le défi du jour est tiré avec une
   graine fixée par la date UTC (l'heure d'Abidjan).
 - Textes affichés en français ; code, noms et commentaires en anglais.
+- Découvrir : chaque peuple et site cite son article Wikipédia (`wiki`), d'où
+  vient la photo créditée ; garder des textes prudents et vérifiables, et des
+  `indices` sans le nom (testé).
+- Supabase est optionnel : sans `VITE_SUPABASE_URL`, l'app reste locale et le
+  client n'est pas chargé (`cloudEnabled`). Doc : `docs/supabase.md`.
 - Commits : Conventional Commits en anglais, aucune mention d'IA.

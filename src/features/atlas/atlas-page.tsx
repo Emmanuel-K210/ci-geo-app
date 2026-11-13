@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
 import type { AtlasSearch } from "@/features/atlas/search"
+import { MapTabs } from "@/components/map-tabs"
 import { Button, Empty, Pill } from "@/components/ui"
 import {
   ABIDJAN,
@@ -60,7 +61,7 @@ function CityRow({ ville, meta }: { ville: Ville; meta?: string }) {
   const count = ville.quartiers.length
   return (
     <Link
-      to="/"
+      to="/atlas"
       search={{ ville: ville.id }}
       className="flex min-h-12 items-center gap-3 border-b border-line px-1 last:border-0 hover:text-green"
     >
@@ -81,6 +82,7 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
   const navigate = useNavigate()
   const panel = useRef<HTMLDivElement>(null)
   const visit = useProgress((state) => state.visit)
+  const devMode = useProgress((state) => state.settings.devMode)
 
   const ville =
     villeById(search.ville) ?? (search.district ? undefined : ABIDJAN)
@@ -118,12 +120,13 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
   }
 
   const randomCity = () => {
-    void navigate({ to: "/", search: { ville: pick(villes).id } })
+    void navigate({ to: "/atlas", search: { ville: pick(villes).id } })
     reveal()
   }
 
   return (
     <div className="flex flex-col gap-4">
+      <MapTabs />
       <div className="flex items-end justify-between gap-3">
         <div>
           <p className="eyebrow text-green">Atlas</p>
@@ -147,7 +150,7 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
             {geo.districts.map((item) => (
               <Link
                 key={item.id}
-                to="/"
+                to="/atlas"
                 search={{
                   district: item.id,
                   ville: item.autonome ? item.villes[0].id : undefined,
@@ -198,7 +201,7 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
               <span aria-hidden>›</span>
               {ville && !district.autonome ? (
                 <Link
-                  to="/"
+                  to="/atlas"
                   search={{ district: district.id }}
                   className="font-medium text-green"
                 >
@@ -223,18 +226,22 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   <Pill>{plural(ville.localites.length, "localité")}</Pill>
                   <Pill>{plural(ville.quartiers.length, "quartier")}</Pill>
-                  {!ville.quartiersComplets && (
+                  <Pill>{coordinates(ville)}</Pill>
+                  {devMode && !ville.quartiersComplets && (
                     <Pill tone="warn">quartiers à compléter</Pill>
                   )}
-                  <Pill>{coordinates(ville)}</Pill>
-                  <button
-                    type="button"
-                    onClick={() => void copyText(ville.id, `${ville.id} copié`)}
-                    className="inline-flex h-6 items-center gap-1 rounded-md bg-land px-2 font-mono text-[11px]"
-                  >
-                    {ville.id}
-                    <Copy className="size-3" aria-hidden />
-                  </button>
+                  {devMode && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        void copyText(ville.id, `${ville.id} copié`)
+                      }
+                      className="inline-flex h-6 items-center gap-1 rounded-md bg-land px-2 font-mono text-[11px]"
+                    >
+                      {ville.id}
+                      <Copy className="size-3" aria-hidden />
+                    </button>
+                  )}
                 </div>
               </>
             ) : (
@@ -263,7 +270,7 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
                 <SectionLabel>Communes</SectionLabel>
                 <div className="flex flex-wrap gap-1.5">
                   <Link
-                    to="/"
+                    to="/atlas"
                     search={{ ville: ville.id }}
                     aria-current={!localite ? "true" : undefined}
                     className="inline-flex min-h-9 items-center gap-1 rounded-full border border-line px-3 text-[13px] font-medium aria-[current]:border-green aria-[current]:bg-green aria-[current]:text-surface"
@@ -276,7 +283,7 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
                   {ville.localites.map((item) => (
                     <Link
                       key={item.id}
-                      to="/"
+                      to="/atlas"
                       search={{ ville: ville.id, localite: item.id }}
                       aria-current={item === localite ? "true" : undefined}
                       className="inline-flex min-h-9 items-center gap-1 rounded-full border border-line px-3 text-[13px] font-medium aria-[current]:border-green aria-[current]:bg-green aria-[current]:text-surface"
@@ -300,23 +307,32 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
                 {shownQuartiers.length ? (
                   <>
                     <div className="flex flex-wrap gap-1.5">
-                      {visibleQuartiers.map((quartier) => (
-                        <button
-                          key={quartier.id}
-                          type="button"
-                          onClick={() =>
-                            void copyText(quartier.id, `${quartier.id} copié`)
-                          }
-                          className="flex min-w-0 flex-col rounded-xl bg-green-soft px-2.5 py-1.5 text-left"
-                        >
-                          <span className="font-medium">
+                      {visibleQuartiers.map((quartier) =>
+                        devMode ? (
+                          <button
+                            key={quartier.id}
+                            type="button"
+                            onClick={() =>
+                              void copyText(quartier.id, `${quartier.id} copié`)
+                            }
+                            className="flex min-w-0 flex-col rounded-xl bg-green-soft px-2.5 py-1.5 text-left"
+                          >
+                            <span className="font-medium">
+                              {localite ? quartier.nom : quartier.libelle}
+                            </span>
+                            <code className="font-mono text-[10px] [overflow-wrap:anywhere] text-muted">
+                              {quartier.id}
+                            </code>
+                          </button>
+                        ) : (
+                          <span
+                            key={quartier.id}
+                            className="rounded-xl bg-green-soft px-2.5 py-1.5 font-medium"
+                          >
                             {localite ? quartier.nom : quartier.libelle}
                           </span>
-                          <code className="font-mono text-[10px] [overflow-wrap:anywhere] text-muted">
-                            {quartier.id}
-                          </code>
-                        </button>
-                      ))}
+                        )
+                      )}
                     </div>
                     {shownQuartiers.length > visibleQuartiers.length && (
                       <Button
@@ -329,10 +345,7 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
                     )}
                   </>
                 ) : (
-                  <Empty>
-                    Aucun quartier connu pour l'instant : dans une application,
-                    le champ Quartier reste une saisie libre.
-                  </Empty>
+                  <Empty>Aucun quartier répertorié pour l'instant.</Empty>
                 )}
               </div>
             )}
@@ -370,39 +383,41 @@ export function AtlasPage({ search }: { search: AtlasSearch }) {
                 >
                   Voir sur la carte
                 </Link>
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    void copyText(
-                      JSON.stringify(
-                        {
-                          ville: {
-                            id: ville.id,
-                            nom: ville.nom,
-                            lat: ville.lat,
-                            lon: ville.lon,
-                            regionId: ville.region?.id ?? null,
-                            districtId: ville.district.id,
-                          },
-                          localites: ville.localites.map((item) => ({
-                            id: item.id,
-                            nom: item.nom,
-                            type: item.type,
-                            quartiers: item.quartiers.map((q) => ({
-                              id: q.id,
-                              nom: q.nom,
+                {devMode && (
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      void copyText(
+                        JSON.stringify(
+                          {
+                            ville: {
+                              id: ville.id,
+                              nom: ville.nom,
+                              lat: ville.lat,
+                              lon: ville.lon,
+                              regionId: ville.region?.id ?? null,
+                              districtId: ville.district.id,
+                            },
+                            localites: ville.localites.map((item) => ({
+                              id: item.id,
+                              nom: item.nom,
+                              type: item.type,
+                              quartiers: item.quartiers.map((q) => ({
+                                id: q.id,
+                                nom: q.nom,
+                              })),
                             })),
-                          })),
-                        },
-                        null,
-                        2
-                      ),
-                      "JSON de la ville copié"
-                    )
-                  }
-                >
-                  Copier le JSON
-                </Button>
+                          },
+                          null,
+                          2
+                        ),
+                        "JSON de la ville copié"
+                      )
+                    }
+                  >
+                    Copier le JSON
+                  </Button>
+                )}
               </div>
             )}
           </div>

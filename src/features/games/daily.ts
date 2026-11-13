@@ -1,9 +1,11 @@
 import { villes, type Ville } from "@/geo"
 import { fmtKm } from "@/lib/format"
-import { hashSeed, sample, seededRng } from "@/lib/random"
+import { hashSeed, pick, sample, seededRng } from "@/lib/random"
 
 export const DAILY_COUNT = 5
 export const DAILY_MAX = DAILY_COUNT * 100
+/** XP to earn each day to fill the ring of the daily goal. */
+export const DAILY_GOAL = 50
 
 /** The day in Abidjan, which lives on UTC all year. */
 export const dayKey = (date = new Date()) => date.toISOString().slice(0, 10)
@@ -63,4 +65,23 @@ export function dailyStreak(keys: string[], today = dayKey()): number {
     cursor.setUTCDate(cursor.getUTCDate() - 1)
   }
   return streak
+}
+
+/** The last `count` days, oldest first, ending with `today`. */
+export function recentDays(count: number, today = dayKey()): string[] {
+  const cursor = new Date(`${today}T00:00:00Z`)
+  cursor.setUTCDate(cursor.getUTCDate() - count + 1)
+  return Array.from({ length: count }, () => {
+    const key = dayKey(cursor)
+    cursor.setUTCDate(cursor.getUTCDate() + 1)
+    return key
+  })
+}
+
+/** The city of the day: the same for everyone, never one of the challenge. */
+export function cityOfTheDay(key: string): Ville {
+  const challenge = new Set(dailyVilles(key))
+  const rng = seededRng(hashSeed(`ci-geo:ville:${key}`))
+  const pool = villes.filter((ville) => !challenge.has(ville))
+  return pick(pool, rng)
 }

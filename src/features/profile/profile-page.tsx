@@ -1,11 +1,15 @@
-import { Lock } from "lucide-react"
+import { Link } from "@tanstack/react-router"
+import { ChevronRight, LayoutGrid, Lock } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 
 import { Button, PageTitle, ProgressBar } from "@/components/ui"
+import { WeekStrip } from "@/components/week-strip"
 import { dailyStreak } from "@/features/games/daily"
+import { CloudSection } from "@/features/profile/cloud-section"
 import { villes } from "@/geo"
 import { cn } from "@/lib/cn"
+import { cloudEnabled } from "@/lib/supabase"
 import { plural } from "@/lib/format"
 import { BADGES } from "@/stores/badges"
 import { LEVELS, levelOf } from "@/stores/levels"
@@ -83,6 +87,10 @@ export function ProfilePage() {
             </div>
           ))}
         </dl>
+        <div className="border-t border-line pt-3">
+          <p className="mb-2 eyebrow">Défi du jour · 7 derniers jours</p>
+          <WeekStrip />
+        </div>
       </section>
 
       <section className="flex flex-col gap-2.5">
@@ -132,10 +140,30 @@ export function ProfilePage() {
         </div>
       </section>
 
+      <CloudSection />
+
+      <Link
+        to="/plus"
+        className="flex min-h-14 items-center gap-3 card px-4 lg:hidden"
+      >
+        <LayoutGrid className="size-5 text-green" aria-hidden />
+        <span className="flex min-w-0 flex-1 flex-col">
+          <span className="font-medium">Le référentiel</span>
+          <span className="text-[13px] text-muted">
+            Liste, statistiques, exports et sélecteur
+          </span>
+        </span>
+        <ChevronRight className="size-5 text-muted" aria-hidden />
+      </Link>
+
       <section className="flex flex-col card p-4">
         <h2 className="mb-1 font-display text-lg font-semibold">Réglages</h2>
         <Toggle label="Sons" setting="sound" />
         <Toggle label="Vibrations" setting="vibration" />
+        <Toggle
+          label="Mode développeur (identifiants et JSON dans l'atlas)"
+          setting="devMode"
+        />
       </section>
 
       <section className="flex flex-col gap-2 card p-4">
@@ -158,7 +186,9 @@ export function ProfilePage() {
           ))}
         </ol>
         <p className="text-xs text-muted">
-          La progression est gardée dans ce navigateur, sur cet appareil.
+          {cloudEnabled
+            ? "La progression est gardée dans ce navigateur ; connectez-vous pour la retrouver sur vos autres appareils."
+            : "La progression est gardée dans ce navigateur, sur cet appareil."}
         </p>
         {confirm ? (
           <div className="flex flex-wrap items-center gap-2">

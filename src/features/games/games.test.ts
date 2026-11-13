@@ -4,19 +4,25 @@ import { cluePoints, cluesFor, guessFeedback } from "@/features/games/clues"
 import { isRight, MIN_GAP_KM, nextChallenger } from "@/features/games/closer"
 import { compassQuestion } from "@/features/games/compass-game"
 import {
+  cityOfTheDay,
   dailyPoints,
   dailyStreak,
   dailyVilles,
   msUntilNextDay,
+  recentDays,
   shareText,
   square,
 } from "@/features/games/daily"
 import { makeQuestion, QUIZ_MODES } from "@/features/games/questions"
 import { ABIDJAN, distanceKm, geo, villes, YAMOUSSOUKRO } from "@/geo"
 import { bearing, direction, sectorMargin } from "@/geo/compass"
-import { px, py, unproject } from "@/geo/projection"
+import { BOUNDS, px, py, unproject } from "@/geo/projection"
 import { seededRng } from "@/lib/random"
+import { groupeById, PEUPLES } from "@/culture/peuples"
+import { SITES } from "@/culture/sites"
+import { STORIES, storyOfTheDay, villesOf } from "@/culture/stories"
 import { BADGES } from "@/stores/badges"
+import { mergeProgress } from "@/stores/merge-progress"
 import { levelOf } from "@/stores/levels"
 import { xpFor } from "@/stores/progress"
 
@@ -148,5 +154,102 @@ describe("progression", () => {
 
   it("has unique badges", () => {
     expect(new Set(BADGES.map((badge) => badge.id)).size).toBe(BADGES.length)
+  })
+})
+
+describe("home", () => {
+  it("lists the last days, oldest first", () => {
+    expect(recentDays(3, "2026-03-01")).toEqual([
+      "2026-02-27",
+      "2026-02-28",
+      "2026-03-01",
+    ])
+  })
+
+  it("picks the same city of the day, outside the challenge", () => {
+    const key = "2026-11-13"
+    expect(cityOfTheDay(key)).toBe(cityOfTheDay(key))
+    expect(dailyVilles(key)).not.toContain(cityOfTheDay(key))
+  })
+})
+
+describe("cloud save", () => {
+  const base = {
+    xp: 0,
+    last: null,
+    onboarded: false,
+    played: {},
+    best: {},
+    xpByDay: {},
+    daily: {},
+    badges: {},
+    visited: [],
+    read: [],
+    settings: { sound: true, vibration: true, devMode: false },
+  }
+
+  it("keeps what was earned on both devices", () => {
+    const merged = mergeProgress(
+      {
+        ...base,
+        xp: 300,
+        best: { quiz: 7 },
+        badges: { a: "2026-11-10T00:00:00Z" },
+        visited: ["x"],
+        daily: { "2026-11-12": [10] },
+      },
+      {
+        xp: 250,
+        best: { quiz: 9, pin: 4 },
+        badges: { a: "2026-11-01T00:00:00Z", b: "2026-11-02T00:00:00Z" },
+        visited: ["y", "x"],
+        daily: { "2026-11-11": [20] },
+        settings: { sound: false, vibration: false, devMode: true },
+      }
+    )
+    expect(merged.xp).toBe(300)
+    expect(merged.best).toEqual({ quiz: 9, pin: 4 })
+    expect(merged.badges).toEqual({
+      a: "2026-11-01T00:00:00Z",
+      b: "2026-11-02T00:00:00Z",
+    })
+    expect(merged.visited.sort()).toEqual(["x", "y"])
+    expect(Object.keys(merged.daily).sort()).toEqual([
+      "2026-11-11",
+      "2026-11-12",
+    ])
+    expect(merged.settings.sound).toBe(true)
+  })
+})
+
+describe("culture", () => {
+  it("links peoples and sites to cities of the reference", () => {
+    for (const peuple of PEUPLES) {
+      expect(groupeById(peuple.groupeId), peuple.id).toBeDefined()
+      expect(villesOf(peuple.villes)).toHaveLength(peuple.villes.length)
+    }
+    for (const site of SITES) {
+      expect(villesOf([site.ville]), site.id).toHaveLength(1)
+      expect(site.lat).toBeGreaterThan(BOUNDS.south)
+      expect(site.lat).toBeLessThan(BOUNDS.north)
+      expect(site.lon).toBeGreaterThan(BOUNDS.west)
+      expect(site.lon).toBeLessThan(BOUNDS.east)
+    }
+  })
+
+  it("keeps the names out of the clues", () => {
+    const strip = (text: string) =>
+      text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+    for (const peuple of PEUPLES) {
+      const name = new RegExp(`\\b${strip(peuple.nom.split(" ")[0])}\\b`)
+      for (const clue of peuple.indices)
+        expect(strip(clue), clue).not.toMatch(name)
+    }
+    for (const site of SITES) expect(site.indices.length).toBeGreaterThan(0)
+  })
+
+  it("has unique ids and a story of the day", () => {
+    expect(new Set(STORIES.map((story) => story.key)).size).toBe(STORIES.length)
+    expect(storyOfTheDay("2026-11-13")).toBe(storyOfTheDay("2026-11-13"))
   })
 })

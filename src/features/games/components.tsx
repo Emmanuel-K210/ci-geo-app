@@ -1,10 +1,79 @@
 import { Link } from "@tanstack/react-router"
-import { ChevronLeft } from "lucide-react"
-import { useEffect, type ReactNode } from "react"
+import { ChevronLeft, Share2 } from "lucide-react"
+import { useEffect, useState, type ReactNode } from "react"
 
-import { Pill, ProgressBar } from "@/components/ui"
+import { Button, Pill, ProgressBar } from "@/components/ui"
+import { shareUrl } from "@/features/games/use-countdown"
 import { cn } from "@/lib/cn"
+import { shareOrCopy } from "@/lib/share"
+import { levelOf } from "@/stores/levels"
 import type { Outcome } from "@/stores/progress"
+
+const reducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+/** Counts from 0 up to `target`, once, unless motion is reduced. */
+function useCountUp(target: number, duration = 900) {
+  const [value, setValue] = useState(() => (reducedMotion() ? target : 0))
+  useEffect(() => {
+    if (reducedMotion()) return
+    let frame = 0
+    const start = performance.now()
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration)
+      setValue(Math.round(target * (1 - (1 - t) ** 3)))
+      if (t < 1) frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [target, duration])
+  return value
+}
+
+/** The XP won, counted up, and the level bar filling from where it was. */
+function XpGain({ outcome }: { outcome: Outcome }) {
+  const gained = useCountUp(outcome.xp)
+  const after = levelOf(outcome.xpBefore + outcome.xp)
+  const before = levelOf(outcome.xpBefore)
+  const [progress, setProgress] = useState(
+    after.number > before.number ? 0 : before.progress
+  )
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setProgress(after.progress))
+    return () => cancelAnimationFrame(frame)
+  }, [after.progress])
+
+  return (
+    <div className="flex items-center gap-3 rounded-2xl bg-land p-3">
+      <span className="grid size-10 flex-none place-items-center rounded-full bg-orange font-display font-bold text-orange-ink">
+        {after.number}
+      </span>
+      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="font-display text-sm font-semibold">
+            {after.name}
+          </span>
+          <span className="font-mono text-sm font-semibold text-orange tabular-nums">
+            +{gained} XP
+          </span>
+        </div>
+        <div
+          role="progressbar"
+          aria-label="Vers le niveau suivant"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(after.progress * 100)}
+          className="h-2 overflow-hidden rounded-full bg-land-2"
+        >
+          <div
+            className="h-full rounded-full bg-orange transition-[width] delay-300 duration-1000 ease-out"
+            style={{ width: `${progress * 100}%` }}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export function GameLayout({
   title,
@@ -158,6 +227,7 @@ export function ResultView({
   message,
   detail,
   outcome,
+  share,
   children,
   actions,
 }: {
@@ -166,6 +236,8 @@ export function ResultView({
   message: ReactNode
   detail?: ReactNode
   outcome: Outcome | null
+  /** One line on the result (« Quiz Chefs-lieux : 8/10 ») adds a share button. */
+  share?: string
   children?: ReactNode
   actions: ReactNode
 }) {
@@ -183,9 +255,9 @@ export function ResultView({
           {detail && <p className="text-sm text-muted">{detail}</p>}
         </div>
       </div>
-      {outcome && (
+      {outcome && outcome.xp > 0 && <XpGain outcome={outcome} />}
+      {outcome && (outcome.record || outcome.newBadges.length > 0) && (
         <div className="flex flex-wrap gap-1.5">
-          {outcome.xp > 0 && <Pill tone="orange">+{outcome.xp} XP</Pill>}
           {outcome.record && <Pill tone="green">Nouveau record</Pill>}
           {outcome.newBadges.map((badge) => (
             <Pill key={badge.id} tone="green">
@@ -196,7 +268,22 @@ export function ResultView({
         </div>
       )}
       {children}
-      <div className="flex flex-wrap gap-2">{actions}</div>
+      <div className="flex flex-wrap gap-2">
+        {actions}
+        {share && (
+          <Button
+            variant="outline"
+            onClick={() =>
+              void shareOrCopy(
+                [`CI-Geo · ${share}`, shareUrl()].filter(Boolean).join("\n")
+              )
+            }
+          >
+            <Share2 className="size-4" aria-hidden />
+            Partager
+          </Button>
+        )}
+      </div>
     </section>
   )
 }

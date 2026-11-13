@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react"
+import type { ComponentProps, ReactNode } from "react"
 
 import { buttonClass, type Variant } from "@/components/button-class"
 import { cn } from "@/lib/cn"
@@ -8,7 +8,7 @@ export function Button({
   className,
   type = "button",
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
+}: ComponentProps<"button"> & { variant?: Variant }) {
   return (
     <button
       type={type}

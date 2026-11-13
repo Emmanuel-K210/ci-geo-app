@@ -113,6 +113,7 @@ export function CloserPage() {
           }
           detail={`${streak > 1 ? "bonnes réponses" : "bonne réponse"} d'affilée · record ${Math.max(best, streak)}`}
           outcome={outcome}
+          share={`Plus près ou plus loin : série de ${streak}`}
           actions={<Button onClick={restart}>Rejouer</Button>}
         />
       </GameLayout>

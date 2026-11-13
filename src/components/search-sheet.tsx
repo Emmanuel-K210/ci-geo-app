@@ -77,7 +77,7 @@ export function SearchSheet() {
     setOpen(false)
     setQuery("")
     void navigate({
-      to: "/",
+      to: "/atlas",
       search: { ville: entry.ville, localite: entry.localite },
     })
   }

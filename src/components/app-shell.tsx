@@ -1,6 +1,8 @@
 import { Link, Outlet } from "@tanstack/react-router"
 import {
   Gamepad2,
+  House,
+  Landmark,
   LayoutGrid,
   Map,
   MapPinned,
@@ -11,25 +13,32 @@ import {
 import { useEffect } from "react"
 import { Toaster } from "sonner"
 
+import { Onboarding } from "@/components/onboarding"
 import { SearchSheet } from "@/components/search-sheet"
-import { dayKey } from "@/features/games/daily"
+import { GoalRing } from "@/components/goal-ring"
+import { DAILY_GOAL, dayKey } from "@/features/games/daily"
 import { cn } from "@/lib/cn"
 import { levelOf } from "@/stores/levels"
 import { useProgress } from "@/stores/progress"
 import { useUi } from "@/stores/ui"
 
 type NavItem = {
-  to: "/" | "/carte" | "/jeux" | "/profil" | "/plus"
+  to: "/" | "/atlas" | "/carte" | "/decouvrir" | "/jeux" | "/profil" | "/plus"
   label: string
   icon: LucideIcon
+  /** Only in the top menu: on phones « Carte » opens from the atlas and
+   * « Plus » from the profile. */
+  desktopOnly?: boolean
 }
 
 const NAV: NavItem[] = [
-  { to: "/", label: "Atlas", icon: Map },
-  { to: "/carte", label: "Carte", icon: MapPinned },
+  { to: "/", label: "Accueil", icon: House },
+  { to: "/atlas", label: "Atlas", icon: Map },
+  { to: "/carte", label: "Carte", icon: MapPinned, desktopOnly: true },
+  { to: "/decouvrir", label: "Découvrir", icon: Landmark },
   { to: "/jeux", label: "Jeux", icon: Gamepad2 },
   { to: "/profil", label: "Profil", icon: Trophy },
-  { to: "/plus", label: "Plus", icon: LayoutGrid },
+  { to: "/plus", label: "Plus", icon: LayoutGrid, desktopOnly: true },
 ]
 
 function Pin({ className }: { className?: string }) {
@@ -51,16 +60,19 @@ function useDailyPending() {
 
 function LevelChip() {
   const xp = useProgress((state) => state.xp)
+  const today = useProgress((state) => state.xpByDay[dayKey()] ?? 0)
   const level = levelOf(xp)
   return (
     <Link
       to="/profil"
-      className="flex min-h-11 items-center gap-2 rounded-full bg-land py-1 pr-3 pl-1.5"
-      aria-label={`Niveau ${level.number}, ${level.name}, ${xp} points d'expérience`}
+      className="flex min-h-11 items-center gap-2 rounded-full bg-land py-1 pr-3 pl-1"
+      aria-label={`Niveau ${level.number}, ${level.name}, ${xp} points d'expérience, ${Math.min(today, DAILY_GOAL)} sur ${DAILY_GOAL} pour l'objectif du jour`}
     >
-      <span className="grid size-8 place-items-center rounded-full bg-orange font-display text-sm font-bold text-orange-ink">
-        {level.number}
-      </span>
+      <GoalRing value={today / DAILY_GOAL} size={36} stroke={3}>
+        <span className="grid size-7 place-items-center rounded-full bg-orange font-display text-sm font-bold text-orange-ink">
+          {level.number}
+        </span>
+      </GoalRing>
       <span className="flex flex-col gap-1">
         <span className="font-mono text-[11px] leading-none">{xp} XP</span>
         <span className="block h-1 w-12 overflow-hidden rounded-full bg-land-2">
@@ -142,7 +154,7 @@ export function AppShell() {
         className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
       >
         <div className="mx-auto grid max-w-md grid-cols-5">
-          {NAV.map((item) => (
+          {NAV.filter((item) => !item.desktopOnly).map((item) => (
             <Link
               key={item.to}
               to={item.to}
@@ -169,6 +181,7 @@ export function AppShell() {
       </nav>
 
       <SearchSheet />
+      <Onboarding />
       <Toaster
         position="top-center"
         theme="system"

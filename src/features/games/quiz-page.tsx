@@ -137,6 +137,7 @@ function QuizGame({ mode }: { mode: QuizMode }) {
                   : "On révise avec l'atlas, puis on recommence."
           }
           outcome={outcome}
+          share={`Quiz ${quizModes[mode].label} : ${score}/${QUIZ_ROUND}`}
           actions={
             <>
               <Button onClick={restart}>Rejouer</Button>

@@ -73,6 +73,11 @@ export function MorePage() {
           km, et le contour du pays est simplifié : à vérifier avant un usage de
           précision.
         </p>
+        <p className="text-muted">
+          Les récits de « Découvrir » sont des résumés à vocation de découverte
+          ; chacun renvoie à son article Wikipédia. Les photos viennent de
+          Wikimedia Commons, avec le nom de leur auteur et leur licence.
+        </p>
       </section>
     </div>
   )

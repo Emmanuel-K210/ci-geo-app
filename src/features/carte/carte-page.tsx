@@ -3,6 +3,7 @@ import { ArrowLeftRight } from "lucide-react"
 
 import { CountryMap, Route as RouteLine } from "@/components/country-map"
 import type { CarteSearch } from "@/features/carte/search"
+import { MapTabs } from "@/components/map-tabs"
 import { Button, PageTitle } from "@/components/ui"
 import {
   ABIDJAN,
@@ -60,6 +61,7 @@ export function CartePage({ search }: { search: CarteSearch }) {
 
   return (
     <div className="flex flex-col gap-4">
+      <MapTabs />
       <PageTitle eyebrow="Carte" title="Les villes à leur place">
         Touchez une ville pour l'ouvrir.
       </PageTitle>
@@ -111,7 +113,7 @@ export function CartePage({ search }: { search: CarteSearch }) {
             </div>
             <div className="flex flex-wrap gap-2">
               <Link
-                to="/"
+                to="/atlas"
                 search={{ ville: city.id }}
                 className="inline-flex min-h-11 items-center rounded-full bg-land px-5 text-sm font-semibold"
               >

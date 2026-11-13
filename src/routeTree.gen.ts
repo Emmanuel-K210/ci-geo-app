@@ -10,8 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AtlasRouteImport } from './routes/atlas'
 import { Route as CarteRouteImport } from './routes/carte'
 import { Route as ProfilRouteImport } from './routes/profil'
+import { Route as DecouvrirIndexRouteImport } from './routes/decouvrir/index'
 import { Route as JeuxIndexRouteImport } from './routes/jeux/index'
 import { Route as JeuxBoussoleRouteImport } from './routes/jeux/boussole'
 import { Route as JeuxCarteATrousRouteImport } from './routes/jeux/carte-a-trous'
@@ -25,10 +27,19 @@ import { Route as PlusExportsRouteImport } from './routes/plus/exports'
 import { Route as PlusListeRouteImport } from './routes/plus/liste'
 import { Route as PlusSelecteurRouteImport } from './routes/plus/selecteur'
 import { Route as PlusStatistiquesRouteImport } from './routes/plus/statistiques'
+import { Route as DecouvrirGroupesIdRouteImport } from './routes/decouvrir/groupes/$id'
+import { Route as DecouvrirPeuplesIdRouteImport } from './routes/decouvrir/peuples/$id'
+import { Route as DecouvrirSitesIndexRouteImport } from './routes/decouvrir/sites/index'
+import { Route as DecouvrirSitesIdRouteImport } from './routes/decouvrir/sites/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AtlasRoute = AtlasRouteImport.update({
+  id: '/atlas',
+  path: '/atlas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CarteRoute = CarteRouteImport.update({
@@ -39,6 +50,11 @@ const CarteRoute = CarteRouteImport.update({
 const ProfilRoute = ProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecouvrirIndexRoute = DecouvrirIndexRouteImport.update({
+  id: '/decouvrir/',
+  path: '/decouvrir/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const JeuxIndexRoute = JeuxIndexRouteImport.update({
@@ -106,9 +122,30 @@ const PlusStatistiquesRoute = PlusStatistiquesRouteImport.update({
   path: '/plus/statistiques',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DecouvrirGroupesIdRoute = DecouvrirGroupesIdRouteImport.update({
+  id: '/decouvrir/groupes/$id',
+  path: '/decouvrir/groupes/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecouvrirPeuplesIdRoute = DecouvrirPeuplesIdRouteImport.update({
+  id: '/decouvrir/peuples/$id',
+  path: '/decouvrir/peuples/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecouvrirSitesIndexRoute = DecouvrirSitesIndexRouteImport.update({
+  id: '/decouvrir/sites/',
+  path: '/decouvrir/sites/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecouvrirSitesIdRoute = DecouvrirSitesIdRouteImport.update({
+  id: '/decouvrir/sites/$id',
+  path: '/decouvrir/sites/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/atlas': typeof AtlasRoute
   '/carte': typeof CarteRoute
   '/profil': typeof ProfilRoute
   '/jeux/boussole': typeof JeuxBoussoleRoute
@@ -122,11 +159,17 @@ export interface FileRoutesByFullPath {
   '/plus/liste': typeof PlusListeRoute
   '/plus/selecteur': typeof PlusSelecteurRoute
   '/plus/statistiques': typeof PlusStatistiquesRoute
+  '/decouvrir/': typeof DecouvrirIndexRoute
   '/jeux/': typeof JeuxIndexRoute
   '/plus/': typeof PlusIndexRoute
+  '/decouvrir/groupes/$id': typeof DecouvrirGroupesIdRoute
+  '/decouvrir/peuples/$id': typeof DecouvrirPeuplesIdRoute
+  '/decouvrir/sites/$id': typeof DecouvrirSitesIdRoute
+  '/decouvrir/sites/': typeof DecouvrirSitesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/atlas': typeof AtlasRoute
   '/carte': typeof CarteRoute
   '/profil': typeof ProfilRoute
   '/jeux/boussole': typeof JeuxBoussoleRoute
@@ -140,12 +183,18 @@ export interface FileRoutesByTo {
   '/plus/liste': typeof PlusListeRoute
   '/plus/selecteur': typeof PlusSelecteurRoute
   '/plus/statistiques': typeof PlusStatistiquesRoute
+  '/decouvrir': typeof DecouvrirIndexRoute
   '/jeux': typeof JeuxIndexRoute
   '/plus': typeof PlusIndexRoute
+  '/decouvrir/groupes/$id': typeof DecouvrirGroupesIdRoute
+  '/decouvrir/peuples/$id': typeof DecouvrirPeuplesIdRoute
+  '/decouvrir/sites/$id': typeof DecouvrirSitesIdRoute
+  '/decouvrir/sites': typeof DecouvrirSitesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/atlas': typeof AtlasRoute
   '/carte': typeof CarteRoute
   '/profil': typeof ProfilRoute
   '/jeux/boussole': typeof JeuxBoussoleRoute
@@ -159,13 +208,19 @@ export interface FileRoutesById {
   '/plus/liste': typeof PlusListeRoute
   '/plus/selecteur': typeof PlusSelecteurRoute
   '/plus/statistiques': typeof PlusStatistiquesRoute
+  '/decouvrir/': typeof DecouvrirIndexRoute
   '/jeux/': typeof JeuxIndexRoute
   '/plus/': typeof PlusIndexRoute
+  '/decouvrir/groupes/$id': typeof DecouvrirGroupesIdRoute
+  '/decouvrir/peuples/$id': typeof DecouvrirPeuplesIdRoute
+  '/decouvrir/sites/$id': typeof DecouvrirSitesIdRoute
+  '/decouvrir/sites/': typeof DecouvrirSitesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/atlas'
     | '/carte'
     | '/profil'
     | '/jeux/boussole'
@@ -179,11 +234,17 @@ export interface FileRouteTypes {
     | '/plus/liste'
     | '/plus/selecteur'
     | '/plus/statistiques'
+    | '/decouvrir/'
     | '/jeux/'
     | '/plus/'
+    | '/decouvrir/groupes/$id'
+    | '/decouvrir/peuples/$id'
+    | '/decouvrir/sites/$id'
+    | '/decouvrir/sites/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/atlas'
     | '/carte'
     | '/profil'
     | '/jeux/boussole'
@@ -197,11 +258,17 @@ export interface FileRouteTypes {
     | '/plus/liste'
     | '/plus/selecteur'
     | '/plus/statistiques'
+    | '/decouvrir'
     | '/jeux'
     | '/plus'
+    | '/decouvrir/groupes/$id'
+    | '/decouvrir/peuples/$id'
+    | '/decouvrir/sites/$id'
+    | '/decouvrir/sites'
   id:
     | '__root__'
     | '/'
+    | '/atlas'
     | '/carte'
     | '/profil'
     | '/jeux/boussole'
@@ -215,12 +282,18 @@ export interface FileRouteTypes {
     | '/plus/liste'
     | '/plus/selecteur'
     | '/plus/statistiques'
+    | '/decouvrir/'
     | '/jeux/'
     | '/plus/'
+    | '/decouvrir/groupes/$id'
+    | '/decouvrir/peuples/$id'
+    | '/decouvrir/sites/$id'
+    | '/decouvrir/sites/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AtlasRoute: typeof AtlasRoute
   CarteRoute: typeof CarteRoute
   ProfilRoute: typeof ProfilRoute
   JeuxBoussoleRoute: typeof JeuxBoussoleRoute
@@ -234,8 +307,13 @@ export interface RootRouteChildren {
   PlusListeRoute: typeof PlusListeRoute
   PlusSelecteurRoute: typeof PlusSelecteurRoute
   PlusStatistiquesRoute: typeof PlusStatistiquesRoute
+  DecouvrirIndexRoute: typeof DecouvrirIndexRoute
   JeuxIndexRoute: typeof JeuxIndexRoute
   PlusIndexRoute: typeof PlusIndexRoute
+  DecouvrirGroupesIdRoute: typeof DecouvrirGroupesIdRoute
+  DecouvrirPeuplesIdRoute: typeof DecouvrirPeuplesIdRoute
+  DecouvrirSitesIdRoute: typeof DecouvrirSitesIdRoute
+  DecouvrirSitesIndexRoute: typeof DecouvrirSitesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -245,6 +323,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/atlas': {
+      id: '/atlas'
+      path: '/atlas'
+      fullPath: '/atlas'
+      preLoaderRoute: typeof AtlasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/carte': {
@@ -259,6 +344,13 @@ declare module '@tanstack/react-router' {
       path: '/profil'
       fullPath: '/profil'
       preLoaderRoute: typeof ProfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decouvrir/': {
+      id: '/decouvrir/'
+      path: '/decouvrir'
+      fullPath: '/decouvrir/'
+      preLoaderRoute: typeof DecouvrirIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/jeux/': {
@@ -352,11 +444,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlusStatistiquesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/decouvrir/groupes/$id': {
+      id: '/decouvrir/groupes/$id'
+      path: '/decouvrir/groupes/$id'
+      fullPath: '/decouvrir/groupes/$id'
+      preLoaderRoute: typeof DecouvrirGroupesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decouvrir/peuples/$id': {
+      id: '/decouvrir/peuples/$id'
+      path: '/decouvrir/peuples/$id'
+      fullPath: '/decouvrir/peuples/$id'
+      preLoaderRoute: typeof DecouvrirPeuplesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decouvrir/sites/': {
+      id: '/decouvrir/sites/'
+      path: '/decouvrir/sites'
+      fullPath: '/decouvrir/sites/'
+      preLoaderRoute: typeof DecouvrirSitesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decouvrir/sites/$id': {
+      id: '/decouvrir/sites/$id'
+      path: '/decouvrir/sites/$id'
+      fullPath: '/decouvrir/sites/$id'
+      preLoaderRoute: typeof DecouvrirSitesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AtlasRoute: AtlasRoute,
   CarteRoute: CarteRoute,
   ProfilRoute: ProfilRoute,
   JeuxBoussoleRoute: JeuxBoussoleRoute,
@@ -370,8 +491,13 @@ const rootRouteChildren: RootRouteChildren = {
   PlusListeRoute: PlusListeRoute,
   PlusSelecteurRoute: PlusSelecteurRoute,
   PlusStatistiquesRoute: PlusStatistiquesRoute,
+  DecouvrirIndexRoute: DecouvrirIndexRoute,
   JeuxIndexRoute: JeuxIndexRoute,
   PlusIndexRoute: PlusIndexRoute,
+  DecouvrirGroupesIdRoute: DecouvrirGroupesIdRoute,
+  DecouvrirPeuplesIdRoute: DecouvrirPeuplesIdRoute,
+  DecouvrirSitesIdRoute: DecouvrirSitesIdRoute,
+  DecouvrirSitesIndexRoute: DecouvrirSitesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

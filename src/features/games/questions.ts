@@ -1,4 +1,6 @@
-import { ABIDJAN, geo, villes } from "@/geo"
+import { GROUPES, groupeById, PEUPLES } from "@/culture/peuples"
+import { SITES } from "@/culture/sites"
+import { ABIDJAN, geo, villeById, villes } from "@/geo"
 import { pick, shuffle, type Rng } from "@/lib/random"
 
 export type Question = {
@@ -16,6 +18,8 @@ export const QUIZ_MODES = [
   "district",
   "abidjan",
   "quartier",
+  "peuples",
+  "sites",
 ] as const
 export type QuizMode = (typeof QUIZ_MODES)[number]
 
@@ -134,6 +138,86 @@ const GENERATORS: Record<Exclude<QuizMode, "tout">, Generator> = {
         good,
         options: [good, ...others(good, pool, rng)],
         why: `${quartier.nom} est un quartier de ${good}.`,
+      }
+    },
+  },
+  peuples: {
+    label: "Peuples",
+    hint: "Qui sont-ils, d'où viennent-ils",
+    make: (rng) => {
+      const peuple = pick(PEUPLES, rng)
+      const groupe = groupeById(peuple.groupeId)!
+      if (rng() < 0.35) {
+        const good = groupe.nom
+        return {
+          type: "Peuples",
+          text: `À quel grand groupe appartiennent les ${peuple.nom} ?`,
+          good,
+          options: [
+            good,
+            ...others(
+              good,
+              GROUPES.map((g) => g.nom),
+              rng
+            ),
+          ],
+          why: `Les ${peuple.nom} font partie du groupe ${good} : ${groupe.aire.toLowerCase()}.`,
+        }
+      }
+      const good = peuple.nom
+      return {
+        type: "Qui sont-ils ?",
+        text: pick(peuple.indices, rng),
+        good,
+        options: [
+          good,
+          ...others(
+            good,
+            PEUPLES.map((p) => p.nom),
+            rng
+          ),
+        ],
+        why: `Ce sont les ${good}. ${peuple.resume}`,
+      }
+    },
+  },
+  sites: {
+    label: "Sites et histoires",
+    hint: "Les lieux à visiter et leurs récits",
+    make: (rng) => {
+      const site = pick(SITES, rng)
+      const ville = villeById(`ci-v-${site.ville}`)
+      if (ville && rng() < 0.4) {
+        const good = ville.nom
+        return {
+          type: "Sites",
+          text: `Près de quelle ville se trouve : ${site.nom} ?`,
+          good,
+          options: [
+            good,
+            ...others(
+              good,
+              villes.map((v) => v.nom),
+              rng
+            ),
+          ],
+          why: `${site.nom} : ${site.resume.charAt(0).toLowerCase()}${site.resume.slice(1)} Ville la plus proche : ${good}.`,
+        }
+      }
+      const good = site.nom
+      return {
+        type: "Quel est ce lieu ?",
+        text: pick(site.indices, rng),
+        good,
+        options: [
+          good,
+          ...others(
+            good,
+            SITES.map((s) => s.nom),
+            rng
+          ),
+        ],
+        why: `C'est ${good}. ${site.resume}`,
       }
     },
   },

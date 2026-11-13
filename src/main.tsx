@@ -7,6 +7,7 @@ import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 
 import { routeTree } from "@/routeTree.gen"
+import { startCloud } from "@/stores/cloud"
 import "@/styles.css"
 
 // Hash URLs (#/jeux): the build works from a plain folder or any static host.
@@ -22,6 +23,8 @@ declare module "@tanstack/react-router" {
     router: typeof router
   }
 }
+
+startCloud()
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

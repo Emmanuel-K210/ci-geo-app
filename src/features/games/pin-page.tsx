@@ -73,6 +73,7 @@ export function PinPage() {
           }
           detail={`Record : ${Math.max(best, score)} / ${PIN_ROUND}`}
           outcome={outcome}
+          share={`Carte à trous : ${score}/${PIN_ROUND}`}
           actions={<Button onClick={restart}>Rejouer</Button>}
         />
       </GameLayout>
