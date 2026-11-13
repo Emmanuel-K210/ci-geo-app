@@ -2,6 +2,25 @@
 // app in phone frames (iframes of the built app, same origin as the poster).
 import { writeFileSync } from "node:fs"
 
+import QRCode from "qrcode"
+
+const SITE = "ci-geo-app.vercel.app"
+const QR = await QRCode.toString(`https://${SITE}`, {
+  type: "svg",
+  margin: 0,
+  color: { dark: "#17241e", light: "#ffffff" },
+})
+
+/** The address, and a QR code for posters seen on a computer. */
+const link = (qrSize, fontSize, dark = false) =>
+  `<div style="display:flex;align-items:center;gap:${Math.round(qrSize / 6)}px">
+  ${qrSize ? `<div style="width:${qrSize}px;height:${qrSize}px;padding:${Math.round(qrSize / 14)}px;background:#fff;border-radius:${Math.round(qrSize / 8)}px;box-shadow:0 10px 30px -14px rgba(23,36,30,.5)">${QR}</div>` : ""}
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <span style="white-space:nowrap;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:${fontSize}px;color:${dark ? "#eef2ee" : "var(--ink)"}">${SITE}</span>
+    <span style="font-size:${Math.round(fontSize * 0.62)}px;color:${dark ? "#9db0a5" : "var(--muted)"}">Gratuit · sans inscription</span>
+  </div>
+</div>`
+
 const out = (name) => new URL(`posters/${name}.html`, import.meta.url)
 
 const PIN = `<svg viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z" fill="#e0680a"/><circle cx="17" cy="13.3" r="4" fill="#fff"/></svg>`
@@ -42,12 +61,13 @@ const POSTERS = {
     627,
     `${FLAG(8)}
 <img class="map" src="carte.svg" style="right:-60px;top:20px;width:620px;opacity:.55" alt="">
-<div style="position:absolute;left:64px;top:52px;width:610px;display:flex;flex-direction:column;gap:20px">
+<div style="position:absolute;left:64px;top:36px;width:610px;display:flex;flex-direction:column;gap:17px">
   <div class="logo" style="font-size:30px">${PIN} CI-Geo</div>
   <p class="eyebrow" style="font-size:15px">Nouvelle application · gratuite</p>
-  <h1 class="display" style="font-size:54px">La Côte d'Ivoire, <span class="accent">ville par ville,</span> peuple par peuple.</h1>
+  <h1 class="display" style="font-size:50px">La Côte d'Ivoire, <span class="accent">ville par ville,</span> peuple par peuple.</h1>
   <p style="margin:0;font-size:20px;line-height:1.45;color:var(--muted)">Un atlas des 14 districts, les récits des peuples et des sites, et 10 jeux pour apprendre la géographie du pays en s'amusant.</p>
   <div class="chips" style="font-size:16px"><span class="chip"><b>46</b> villes</span><span class="chip"><b>16</b> peuples</span><span class="chip"><b>15</b> sites</span><span class="chip"><b>10</b> jeux</span></div>
+  ${link(78, 24)}
 </div>
 ${phone(745, 66, 236, "/", -6)}
 ${phone(945, 112, 236, "/decouvrir/sites/tai", 5)}
@@ -70,8 +90,8 @@ ${phone(60, 560, 290, "/atlas?ville=ci-v-korhogo", -5)}
 ${phone(395, 515, 290, "/", 0)}
 ${phone(730, 560, 290, "/decouvrir/sites", 5)}
 <div style="position:absolute;left:80px;right:80px;bottom:58px;display:flex;align-items:center;justify-content:space-between;gap:20px">
-  <div class="chips" style="font-size:22px"><span class="chip"><b>14</b> districts</span><span class="chip"><b>16</b> peuples</span><span class="chip"><b>10</b> jeux</span></div>
-  <span class="cta" style="font-size:26px">Gratuit · sans inscription</span>
+  <div class="chips" style="font-size:21px"><span class="chip"><b>16</b> peuples</span><span class="chip"><b>10</b> jeux</span></div>
+  ${link(112, 30)}
 </div>
 <p class="credit" style="left:80px;bottom:18px">${CREDIT_MAP} · ${CREDIT_PHOTOS}</p>`
   ),
@@ -88,10 +108,10 @@ ${FLAG(14)}
   <h1 class="display" style="font-size:104px">Tu connais vraiment <span class="accent">ton pays&nbsp;?</span></h1>
   <p style="margin:0;font-size:34px;line-height:1.4;color:var(--muted)">Chaque jour, 5 villes à placer sur la carte. Le même défi pour tout le monde. Partage ton score 🟩🟨🟧</p>
 </div>
-${phone(310, 690, 460, "/", 0)}
-<div style="position:absolute;left:0;right:0;bottom:64px;display:flex;flex-direction:column;align-items:center;gap:18px">
+${phone(320, 670, 440, "/", 0)}
+<div style="position:absolute;left:0;right:0;bottom:48px;display:flex;flex-direction:column;align-items:center;gap:14px">
   <span class="cta" style="font-size:40px;box-shadow:0 20px 40px -18px rgba(224,104,10,.8)">Relève le défi du jour</span>
-  <p style="margin:0;font-size:26px;color:var(--muted)">Gratuit · sans inscription · sur ton téléphone</p>
+  <p style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:40px">${SITE}</p>
 </div>`
   ),
 
@@ -109,11 +129,12 @@ ${FLAG(14)}
   <h1 class="display" style="font-size:90px">Abla Pokou, Kong, Grand-Bassam… <span class="accent">les histoires</span> derrière les lieux.</h1>
   <p style="margin:0;font-size:32px;line-height:1.4;opacity:.8">16 peuples, leurs origines et leurs traditions. 15 sites à visiter, avec leur récit et leurs photos.</p>
 </div>
-${phone(100, 800, 400, "/decouvrir/peuples/baoule", -5)}
-${phone(580, 850, 400, "/decouvrir/sites/grand-bassam", 5)}
-<div style="position:absolute;left:0;right:0;bottom:56px;display:flex;flex-direction:column;align-items:center;gap:16px">
+${phone(110, 780, 380, "/decouvrir/peuples/baoule", -5)}
+${phone(590, 830, 380, "/decouvrir/sites/grand-bassam", 5)}
+<div style="position:absolute;left:0;right:0;bottom:40px;display:flex;flex-direction:column;align-items:center;gap:12px">
   <span class="cta" style="font-size:38px;box-shadow:0 20px 40px -18px rgba(0,0,0,.7)">Lis le récit du jour</span>
-  <p style="margin:0;font-size:22px;color:#9db0a5">${CREDIT_PHOTOS} · Limites : geoBoundaries (CC BY 4.0)</p>
+  <p style="margin:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:38px;color:#eef2ee">${SITE}</p>
+  <p style="margin:0;font-size:20px;color:#9db0a5">${CREDIT_PHOTOS} · Limites : geoBoundaries (CC BY 4.0)</p>
 </div>`
   ),
 
@@ -133,7 +154,7 @@ ${phone(580, 850, 400, "/decouvrir/sites/grand-bassam", 5)}
     <li>🎮 10 jeux, un défi chaque jour</li>
     <li>🏆 Niveaux, badges et duels entre amis</li>
   </ul>
-  <span class="cta" style="font-size:30px;align-self:flex-start">Gratuit · sans inscription</span>
+  ${link(110, 30)}
 </div>
 ${phone(665, 300, 320, "/jeux", 4)}
 <p class="credit" style="left:72px;bottom:20px">${CREDIT_MAP}</p>`
