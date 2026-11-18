@@ -42,6 +42,12 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
+        // Static pages are served as they are, never replaced by the app.
+        navigateFallbackDenylist: [
+          /\/tiktok-callback/,
+          /\/conditions/,
+          /\/confidentialite/,
+        ],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/(upload|thumb)\.wikimedia\.org\//,

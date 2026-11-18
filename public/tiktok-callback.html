@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Connexion TikTok · Culture Ivoire</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./legal.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="./logo-mark.svg" alt="" />
+        <a href="./">Culture Ivoire</a>
+      </header>
+      <h1>Connexion à TikTok</h1>
+      <div class="card" id="result">
+        <p class="muted">Lecture de la réponse de TikTok…</p>
+      </div>
+      <p class="muted">
+        Cette page affiche seulement le code renvoyé par TikTok après
+        l'autorisation. Elle ne l'envoie nulle part : copiez-le dans l'outil de
+        publication de Culture Ivoire. Il n'est valable que quelques minutes.
+      </p>
+    </main>
+    <script>
+      // TikTok sends ?code=…&state=… (or ?error=…) back to this page.
+      const params = new URLSearchParams(location.search)
+      const box = document.getElementById("result")
+      const code = params.get("code")
+      if (code) {
+        box.innerHTML = `
+          <p><strong>Autorisation reçue.</strong> Votre code :</p>
+          <code id="code"></code>
+          <button type="button" id="copy">Copier le code</button>`
+        document.getElementById("code").textContent = code
+        document.getElementById("copy").onclick = async () => {
+          await navigator.clipboard.writeText(code)
+          document.getElementById("copy").textContent = "Copié"
+        }
+        // Keep the code out of the address bar and the browser history.
+        history.replaceState(null, "", location.pathname)
+      } else {
+        const error = params.get("error_description") || params.get("error")
+        box.textContent = error
+          ? `TikTok a refusé l'autorisation : ${error}`
+          : "Aucune réponse de TikTok sur cette page."
+      }
+    </script>
+  </body>
+</html>
