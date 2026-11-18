@@ -5,6 +5,7 @@
     <title>Encodeur</title>
     <script src="mp4-muxer.js"></script>
     <script src="music.js"></script>
+    <script src="sfx.js"></script>
   </head>
   <body>
     <script>
@@ -95,6 +96,7 @@
         voice,
         voiceAt = 0,
         voices = [],
+        sfx = [],
         voiceGain = 1,
         music = true,
         musicGain = 0.55,
@@ -153,6 +155,12 @@
           bed.gain.linearRampToValueAtTime(0, seconds)
           composeMusic(ctx, bed, seconds, { transpose, bpm })
           bed.connect(master)
+        }
+        if (sfx.length) {
+          const effects = ctx.createGain()
+          effects.gain.value = 0.7
+          effects.connect(master)
+          playSfx(ctx, effects, sfx)
         }
         const mix = await ctx.startRendering()
 

@@ -40,6 +40,10 @@
   /** Seconds the sentence lasts once spoken; 0 without a voice, so the
    * scene keeps its own pace. */
   window.voiceLength = (id) => durations?.[id] ?? 0
+  /** Sound effects at given times (tick, ding, whoosh, pop, chime). */
+  window.sfx = []
+  window.effect = (type, at) => sfx.push({ type, at })
+
   /** Adds a sentence at time `at`; returns when it ends. */
   window.say = (id, text, at) => {
     voiceScript.push({ id, text })
@@ -144,7 +148,10 @@
     /^[aeiouéèêîâô]/i.test(name) ? `d'${name}` : `de ${name}`
 
   /** The end card shared by every video. */
-  window.endCard = (from, line) => `
+  window.endCard = (from, line) => {
+    effect("whoosh", from - 0.15)
+    effect("chime", from + 0.5)
+    return `
     <div data-in="${from}" data-fadein="0.3" class="layer dark">
       <div class="bar"><div class="flag"><span></span><span></span><span></span></div></div>
       <div class="layer center">
@@ -154,4 +161,5 @@
         <p data-in="${from + 1.3}" data-fx="fade" style="margin: 0; font-size: 38px; color: #9db0a5">Gratuit · sans inscription</p>
       </div>
     </div>`
+  }
 })()

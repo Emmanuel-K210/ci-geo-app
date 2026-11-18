@@ -112,8 +112,10 @@
         // The timeline: title, the story paragraph by paragraph, one fact,
         // the page in the app, the end card.
         // Each card stays at least as long as its sentence is spoken.
-        const hold = (start, minimum, id, text) =>
-          Math.max(start + minimum, say(id, text, start + 0.25) + 0.45)
+        const hold = (start, minimum, id, text) => {
+          effect("whoosh", start - 0.1)
+          return Math.max(start + minimum, say(id, text, start + 0.25) + 0.45)
+        }
         let t = 0.4
         const blocks = []
         const titleEnd = hold(t, 4.2, "title", `${title}. ${item.resume}`)
@@ -152,6 +154,7 @@
           t = end
         }
         const phoneAt = t
+        effect("whoosh", phoneAt - 0.1)
         say(
           "cta",
           `Toute ${kind === "peuple" ? "leur" : "son"} histoire est sur Culture Ivoire.`,

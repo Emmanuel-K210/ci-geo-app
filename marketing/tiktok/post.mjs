@@ -13,6 +13,7 @@
 // the script picks the most public level TikTok allows.
 import { randomBytes } from "node:crypto"
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs"
+import { pathToFileURL } from "node:url"
 
 const ROOT = new URL("../../", import.meta.url)
 const TOKENS = new URL(".tokens.json", import.meta.url)
@@ -118,7 +119,7 @@ const PRIVACY_ORDER = [
 ]
 
 /** Uploads a video and publishes it with its caption; returns its status. */
-async function post(file, caption) {
+export async function post(file, caption) {
   const creator = await api("/post/publish/creator_info/query/")
   const allowed = creator.privacy_level_options ?? ["SELF_ONLY"]
   const privacy =
@@ -175,7 +176,7 @@ async function post(file, caption) {
 // The batch's schedule ----------------------------------------------------
 
 /** Rows of programme.csv: date (JJ/MM/AAAA), time (Abidjan = UTC), file, caption. */
-function programme(lot) {
+export function programme(lot) {
   const text = readFileSync(
     new URL(`marketing/video/out/${lot}/programme.csv`, ROOT),
     "utf8"
@@ -192,57 +193,98 @@ function programme(lot) {
     })
 }
 
-async function due(lot) {
-  const logFile = new URL(`marketing/video/out/${lot}/publie.json`, ROOT)
-  const log = existsSync(logFile)
-    ? JSON.parse(readFileSync(logFile, "utf8"))
-    : {}
+/** Where a batch keeps track of what it has already posted. */
+const logOf = (lot) => new URL(`marketing/video/out/${lot}/publie.json`, ROOT)
+
+export function published(lot) {
+  const file = logOf(lot)
+  return existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : {}
+}
+
+/** Posts one video of a batch with its caption, and records it. */
+export async function postFromLot(lot, row) {
+  const result = await post(
+    new URL(`marketing/video/out/${lot}/${row.file}`, ROOT),
+    row.caption
+  )
+  const log = published(lot)
+  log[row.file] = { ...result, at: new Date().toISOString() }
+  writeFileSync(logOf(lot), JSON.stringify(log, null, 2))
+  return result
+}
+
+/** Posts the batch's videos whose time has come, once each. */
+export async function due(lot, report = console.log) {
+  const log = published(lot)
   const now = new Date()
   const ready = programme(lot).filter((row) => row.at <= now && !log[row.file])
-  if (!ready.length) return console.log("Rien à publier pour l'instant.")
+  if (!ready.length) return report("Rien à publier pour l'instant.")
   for (const row of ready) {
-    const file = new URL(`marketing/video/out/${lot}/${row.file}`, ROOT)
-    console.log(`Publication de ${row.file}…`)
-    const result = await post(file, row.caption)
-    log[row.file] = { ...result, at: new Date().toISOString() }
-    writeFileSync(logFile, JSON.stringify(log, null, 2))
-    console.log(`  ${result.status} (${result.privacy})`)
+    report(`Publication de ${row.file}…`)
+    const result = await postFromLot(lot, row)
+    report(`  ${result.status} (${result.privacy})`)
   }
 }
 
-// Commands ----------------------------------------------------------------
+/** The link that asks the account owner to authorize the app. */
+export function authUrl() {
+  const params = new URLSearchParams({
+    client_key: keys().key,
+    scope: SCOPES,
+    response_type: "code",
+    redirect_uri: REDIRECT,
+    state: randomBytes(8).toString("hex"),
+  })
+  return `https://www.tiktok.com/v2/auth/authorize/?${params}`
+}
 
-const [command, ...rest] = process.argv.slice(2)
-try {
-  if (command === "login") {
-    const params = new URLSearchParams({
-      client_key: keys().key,
-      scope: SCOPES,
-      response_type: "code",
-      redirect_uri: REDIRECT,
-      state: randomBytes(8).toString("hex"),
-    })
-    console.log("Ouvrez ce lien, connecté au compte TikTok Culture Ivoire :")
-    console.log(`https://www.tiktok.com/v2/auth/authorize/?${params}`)
-    console.log("Puis : npm run tiktok -- code <le code affiché>")
-  } else if (command === "code") {
-    const tokens = await tokenRequest({
-      code: decodeURIComponent(rest[0] ?? ""),
-      grant_type: "authorization_code",
-      redirect_uri: REDIRECT,
-    })
-    console.log(`Compte autorisé (droits : ${tokens.scope}).`)
-  } else if (command === "post") {
-    const [file, caption = ""] = rest
-    console.log(await post(file, caption))
-  } else if (command === "due") {
-    await due(rest[0])
-  } else {
-    console.log(
-      'Commandes : login, code <CODE>, post <vidéo> "<légende>", due <lot>'
-    )
+/** Exchanges the code shown by tiktok-callback.html for the tokens. */
+export async function authorize(code) {
+  return tokenRequest({
+    code: decodeURIComponent(code.trim()),
+    grant_type: "authorization_code",
+    redirect_uri: REDIRECT,
+  })
+}
+
+export const connected = () => existsSync(TOKENS)
+
+/** The authorized account: name and avatar, for the Studio. */
+export async function account() {
+  const response = await fetch(
+    `${API}/user/info/?fields=open_id,display_name,avatar_url`,
+    { headers: { Authorization: `Bearer ${await accessToken()}` } }
+  )
+  const data = await response.json()
+  if (data.error?.code && data.error.code !== "ok")
+    throw new Error(`TikTok : ${data.error.code} ${data.error.message ?? ""}`)
+  return data.data.user
+}
+
+// Commands (when run directly, not imported by the Studio) -----------------
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  const [command, ...rest] = process.argv.slice(2)
+  try {
+    if (command === "login") {
+      console.log("Ouvrez ce lien, connecté au compte TikTok Culture Ivoire :")
+      console.log(authUrl())
+      console.log("Puis : npm run tiktok -- code <le code affiché>")
+    } else if (command === "code") {
+      const tokens = await authorize(rest[0] ?? "")
+      console.log(`Compte autorisé (droits : ${tokens.scope}).`)
+    } else if (command === "post") {
+      const [file, caption = ""] = rest
+      console.log(await post(file, caption))
+    } else if (command === "due") {
+      await due(rest[0])
+    } else {
+      console.log(
+        'Commandes : login, code <CODE>, post <vidéo> "<légende>", due <lot>'
+      )
+    }
+  } catch (error) {
+    console.error(error.message)
+    process.exitCode = 1
   }
-} catch (error) {
-  console.error(error.message)
-  process.exitCode = 1
 }

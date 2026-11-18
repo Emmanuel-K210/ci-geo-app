@@ -63,6 +63,45 @@
     osc.stop(t + length + 0.02)
   }
 
+  /** A hand clap: a few short noise bursts through a band-pass filter. */
+  function clap(ctx, out, noise, t, level) {
+    for (const [offset, amount] of [
+      [0, 0.6],
+      [0.012, 0.8],
+      [0.024, 1],
+    ]) {
+      const src = ctx.createBufferSource()
+      src.buffer = noise
+      const filter = ctx.createBiquadFilter()
+      filter.type = "bandpass"
+      filter.frequency.value = 1400
+      filter.Q.value = 0.9
+      const gain = ctx.createGain()
+      const at = t + offset
+      gain.gain.setValueAtTime(level * amount, at)
+      gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        at + (offset === 0.024 ? 0.18 : 0.03)
+      )
+      src.connect(filter).connect(gain).connect(out)
+      src.start(at, (at * 0.53) % 0.8)
+      src.stop(at + 0.2)
+    }
+  }
+
+  /** A tuned hand drum (conga-like): a sine with a quick pitch drop. */
+  function conga(ctx, out, t, freq, level) {
+    const osc = ctx.createOscillator()
+    osc.frequency.setValueAtTime(freq * 1.3, t)
+    osc.frequency.exponentialRampToValueAtTime(freq, t + 0.03)
+    const gain = ctx.createGain()
+    gain.gain.setValueAtTime(level, t)
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22)
+    osc.connect(gain).connect(out)
+    osc.start(t)
+    osc.stop(t + 0.25)
+  }
+
   /** A struck wooden bar: two partials and a fast decay. */
   function balafon(ctx, out, t, midi, level) {
     for (const [ratio, amount, decay] of [
@@ -102,6 +141,18 @@
       const root = chord.root + transpose
       const melody = chord.melody.map((midi) => midi + transpose)
       for (let b = 0; b < 4; b++) kick(ctx, bus, start + b * BEAT)
+      // Afro groove: claps on 2 and 4, a two-drum conga pattern.
+      clap(ctx, bus, noise, start + BEAT, 0.5)
+      clap(ctx, bus, noise, start + BEAT * 3, 0.5)
+      for (const [step, freq, level] of [
+        [3, 330, 0.22],
+        [6, 250, 0.25],
+        [7, 330, 0.18],
+        [10, 250, 0.22],
+        [14, 330, 0.22],
+        [15, 250, 0.18],
+      ])
+        conga(ctx, bus, start + (step * BEAT) / 4, freq, level)
       for (let s = 0; s < 16; s++)
         shaker(ctx, bus, noise, start + (s * BEAT) / 4, s % 2 ? 0.08 : 0.16)
       // Bass: root on 1, a syncopated push before 3, the fifth on 4.

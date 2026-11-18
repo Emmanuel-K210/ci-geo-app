@@ -55,7 +55,7 @@ copyFileSync(new URL("src/geo/shapes.json", ROOT), new URL("shapes.json", SITE))
 // Voice-overs (marketing/video/audio/*.mp3), served next to the scenes.
 const AUDIO = new URL("audio/", HERE)
 if (existsSync(AUDIO))
-  for (const file of readdirSync(AUDIO))
+  for (const file of readdirSync(AUDIO).filter((f) => /\.(mp3|wav)$/.test(f)))
     copyFileSync(new URL(file, AUDIO), new URL(file, SITE))
 // The Découvrir texts, straight from the app's sources (Node strips the types).
 const { GROUPES, PEUPLES } = await import(
@@ -170,9 +170,13 @@ async function renderOne(job, label, target) {
       : ((await scene.evaluate(() => window.audio ?? null)) ??
         job.audio ??
         null)
+    const sfx = args.includes("--silent")
+      ? []
+      : await scene.evaluate(() => window.sfx ?? [])
     const audio =
-      base || voices.length
+      base || voices.length || sfx.length
         ? {
+            sfx,
             music: true,
             ...base,
             voices: voices.length ? voices : (base?.voices ?? []),

@@ -67,6 +67,13 @@
         say("deux", "Deux.", K + 1)
         say("un", "Un.", K + 2)
         const R = K + 3 // the answer
+        effect("pop", 0.8)
+        effect("pop", 2)
+        effect("tick", K)
+        effect("tick", K + 1)
+        effect("tick", K + 2)
+        effect("ding", R)
+        effect("whoosh", R - 0.2)
         const answerEnd = say("answer", `C'est ${ville.nom} !`, R + 0.1)
         const asked = say(
           "comment",

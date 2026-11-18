@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Studio · Culture Ivoire</title>
+    <style>
+      :root {
+        --paper: #eef2ee;
+        --surface: #ffffff;
+        --ink: #17241e;
+        --muted: #56675e;
+        --line: #d3ddd5;
+        --orange: #e0680a;
+        --green: #0b7a4b;
+        --green-soft: #e1f1e8;
+        --warn: #fdf1e2;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font:
+          15px/1.5 "Segoe UI",
+          system-ui,
+          sans-serif;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(238, 242, 238, 0.92);
+        backdrop-filter: blur(8px);
+      }
+      header svg {
+        width: 38px;
+        height: 38px;
+      }
+      header b {
+        font-size: 19px;
+      }
+      header b span {
+        color: var(--orange);
+      }
+      header small {
+        margin-left: 6px;
+        color: var(--muted);
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px;
+        display: grid;
+        gap: 18px;
+      }
+      .card {
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--surface);
+      }
+      h2 {
+        margin: 0 0 10px;
+        font-size: 17px;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+      }
+      button {
+        min-height: 40px;
+        padding: 0 16px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--ink);
+        color: #fff;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button.orange {
+        background: var(--orange);
+      }
+      button.ghost {
+        background: var(--paper);
+        color: var(--ink);
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: wait;
+      }
+      input,
+      select {
+        min-height: 40px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--paper);
+        color: var(--ink);
+        font: inherit;
+      }
+      input {
+        flex: 1;
+        min-width: 220px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .account img {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+      }
+      .notice {
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: var(--warn);
+        font-size: 14px;
+      }
+      .videos {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 14px;
+      }
+      .video {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--surface);
+      }
+      .video video {
+        width: 100%;
+        aspect-ratio: 9 / 16;
+        border-radius: 12px;
+        background: #000;
+      }
+      .when {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+      }
+      .badge {
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        background: var(--paper);
+        color: var(--muted);
+      }
+      .badge.done {
+        background: var(--green-soft);
+        color: var(--green);
+      }
+      .badge.due {
+        background: var(--warn);
+        color: #8a4a00;
+      }
+      .caption {
+        max-height: 88px;
+        overflow: auto;
+        font-size: 13px;
+        color: var(--muted);
+        white-space: pre-wrap;
+      }
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%);
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: var(--ink);
+        color: #fff;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <svg viewBox="12 10 76 80" aria-hidden="true">
+        <clipPath id="ci">
+          <path
+            d="M20.2,20.8L23.6,18.5L29.2,16.8L34.3,14L42.7,16.3L50.6,16.8L55.1,18.5L59.6,24.8L64.6,25.9L71.4,23.1L77.5,24.8L82,27.6L84.3,42.3L79.8,45.7L76.4,58.2L77.5,66.2L77.5,74.1L80.4,77.5L70.8,76.9L60.7,76.4L51.7,77.5L42.7,80.9L33.7,84.3L27.5,86L27.5,77.5L23.6,70.7L18,63.9L15.7,56L17.4,49.1L17.4,42.3L24.7,38.9L23,31L20.2,25.9Z"
+          />
+        </clipPath>
+        <g clip-path="url(#ci)">
+          <rect x="14.7" width="23.9" height="100" fill="#f77f00" />
+          <rect x="38.6" width="22.9" height="100" fill="#fff" />
+          <rect x="61.4" width="23.9" height="100" fill="#009e60" />
+        </g>
+        <path
+          d="M20.2,20.8L23.6,18.5L29.2,16.8L34.3,14L42.7,16.3L50.6,16.8L55.1,18.5L59.6,24.8L64.6,25.9L71.4,23.1L77.5,24.8L82,27.6L84.3,42.3L79.8,45.7L76.4,58.2L77.5,66.2L77.5,74.1L80.4,77.5L70.8,76.9L60.7,76.4L51.7,77.5L42.7,80.9L33.7,84.3L27.5,86L27.5,77.5L23.6,70.7L18,63.9L15.7,56L17.4,49.1L17.4,42.3L24.7,38.9L23,31L20.2,25.9Z"
+          fill="none"
+          stroke="#17241e"
+          stroke-width="2"
+        />
+      </svg>
+      <b>Culture <span>Ivoire</span></b>
+      <small>Studio TikTok</small>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Compte TikTok</h2>
+        <div id="account" class="muted">Chargement…</div>
+      </section>
+
+      <section class="card">
+        <div class="row" style="justify-content: space-between">
+          <h2 style="margin: 0">Vidéos du lot</h2>
+          <select id="lot" aria-label="Lot de vidéos"></select>
+        </div>
+        <p class="muted" style="margin: 8px 0 14px">
+          Chaque vidéo a sa date, son heure (heure d'Abidjan) et sa légende. «
+          Publier » l'envoie sur le compte connecté ; « Copier la légende » sert
+          si vous programmez dans TikTok Studio.
+        </p>
+        <div id="videos" class="videos"></div>
+      </section>
+    </main>
+    <div id="toast"></div>
+
+    <script>
+      const $ = (id) => document.getElementById(id)
+      const fmt = (iso) =>
+        new Date(iso).toLocaleString("fr-FR", {
+          weekday: "short",
+          day: "2-digit",
+          month: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "UTC",
+        })
+
+      function toast(text) {
+        $("toast").textContent = text
+        $("toast").style.opacity = 1
+        clearTimeout(toast.timer)
+        toast.timer = setTimeout(() => ($("toast").style.opacity = 0), 2600)
+      }
+
+      async function call(path, body) {
+        const response = await fetch(path, {
+          method: body ? "POST" : "GET",
+          headers: body ? { "Content-Type": "application/json" } : {},
+          body: body ? JSON.stringify(body) : undefined,
+        })
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.error ?? "Erreur")
+        return data
+      }
+
+      function renderAccount(state) {
+        const box = $("account")
+        const user = state.user
+        if (state.connected && user && !user.error) {
+          box.className = "row account"
+          box.innerHTML = `
+            ${user.avatar_url ? `<img src="${user.avatar_url}" alt="">` : ""}
+            <div><b>${user.display_name}</b><br><span class="muted">Connecté : les vidéos seront publiées sur ce compte.</span></div>
+            <button class="ghost" id="reconnect" style="margin-left:auto">Changer de compte</button>`
+          $("reconnect").onclick = startLogin
+          return
+        }
+        box.className = ""
+        box.innerHTML = `
+          <p class="muted" style="margin-top:0">${
+            user?.error
+              ? `La connexion a expiré ou a été retirée (${user.error}).`
+              : "Aucun compte connecté."
+          }</p>
+          <div class="row">
+            <button class="orange" id="login">1. Connecter le compte TikTok</button>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <input id="code" placeholder="2. Collez ici le code affiché après l'autorisation" autocomplete="off">
+            <button id="validate">Valider</button>
+          </div>`
+        $("login").onclick = startLogin
+        $("validate").onclick = async () => {
+          const code = $("code").value
+          if (!code.trim()) return toast("Collez d'abord le code")
+          $("validate").disabled = true
+          try {
+            await call("/api/code", { code })
+            toast("Compte connecté")
+            load()
+          } catch (error) {
+            toast(error.message)
+            $("validate").disabled = false
+          }
+        }
+      }
+
+      async function startLogin() {
+        const { url } = await call("/api/login", {})
+        window.open(url, "_blank")
+        toast("Autorisez dans l'onglet TikTok, puis collez le code ici")
+        if (!$("code")) renderAccount({ connected: false })
+      }
+
+      async function renderLot(lot) {
+        const { rows } = await call(`/api/lot?lot=${lot}`)
+        const now = Date.now()
+        $("videos").innerHTML = rows
+          .map((row, i) => {
+            const done = row.published
+            const due = !done && new Date(row.at).getTime() <= now
+            const badge = done
+              ? `<span class="badge done">Publiée${done.privacy === "SELF_ONLY" ? " · privée" : ""}</span>`
+              : !row.exists
+                ? `<span class="badge">Pas encore fabriquée</span>`
+                : due
+                  ? `<span class="badge due">À publier</span>`
+                  : `<span class="badge">Programmée</span>`
+            return `
+              <article class="video">
+                <div class="when"><span>${fmt(row.at)}</span>${badge}</div>
+                ${
+                  row.exists
+                    ? `<video src="/video/${lot}/${row.file}#t=1" preload="metadata" controls muted></video>`
+                    : `<div class="notice" style="aspect-ratio:9/16;display:grid;place-items:center;text-align:center">Vidéo pas encore fabriquée</div>`
+                }
+                <div class="caption">${row.caption.replace(/</g, "&lt;")}</div>
+                <div class="row">
+                  <button class="ghost" data-copy="${i}">Copier la légende</button>
+                  <button data-post="${i}" ${done || !row.exists ? "disabled" : ""}>${done ? "Déjà publiée" : "Publier"}</button>
+                </div>
+              </article>`
+          })
+          .join("")
+        $("videos").onclick = async (event) => {
+          const copy = event.target.dataset.copy
+          const post = event.target.dataset.post
+          if (copy !== undefined) {
+            await navigator.clipboard.writeText(rows[copy].caption)
+            toast("Légende copiée")
+          }
+          if (post !== undefined) {
+            const button = event.target
+            button.disabled = true
+            button.textContent = "Envoi en cours…"
+            try {
+              const result = await call("/api/post", {
+                lot,
+                file: rows[post].file,
+              })
+              toast(
+                result.status === "PUBLISH_COMPLETE"
+                  ? `Publiée (${result.privacy === "SELF_ONLY" ? "privée" : "publique"})`
+                  : "Envoyée : TikTok la traite encore"
+              )
+              renderLot(lot)
+            } catch (error) {
+              toast(error.message)
+              button.disabled = false
+              button.textContent = "Publier"
+            }
+          }
+        }
+      }
+
+      async function load() {
+        const state = await call("/api/state")
+        renderAccount(state)
+        const select = $("lot")
+        select.innerHTML = state.lots
+          .map(
+            (lot) =>
+              `<option value="${lot}">${lot.replace("lot-", "Lot du ")}</option>`
+          )
+          .join("")
+        if (!state.lots.length) {
+          $("videos").innerHTML =
+            `<p class="notice">Aucun lot de vidéos pour l'instant.</p>`
+          return
+        }
+        // The batch in progress: the latest one already started, else the next.
+        const today = new Date().toISOString().slice(0, 10)
+        const started = state.lots.filter((lot) => lot.slice(4) <= today)
+        select.value = started[0] ?? state.lots.at(-1)
+        select.onchange = () => renderLot(select.value)
+        renderLot(select.value)
+      }
+
+      load().catch((error) => toast(error.message))
+    </script>
+  </body>
+</html>

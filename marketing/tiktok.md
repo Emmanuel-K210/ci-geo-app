@@ -88,6 +88,21 @@ s'était arrêté : relancez la même commande.
   gratuites du web risquent d'être coupées par TikTok : préférez la musique
   intégrée ou la bibliothèque de sons de TikTok.
 
+## Studio : publier sans taper de commande
+
+Double-cliquez sur **`Studio Culture Ivoire.cmd`** (à la racine du projet) :
+une fenêtre noire s'ouvre (laissez-la ouverte) et la page du Studio
+s'affiche dans le navigateur (http://localhost:3457).
+
+- **Compte TikTok** : « Connecter le compte TikTok » ouvre l'autorisation ;
+  collez ensuite le code affiché et « Valider ».
+- **Vidéos du lot** : chaque vidéo avec sa date, son heure, sa légende,
+  « Copier la légende » (pour TikTok Studio) et « Publier ».
+- Fermez la fenêtre noire pour arrêter le Studio.
+
+Le Studio ne fonctionne que sur votre ordinateur ; les clés restent dans
+`.env`.
+
 ## Publication automatique (API TikTok)
 
 Le script `marketing/tiktok/post.mjs` publie les vidéos sur le compte

@@ -74,6 +74,11 @@
         say("answers", "Et voici les réponses d'hier.", B + 0.2)
         const each = 1.5
         const C = B + 1.4 + yesterday.length * each + 1.2
+        names.forEach((_, i) =>
+          effect("pop", Math.max(A + 1 + i * 0.35, listAt + i * step - 0.1))
+        )
+        effect("whoosh", B - 0.15)
+        yesterday.forEach((_, i) => effect("pop", B + 1.4 + i * each))
         const ctaEnd = say(
           "cta",
           "Joue au défi du jour sur Culture Ivoire !",
