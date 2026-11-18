@@ -43,6 +43,36 @@ publier (bibliothèque « Sons » de l'app), c'est ce qui aide le plus la porté
 - **Série** : « Le saviez-vous » se décline pour chaque peuple et chaque site ;
   dites-moi lesquels, je génère les vidéos.
 
+## Vidéos automatiques (2 par jour)
+
+Un lot de vidéos se génère en une commande, avec légendes et programme :
+
+```bash
+npm run build
+npx vite preview --port 4173
+npm run videos -- 2026-11-19 21    # 21 jours à partir du 19/11 : 42 vidéos
+```
+
+Résultat dans `marketing/video/out/lot-<date>/` :
+
+- les MP4, nommés `date-1-defi.mp4` (12 h 30) et `date-2-….mp4` (19 h 30) ;
+- `programme.md` : pour chaque vidéo, la date, l'heure et la légende à coller ;
+- `programme.csv` : la même chose pour un tableur.
+
+Les formats, tirés automatiquement des données de l'app :
+
+| Format                     | Contenu                                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------------------- |
+| Défi du jour (chaque midi) | Les 5 villes du jour, les mêmes que dans l'app, puis les réponses de la veille sur la carte |
+| Devine la ville            | Point mystère sur la carte, indice, 3-2-1, réponse                                          |
+| Le saviez-vous             | Un peuple ou un site : photo créditée, histoire, « à savoir »                               |
+| Quiz éclair                | 5 questions de 3 secondes (chefs-lieux, régions, districts, peuples, sites)                 |
+
+Programmer dans TikTok Studio (ordinateur, tiktok.com/tiktokstudio) :
+Importer, choisir le fichier, coller la légende, ajouter un son, puis
+« Programmer » (jusqu'à 10 jours à l'avance). Un lot interrompu reprend où il
+s'était arrêté : relancez la même commande.
+
 ## Refaire les vidéos
 
 ```bash

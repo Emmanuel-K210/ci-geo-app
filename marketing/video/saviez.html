@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>CI-Geo · le saviez-vous</title>
+    <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="scene.css" />
+    <script src="demo.js"></script>
+    <script src="scene.js"></script>
+    <script src="data.js"></script>
+    <style>
+      .card {
+        position: absolute;
+        left: 80px;
+        right: 80px;
+        top: 560px;
+        color: #eef2ee;
+      }
+      .card em {
+        font-style: normal;
+        color: var(--orange);
+      }
+      .photo {
+        position: relative;
+        width: 100%;
+        height: 560px;
+        border-radius: 36px;
+        overflow: hidden;
+        background: #213229;
+        box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.6);
+      }
+      .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .photo figcaption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 40px 24px 14px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body class="dark">
+    <div class="layer dark"></div>
+    <img
+      id="bgmap"
+      src="carte.svg"
+      alt=""
+      style="
+        position: absolute;
+        left: 60px;
+        top: 420px;
+        width: 960px;
+        opacity: 0.08;
+      "
+    />
+    <div class="bar">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <div id="scene"></div>
+    <script>
+      // ?story=peuple:baoule | site:tai
+      const readingTime = (text) => Math.min(8, Math.max(3.6, text.length / 26))
+      const size = (text) =>
+        text.length <= 110 ? 66 : text.length <= 190 ? 58 : 50
+
+      setup.push(async () => {
+        const data = await DATA
+        const [kind, id] = PARAMS.get("story").split(":")
+        const item =
+          kind === "peuple"
+            ? data.culture.PEUPLES.find((p) => p.id === id)
+            : data.culture.SITES.find((s) => s.id === id)
+        const route =
+          kind === "peuple"
+            ? `/decouvrir/peuples/${id}`
+            : `/decouvrir/sites/${id}`
+        const title = kind === "peuple" ? `Les ${item.nom}` : item.nom
+        const facts = kind === "peuple" ? item.culture : item.aSavoir
+        const scene = document.getElementById("scene")
+
+        // The app page loads first, unseen: it fetches the credited photo.
+        scene.insertAdjacentHTML(
+          "beforeend",
+          `<div id="phonewrap" class="layer" style="opacity:0">
+            <div class="phone" style="left:270px;top:430px;--w:540px;--s:1.3015">
+              <div class="screen"><iframe id="app" src="/#${route}"></iframe></div>
+            </div>
+          </div>`
+        )
+        const frame = document.getElementById("app")
+        await new Promise((r) =>
+          frame.addEventListener("load", r, { once: true })
+        )
+        let photo = null
+        for (let i = 0; i < 40 && !photo; i++) {
+          await new Promise((r) => setTimeout(r, 200))
+          try {
+            const cache = JSON.parse(
+              localStorage.getItem("ci-geo-wiki-v3") ?? "{}"
+            )
+            if (item.wiki in cache) photo = cache[item.wiki].image ?? false
+          } catch {}
+        }
+
+        // The timeline: title, the story paragraph by paragraph, one fact,
+        // the page in the app, the end card.
+        let t = 0.4
+        const blocks = []
+        const titleEnd = t + 4.2
+        blocks.push(`
+          <div data-in="${t}" data-out="${titleEnd}" data-fx="up" class="card" style="top:${photo ? 330 : 560}px">
+            ${
+              photo
+                ? `<figure class="photo"><img id="photo" src="${photo.src}" alt="">
+                    <figcaption>Photo : ${photo.artist ?? "auteur inconnu"}${photo.license ? ` · ${photo.license}` : ""} · Wikimedia Commons</figcaption></figure>`
+                : ""
+            }
+            <p class="big accent" style="margin-top:${photo ? 44 : 0}px;font-size:${title.length > 26 ? 76 : 96}px">${title}</p>
+            <p class="story" style="margin-top:18px;font-size:46px;opacity:.85">${item.resume}</p>
+          </div>`)
+        t = titleEnd
+        for (const paragraph of item.histoire) {
+          const end = t + readingTime(paragraph)
+          blocks.push(`
+            <div data-in="${t}" data-out="${end}" data-fx="up" class="card">
+              <p class="story" style="font-size:${size(paragraph)}px">${paragraph}</p>
+            </div>`)
+          t = end
+        }
+        if (facts[0]) {
+          const end = t + readingTime(facts[0])
+          blocks.push(`
+            <div data-in="${t}" data-out="${end}" data-fx="up" class="card">
+              <span class="badge" style="font-size:36px">À savoir</span>
+              <p class="story" style="margin-top:30px;font-size:${size(facts[0])}px">${facts[0]}</p>
+            </div>`)
+          t = end
+        }
+        const phoneAt = t
+        blocks.push(`
+          <p data-in="${phoneAt}" data-out="${phoneAt + 5}" data-fx="up" class="caption" style="top:160px;color:#eef2ee">
+            Toute ${kind === "peuple" ? "leur" : "son"} histoire<br>sur <span class="accent">CI-Geo</span>
+          </p>`)
+        blocks.push(`
+          <div data-in="0.1" data-out="${phoneAt}" data-fx="up" style="position:absolute;left:80px;top:150px">
+            <span class="badge">Le saviez-vous&nbsp;?</span>
+          </div>`)
+        blocks.push(endCard(phoneAt + 5, "16 peuples · 15 sites"))
+        scene.insertAdjacentHTML("beforeend", blocks.join(""))
+        if (photo)
+          await document
+            .getElementById("photo")
+            .decode()
+            .catch(() => {})
+
+        const wrap = document.getElementById("phonewrap")
+        onFrame.push((time) => {
+          wrap.style.opacity = String(
+            Math.min(
+              span(time, phoneAt, phoneAt + 0.5),
+              1 - span(time, phoneAt + 4.7, phoneAt + 5)
+            )
+          )
+          wrap.style.transform = `translateY(${(1 - span(time, phoneAt, phoneAt + 0.5)) * 60}px)`
+          app("app").scrollTo(0, span(time, phoneAt + 0.8, phoneAt + 4.6) * 700)
+          document.getElementById("bgmap").style.transform =
+            `scale(${1 + time * 0.01})`
+        })
+        window.duration = phoneAt + 5 + 3.2
+        window.caption = { title, kind }
+      })
+    </script>
+  </body>
+</html>

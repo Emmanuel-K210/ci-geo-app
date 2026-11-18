@@ -53,14 +53,28 @@
   /** The app document inside a phone frame. */
   window.app = (id) => document.getElementById(id).contentWindow
 
-  /** Resolves when the frames and their photos have loaded. */
+  /** Async steps a scene registers to build itself before the first frame. */
+  window.setup = []
+
+  const loaded = (frame) =>
+    new Promise((resolve) => {
+      const doc = frame.contentDocument
+      if (doc?.readyState === "complete" && doc.URL !== "about:blank") resolve()
+      else frame.addEventListener("load", resolve, { once: true })
+    })
+
+  /** Resolves when the scene is built and its frames and photos have loaded. */
   window.ready = new Promise((resolve) => {
-    const frames = [...document.querySelectorAll("iframe")]
-    let left = frames.length
-    if (!left) resolve()
-    for (const frame of frames)
-      frame.addEventListener("load", () => {
-        if (--left === 0) setTimeout(resolve, 3500)
-      })
-  }).then(() => document.fonts.ready)
+    if (document.readyState === "loading")
+      document.addEventListener("DOMContentLoaded", resolve, { once: true })
+    else resolve()
+  })
+    .then(() => Promise.all(window.setup.map((step) => step())))
+    .then(async () => {
+      const frames = [...document.querySelectorAll("iframe")]
+      await Promise.all(frames.map(loaded))
+      // Photos and lazy content inside the app need a moment more.
+      if (frames.length) await new Promise((r) => setTimeout(r, 3500))
+      await document.fonts.ready
+    })
 })()

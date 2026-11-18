@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>CI-Geo · défi du jour</title>
+    <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="scene.css" />
+    <script src="scene.js"></script>
+    <script src="data.js"></script>
+    <style>
+      .name {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        min-height: 112px;
+        margin-top: 20px;
+        padding: 0 34px;
+        border-radius: 30px;
+        background: #213229;
+        border: 3px solid #2a3b33;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 58px;
+        color: #eef2ee;
+      }
+      .name b {
+        color: var(--orange);
+        font-size: 44px;
+        width: 50px;
+      }
+      #map {
+        position: absolute;
+        left: 150px;
+        top: 450px;
+        width: 780px;
+      }
+    </style>
+  </head>
+  <body class="dark">
+    <div class="layer dark"></div>
+    <div class="bar">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <div id="scene"></div>
+    <script>
+      // ?day=2026-11-19&today=id,…&yesterday=id,…  (computed by batch.mjs
+      // with the app's own draw, so the cities are the ones in the app)
+      const fmt = (key) => key.split("-").reverse().slice(0, 2).join("/")
+
+      setup.push(async () => {
+        const data = await DATA
+        const byId = (id) => data.villes.find((v) => v.id === id)
+        const today = PARAMS.get("today").split(",").map(byId)
+        const yesterday = PARAMS.get("yesterday").split(",").map(byId)
+        const day = PARAMS.get("day")
+        const before = new Date(`${day}T12:00:00Z`)
+        before.setUTCDate(before.getUTCDate() - 1)
+        const yKey = before.toISOString().slice(0, 10)
+
+        const A = 0.3 // today's cities
+        const B = 7.2 // yesterday's answers
+        const each = 1.5
+        const C = B + 1.4 + yesterday.length * each + 1.2
+
+        document.getElementById("scene").innerHTML = `
+          <div data-in="0.1" data-out="${B}" data-fx="up" style="position:absolute;left:80px;top:150px">
+            <span class="badge">Défi du ${fmt(day)}</span>
+          </div>
+          <p data-in="0.4" data-out="${B}" data-fx="up" class="caption" style="top:270px;color:#eef2ee">
+            Les 5 villes d'aujourd'hui
+            <small>Tu sauras les placer sur la carte&nbsp;?</small>
+          </p>
+          <div style="position:absolute;left:80px;right:80px;top:560px">
+            ${today
+              .map(
+                (v, i) =>
+                  `<div class="name" data-in="${A + 1 + i * 0.35}" data-out="${B}" data-fx="left"><b>${i + 1}</b>${v.nom}</div>`
+              )
+              .join("")}
+          </div>
+          <p data-in="${A + 3.4}" data-out="${B}" data-fx="up" class="story" style="position:absolute;left:80px;right:80px;top:1260px;text-align:center;color:#9db0a5;font-size:48px">
+            Le même défi pour tout le monde.<br><span style="color:#eef2ee">Joue avant de lire les commentaires 😉</span>
+          </p>
+
+          <div data-in="${B}" data-out="${C}" data-fx="up" style="position:absolute;left:80px;top:150px">
+            <span class="badge" style="background:#0b7a4b">Réponses du ${fmt(yKey)}</span>
+          </div>
+          <p data-in="${B + 0.2}" data-out="${C}" data-fx="up" class="caption" style="top:270px;color:#eef2ee;font-size:64px">
+            Tu les avais bien placées&nbsp;?
+          </p>
+          <svg id="map" data-in="${B}" data-out="${C}" data-fx="zoom"></svg>
+          ${endCard(C, "Joue le défi du jour")}`
+
+        const marks = drawMap(document.getElementById("map"), data, {
+          tint: "dark",
+        })
+        const pins = yesterday.map((v, i) => {
+          const x = MAP.px(v.lon)
+          const y = MAP.py(v.lat)
+          const g = svgEl("g", { opacity: 0 })
+          g.append(
+            svgEl("circle", {
+              cx: x,
+              cy: y,
+              r: 10,
+              fill: "#e0680a",
+              stroke: "#fff",
+              "stroke-width": 3,
+            })
+          )
+          const label = svgEl("text", {
+            x: v.lon > -4 ? x - 16 : x + 16,
+            y: y + 8,
+            "text-anchor": v.lon > -4 ? "end" : "start",
+            fill: "#fff",
+            "font-family": "Space Grotesk",
+            "font-weight": 700,
+            "font-size": 26,
+            stroke: "#17241e",
+            "stroke-width": 6,
+            "paint-order": "stroke",
+          })
+          label.textContent = `${i + 1}. ${v.nom}`
+          g.append(label)
+          marks.append(g)
+          return g
+        })
+        onFrame.push((t) => {
+          pins.forEach((g, i) => {
+            const at = B + 1.4 + i * each
+            g.setAttribute("opacity", String(span(t, at, at + 0.3)))
+          })
+        })
+        window.duration = C + 3.2
+        window.caption = { day, today: today.map((v) => v.nom) }
+      })
+    </script>
+  </body>
+</html>

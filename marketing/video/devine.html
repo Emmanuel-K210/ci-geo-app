@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>CI-Geo · devine la ville</title>
+    <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="scene.css" />
+    <script src="scene.js"></script>
+    <script src="data.js"></script>
+    <style>
+      #map {
+        position: absolute;
+        left: 110px;
+        top: 530px;
+        width: 840px;
+      }
+      .count {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 840px;
+        text-align: center;
+        text-shadow:
+          0 0 40px #17241e,
+          0 0 12px #17241e;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 230px;
+        line-height: 1;
+        color: var(--orange);
+      }
+    </style>
+  </head>
+  <body class="dark">
+    <div class="layer dark"></div>
+    <div class="bar">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <div id="scene"></div>
+    <script>
+      // ?ville=ci-v-korhogo  — a city to find on the blank map.
+      setup.push(async () => {
+        const data = await DATA
+        const ville = data.villes.find((v) => v.id === PARAMS.get("ville"))
+        const near = data.villes
+          .filter((v) => v !== ville)
+          .map((v) => ({ v, km: distanceKm(ville, v) }))
+          .sort((a, b) => a.km - b.km)[0]
+        const kind =
+          ville.chefLieuDe === "district"
+            ? `Chef-lieu du district ${ville.district.nom}`
+            : ville.chefLieuDe === "region"
+              ? `Chef-lieu de la région ${ville.region.nom}`
+              : `Une ville de la région ${ville.region?.nom ?? ville.district.nom}`
+        const hint = ville.district.autonome
+          ? "Un district autonome"
+          : `District : ${ville.district.nom}`
+
+        document.getElementById("scene").innerHTML = `
+          <div data-in="0.1" data-out="7" data-fx="up" style="position:absolute;left:80px;top:150px">
+            <span class="badge">Devine la ville</span>
+          </div>
+          <p data-in="0.4" data-out="7" data-fx="up" class="caption" style="top:270px;color:#eef2ee">
+            Tu la trouves en 3&nbsp;secondes&nbsp;?
+          </p>
+          <svg id="map"></svg>
+          <p data-in="2" data-out="7" data-fx="up" class="story" style="position:absolute;left:80px;right:80px;top:1430px;text-align:center;color:#9db0a5;font-size:52px">
+            Indice : ${hint.replace("District : ", "district ")}
+          </p>
+          <div data-in="4" data-out="4.95" data-fadein="0.08" data-fx="pop" class="count">3</div>
+          <div data-in="5" data-out="5.95" data-fadein="0.08" data-fx="pop" class="count">2</div>
+          <div data-in="6" data-out="6.95" data-fadein="0.08" data-fx="pop" class="count">1</div>
+
+          <div data-in="7" data-out="11" data-fx="pop" style="position:absolute;left:0;right:0;top:170px;text-align:center">
+            <p class="big accent" style="font-size:${ville.nom.length > 12 ? 112 : 140}px">${ville.nom}</p>
+            <p class="story" style="margin-top:22px;color:#eef2ee;font-size:46px">${kind}</p>
+          </div>
+          <p data-in="8.2" data-out="11" data-fx="up" class="story" style="position:absolute;left:80px;right:80px;top:1420px;text-align:center;color:#eef2ee;font-size:50px">
+            À ${Math.round(near.km)} km ${de(near.v.nom)}.<br><span style="color:#9db0a5">Tu avais trouvé&nbsp;? Dis-le en commentaire 👇</span>
+          </p>
+          ${endCard(11, "Joue au défi du jour")}`
+
+        const marks = drawMap(document.getElementById("map"), data, {
+          tint: "dark",
+        })
+        const x = MAP.px(ville.lon)
+        const y = MAP.py(ville.lat)
+        const halo = svgEl("circle", {
+          cx: x,
+          cy: y,
+          r: 14,
+          fill: "rgba(224,104,10,.25)",
+        })
+        const dot = svgEl("circle", {
+          cx: x,
+          cy: y,
+          r: 9,
+          fill: "#e0680a",
+          stroke: "#fff",
+          "stroke-width": 3,
+        })
+        const label = svgEl("text", {
+          x,
+          y: y - 22,
+          "text-anchor": "middle",
+          fill: "#fff",
+          "font-family": "Space Grotesk",
+          "font-weight": 700,
+          "font-size": 24,
+          stroke: "#17241e",
+          "stroke-width": 5,
+          "paint-order": "stroke",
+          opacity: 0,
+        })
+        label.textContent = ville.nom
+        marks.append(halo, dot, label)
+        const district = document.querySelector(
+          `[data-district="${ville.districtId}"]`
+        )
+
+        onFrame.push((t) => {
+          // A pulsing mystery point, the district lit when the hint comes,
+          // the name on the map at the answer.
+          halo.setAttribute("r", String(14 + 10 * Math.abs(Math.sin(t * 3))))
+          district.setAttribute(
+            "fill",
+            t >= 2 && t < 11 ? "#2e4a3b" : "#213229"
+          )
+          label.setAttribute("opacity", String(span(t, 7, 7.4)))
+          document.getElementById("map").style.opacity = String(
+            1 - span(t, 10.6, 11)
+          )
+        })
+        window.duration = 14
+        window.caption = { ville: ville.nom, kind }
+      })
+    </script>
+  </body>
+</html>

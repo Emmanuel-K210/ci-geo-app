@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>CI-Geo · quiz éclair</title>
+    <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="scene.css" />
+    <script src="scene.js"></script>
+    <script src="data.js"></script>
+    <style>
+      body {
+        background:
+          radial-gradient(
+            circle at 90% 6%,
+            rgba(224, 104, 10, 0.18),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 0% 100%,
+            rgba(11, 122, 75, 0.14),
+            transparent 45%
+          ),
+          var(--paper);
+      }
+      .q {
+        position: absolute;
+        left: 80px;
+        right: 80px;
+        top: 330px;
+      }
+      .opt {
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        min-height: 118px;
+        margin-top: 22px;
+        padding: 0 34px;
+        border-radius: 30px;
+        border: 3px solid var(--line);
+        background: #fff;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        font-size: 50px;
+        color: var(--ink);
+      }
+      .opt b {
+        display: grid;
+        place-items: center;
+        width: 62px;
+        height: 62px;
+        flex: none;
+        border-radius: 16px;
+        background: var(--green-soft);
+        color: var(--green);
+        font-size: 34px;
+      }
+      .timer {
+        height: 16px;
+        margin-top: 34px;
+        border-radius: 999px;
+        background: #d3ddd5;
+        overflow: hidden;
+      }
+      .timer i {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: var(--orange);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <div id="scene"></div>
+    <script>
+      // ?seed=12 — five questions drawn from the app's data with that seed.
+      const PER = 4.2
+      const INTRO = 2.3
+
+      function questions(data, rng) {
+        const pick = (list) => list[Math.floor(rng() * list.length)]
+        const others = (good, pool) =>
+          shuffle(
+            [...new Set(pool)].filter((name) => name !== good),
+            rng
+          ).slice(0, 3)
+        const withOptions = (q) => ({
+          ...q,
+          options: shuffle([q.good, ...others(q.good, q.pool)], rng),
+        })
+        const regions = data.geo.regions
+        const { PEUPLES, SITES } = data.culture
+        const make = {
+          cheflieu: () => {
+            const r = pick(regions)
+            return withOptions({
+              type: "Chef-lieu",
+              text: `Quel est le chef-lieu de la région ${r.nom}&nbsp;?`,
+              good: r.chefLieu.nom,
+              pool: regions.map((x) => x.chefLieu.nom),
+            })
+          },
+          region: () => {
+            const v = pick(data.villes.filter((x) => x.region))
+            return withOptions({
+              type: "Région",
+              text: `${v.nom} est dans quelle région&nbsp;?`,
+              good: v.region.nom,
+              pool: regions.map((x) => x.nom),
+            })
+          },
+          district: () => {
+            const r = pick(regions)
+            return withOptions({
+              type: "District",
+              text: `La région ${r.nom} fait partie de quel district&nbsp;?`,
+              good: data.districts.get(r.districtId).nom,
+              pool: data.geo.districts
+                .filter((d) => !d.autonome)
+                .map((d) => d.nom),
+            })
+          },
+          peuple: () => {
+            const p = pick(PEUPLES)
+            return withOptions({
+              type: "Qui sont-ils ?",
+              text: `«&nbsp;${pick(p.indices)}&nbsp;»`,
+              good: p.nom,
+              pool: PEUPLES.map((x) => x.nom),
+            })
+          },
+          site: () => {
+            const s = pick(SITES)
+            return withOptions({
+              type: "Quel est ce lieu ?",
+              text: `«&nbsp;${pick(s.indices)}&nbsp;»`,
+              good: s.nom,
+              pool: SITES.map((x) => x.nom),
+            })
+          },
+        }
+        return shuffle(Object.keys(make), rng).map((kind) => make[kind]())
+      }
+
+      setup.push(async () => {
+        const data = await DATA
+        const list = questions(data, seededRng(Number(PARAMS.get("seed") ?? 1)))
+        const html = [
+          `<div data-in="0" data-out="${INTRO}" data-fadein="0.01" class="layer center">
+            <span data-in="0.1" data-fx="pop" class="badge" style="font-size:52px">Quiz éclair</span>
+            <p data-in="0.4" data-fx="up" class="big" style="font-size:118px">5 questions<br><span class="accent">3 secondes</span></p>
+            <p data-in="0.9" data-fx="fade" class="story" style="font-size:46px;color:var(--muted)">Compte tes points 👇</p>
+          </div>`,
+        ]
+        list.forEach((q, i) => {
+          const s = INTRO + i * PER
+          const long = q.options.some((o) => o.length > 22)
+          html.push(`
+            <div data-in="${s}" data-out="${s + PER}" data-fadein="0.25" class="q" id="q${i}">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span class="eyebrow" style="font-size:30px">${q.type}</span>
+                <span class="eyebrow" style="font-size:30px;color:var(--muted)">${i + 1} / 5</span>
+              </div>
+              <p class="big" style="margin-top:20px;font-size:${q.text.length > 70 ? 62 : 74}px;line-height:1.08">${q.text}</p>
+              <div class="timer"><i id="timer${i}"></i></div>
+              ${q.options
+                .map(
+                  (o, k) =>
+                    `<div class="opt" data-in="${s + 0.25 + k * 0.08}" data-fx="left" data-good="${o === q.good}" style="font-size:${long ? 42 : 50}px"><b>${"ABCD"[k]}</b>${o}</div>`
+                )
+                .join("")}
+            </div>`)
+        })
+        const end = INTRO + list.length * PER
+        html.push(`
+          <div data-in="${INTRO}" data-out="${end}" data-fx="up" style="position:absolute;left:80px;top:150px">
+            <span class="badge" style="font-size:40px">Quiz éclair · CI-Geo</span>
+          </div>`)
+        html.push(`
+          <div data-in="${end}" data-out="${end + 2.4}" data-fadein="0.2" class="layer center">
+            <p data-in="${end + 0.1}" data-fx="pop" class="big" style="font-size:110px">Ton score&nbsp;?</p>
+            <p data-in="${end + 0.4}" data-fx="up" class="story" style="font-size:54px">Dis-le en commentaire 👇<br><span style="color:var(--muted)">Et défie tes amis</span></p>
+          </div>`)
+        html.push(endCard(end + 2.4, "Joue au quiz sur CI-Geo"))
+        document.getElementById("scene").innerHTML = html.join("")
+
+        onFrame.push((t) => {
+          list.forEach((q, i) => {
+            const s = INTRO + i * PER
+            const reveal = t >= s + 3.6
+            document.getElementById(`timer${i}`).style.width =
+              `${(1 - span(t, s + 0.6, s + 3.6)) * 100}%`
+            for (const opt of document.querySelectorAll(`#q${i} .opt`)) {
+              const good = opt.dataset.good === "true"
+              opt.style.background = reveal && good ? "#0b7a4b" : "#fff"
+              opt.style.borderColor = reveal && good ? "#0b7a4b" : "#d3ddd5"
+              opt.style.color = reveal && good ? "#fff" : "#17241e"
+              if (reveal && !good) opt.style.opacity = "0.35"
+            }
+          })
+        })
+        window.duration = end + 2.4 + 3.2
+        window.caption = { questions: list.map((q) => q.good) }
+      })
+    </script>
+  </body>
+</html>
