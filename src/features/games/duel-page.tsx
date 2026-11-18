@@ -115,7 +115,7 @@ function DuelGame({
   const challenge = () =>
     void shareOrCopy(
       [
-        `CI-Geo · Duel ${quizModes[mode].label} : j'ai fait ${score}/${DUEL_ROUND}. Tu fais mieux ?`,
+        `Culture Ivoire · Duel ${quizModes[mode].label} : j'ai fait ${score}/${DUEL_ROUND}. Tu fais mieux ?`,
         duelLink(mode, seed, score),
       ].join("\n")
     )

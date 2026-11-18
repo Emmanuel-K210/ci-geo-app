@@ -107,7 +107,7 @@ for (let d = 0; d < DAYS; d++) {
       day,
       time: "19:30",
       file: `${day}-2-saviez-${item.id}.mp4`,
-      caption: `Le saviez-vous ? ${title.charAt(0).toUpperCase()}${title.slice(1)} : ${item.resume} 📖 Toute l'histoire sur CI-Geo. ${TAGS.base} ${TAGS.culture} #fyp`,
+      caption: `Le saviez-vous ? ${title.charAt(0).toUpperCase()}${title.slice(1)} : ${item.resume} 📖 Toute l'histoire sur Culture Ivoire. ${TAGS.base} ${TAGS.culture} #fyp`,
     })
   } else {
     const seed = 100 + quiz++
@@ -124,6 +124,15 @@ for (let d = 0; d < DAYS; d++) {
     })
   }
 }
+
+// The original music on every video, a little different each time.
+jobs.forEach((job, i) => {
+  job.audio = {
+    music: true,
+    transpose: [0, 2, -2, 3, -3, 5][i % 6],
+    bpm: 98 + ((i * 5) % 15),
+  }
+})
 
 mkdirSync(OUT, { recursive: true })
 const jobsFile = fileURLToPath(new URL("jobs.json", OUT))

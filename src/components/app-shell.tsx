@@ -16,6 +16,7 @@ import { Toaster } from "sonner"
 import { Onboarding } from "@/components/onboarding"
 import { SearchSheet } from "@/components/search-sheet"
 import { GoalRing } from "@/components/goal-ring"
+import { Logo } from "@/components/logo"
 import { DAILY_GOAL, dayKey } from "@/features/games/daily"
 import { cn } from "@/lib/cn"
 import { levelOf } from "@/stores/levels"
@@ -40,18 +41,6 @@ const NAV: NavItem[] = [
   { to: "/profil", label: "Profil", icon: Trophy },
   { to: "/plus", label: "Plus", icon: LayoutGrid, desktopOnly: true },
 ]
-
-function Pin({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 34 34" aria-hidden className={className}>
-      <path
-        d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z"
-        fill="var(--orange)"
-      />
-      <circle cx="17" cy="13.3" r="4" fill="var(--surface)" />
-    </svg>
-  )
-}
 
 /** An orange dot on « Jeux » while today's challenge is waiting. */
 function useDailyPending() {
@@ -109,12 +98,9 @@ export function AppShell() {
           <Link
             to="/"
             className="flex items-center gap-2"
-            aria-label="CI-Geo, accueil"
+            aria-label="Culture Ivoire, accueil"
           >
-            <Pin className="size-8" />
-            <span className="font-display text-lg font-bold tracking-tight">
-              CI-Geo
-            </span>
+            <Logo />
           </Link>
           <nav className="ml-4 hidden gap-1 lg:flex" aria-label="Sections">
             {NAV.map((item) => (

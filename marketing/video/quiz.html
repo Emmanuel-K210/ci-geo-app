@@ -2,7 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>CI-Geo · quiz éclair</title>
+    <title>Culture Ivoire · quiz éclair</title>
     <link rel="stylesheet" href="poster.css" />
     <link rel="stylesheet" href="scene.css" />
     <script src="scene.js"></script>
@@ -76,8 +76,8 @@
     <div id="scene"></div>
     <script>
       // ?seed=12 — five questions drawn from the app's data with that seed.
-      const PER = 4.2
-      const INTRO = 2.3
+      /** Seconds from a question to its answer on screen. */
+      const ANSWER = 3.6
 
       function questions(data, rng) {
         const pick = (list) => list[Math.floor(rng() * list.length)]
@@ -147,6 +147,40 @@
       setup.push(async () => {
         const data = await DATA
         const list = questions(data, seededRng(Number(PARAMS.get("seed") ?? 1)))
+        // The voice opens, reads each answer when it shows, then asks for
+        // the score: the timing stretches to fit it.
+        const INTRO = Math.max(
+          2.3,
+          say(
+            "intro",
+            "Quiz éclair ! Cinq questions, trois secondes chacune.",
+            0.2
+          ) + 0.2
+        )
+        const starts = []
+        let clock = INTRO
+        list.forEach((q, i) => {
+          starts.push(clock)
+          const letter = "ABCD"[q.options.indexOf(q.good)]
+          const spoken = say(
+            `a${i}`,
+            `${letter} : ${q.good} !`,
+            clock + ANSWER + 0.05
+          )
+          clock = Math.max(clock + 4.2, spoken + 0.25)
+        })
+        const end = clock
+        const scoreEnd = say(
+          "score",
+          "Alors, ton score sur cinq ? Dis-le en commentaire !",
+          end + 0.2
+        )
+        const finale = Math.max(end + 2.4, scoreEnd + 0.3)
+        const ctaEnd = say(
+          "cta",
+          "Joue au quiz sur Culture Ivoire !",
+          finale + 0.4
+        )
         const html = [
           `<div data-in="0" data-out="${INTRO}" data-fadein="0.01" class="layer center">
             <span data-in="0.1" data-fx="pop" class="badge" style="font-size:52px">Quiz éclair</span>
@@ -155,10 +189,11 @@
           </div>`,
         ]
         list.forEach((q, i) => {
-          const s = INTRO + i * PER
+          const s = starts[i]
+          const next = starts[i + 1] ?? end
           const long = q.options.some((o) => o.length > 22)
           html.push(`
-            <div data-in="${s}" data-out="${s + PER}" data-fadein="0.25" class="q" id="q${i}">
+            <div data-in="${s}" data-out="${next}" data-fadein="0.25" class="q" id="q${i}">
               <div style="display:flex;justify-content:space-between;align-items:center">
                 <span class="eyebrow" style="font-size:30px">${q.type}</span>
                 <span class="eyebrow" style="font-size:30px;color:var(--muted)">${i + 1} / 5</span>
@@ -173,25 +208,24 @@
                 .join("")}
             </div>`)
         })
-        const end = INTRO + list.length * PER
         html.push(`
           <div data-in="${INTRO}" data-out="${end}" data-fx="up" style="position:absolute;left:80px;top:150px">
-            <span class="badge" style="font-size:40px">Quiz éclair · CI-Geo</span>
+            <span class="badge" style="font-size:40px">Quiz éclair · Culture Ivoire</span>
           </div>`)
         html.push(`
-          <div data-in="${end}" data-out="${end + 2.4}" data-fadein="0.2" class="layer center">
+          <div data-in="${end}" data-out="${finale}" data-fadein="0.2" class="layer center">
             <p data-in="${end + 0.1}" data-fx="pop" class="big" style="font-size:110px">Ton score&nbsp;?</p>
             <p data-in="${end + 0.4}" data-fx="up" class="story" style="font-size:54px">Dis-le en commentaire 👇<br><span style="color:var(--muted)">Et défie tes amis</span></p>
           </div>`)
-        html.push(endCard(end + 2.4, "Joue au quiz sur CI-Geo"))
+        html.push(endCard(finale, "Joue au quiz sur Culture Ivoire"))
         document.getElementById("scene").innerHTML = html.join("")
 
         onFrame.push((t) => {
           list.forEach((q, i) => {
-            const s = INTRO + i * PER
-            const reveal = t >= s + 3.6
+            const s = starts[i]
+            const reveal = t >= s + ANSWER
             document.getElementById(`timer${i}`).style.width =
-              `${(1 - span(t, s + 0.6, s + 3.6)) * 100}%`
+              `${(1 - span(t, s + 0.6, s + ANSWER)) * 100}%`
             for (const opt of document.querySelectorAll(`#q${i} .opt`)) {
               const good = opt.dataset.good === "true"
               opt.style.background = reveal && good ? "#0b7a4b" : "#fff"
@@ -201,7 +235,7 @@
             }
           })
         })
-        window.duration = end + 2.4 + 3.2
+        window.duration = Math.max(finale + 3.2, ctaEnd + 0.6)
         window.caption = { questions: list.map((q) => q.good) }
       })
     </script>

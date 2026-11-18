@@ -18,6 +18,8 @@ import { execFileSync } from "node:child_process"
 import { fileURLToPath } from "node:url"
 import { chromium } from "playwright-core"
 
+import { speak, voiceEnabled } from "./elevenlabs.mjs"
+
 const ROOT = new URL("../../", import.meta.url)
 const HERE = new URL("./", import.meta.url)
 const SITE = new URL("dist/_videos/", ROOT)
@@ -31,7 +33,7 @@ const FPS = 30
 
 /** Hand-made scenes → duration in seconds. */
 const SCENES = {
-  "v1-presentation": 22,
+  "v1-presentation": 13.5,
   "v2-defi": 24,
   "v3-pokou": 25,
 }
@@ -50,6 +52,11 @@ copyFileSync(
 )
 copyFileSync(new URL("src/geo/ci-geo.json", ROOT), new URL("ci-geo.json", SITE))
 copyFileSync(new URL("src/geo/shapes.json", ROOT), new URL("shapes.json", SITE))
+// Voice-overs (marketing/video/audio/*.mp3), served next to the scenes.
+const AUDIO = new URL("audio/", HERE)
+if (existsSync(AUDIO))
+  for (const file of readdirSync(AUDIO))
+    copyFileSync(new URL(file, AUDIO), new URL(file, SITE))
 // The Découvrir texts, straight from the app's sources (Node strips the types).
 const { GROUPES, PEUPLES } = await import(
   new URL("src/culture/peuples.ts", ROOT).href
@@ -101,6 +108,15 @@ const jobs = jobsFile
         seconds,
       }))
 
+let warned = false
+function warnNoVoice() {
+  if (warned) return
+  warned = true
+  console.log(
+    "\nPas de clé ElevenLabs (ELEVENLABS_API_KEY dans .env) : vidéos sans voix."
+  )
+}
+
 const browser = await chromium.launch({ executablePath: CHROME })
 
 /** Renders one job; throws on any failure so the caller can retry it. */
@@ -116,7 +132,52 @@ async function renderOne(job, label, target) {
     const scene = await context.newPage()
     await scene.goto(`${BASE}${job.page}`)
     await scene.evaluate(() => window.ready)
+
+    // Voice-over in two passes: the scene gives its sentences, ElevenLabs
+    // speaks them, then the scene is reloaded with their durations and sets
+    // its timing (and when each sentence starts) to fit them.
+    let voices = []
+    const script = await scene.evaluate(() => window.voiceScript ?? null)
+    if (
+      script?.length &&
+      !args.includes("--silent") &&
+      !args.includes("--no-voice")
+    ) {
+      if (!voiceEnabled()) warnNoVoice()
+      else {
+        const durations = {}
+        const clips = {}
+        for (const line of script) {
+          const clip = await speak(line.text)
+          copyFileSync(clip.file, new URL(clip.name, SITE))
+          durations[line.id] = Number(clip.seconds.toFixed(2))
+          clips[line.id] = clip.name
+        }
+        const glue = job.page.includes("?") ? "&" : "?"
+        await scene.goto(
+          `${BASE}${job.page}${glue}durations=${encodeURIComponent(JSON.stringify(durations))}`
+        )
+        await scene.evaluate(() => window.ready)
+        const timeline = await scene.evaluate(() => window.voiceTimeline ?? [])
+        voices = timeline.map(({ id, at }) => ({ src: clips[id], at }))
+      }
+    }
+
     const seconds = (await scene.evaluate(() => window.duration)) ?? job.seconds
+    // Soundtrack: set by the scene (window.audio) or the job; --silent drops it.
+    const base = args.includes("--silent")
+      ? null
+      : ((await scene.evaluate(() => window.audio ?? null)) ??
+        job.audio ??
+        null)
+    const audio =
+      base || voices.length
+        ? {
+            music: true,
+            ...base,
+            voices: voices.length ? voices : (base?.voices ?? []),
+          }
+        : null
 
     if (stills) {
       const last = Math.max(...stills)
@@ -137,8 +198,8 @@ async function renderOne(job, label, target) {
     await encoder.goto(`${BASE}encoder.html`)
     await encoder.waitForFunction(() => typeof window.init === "function")
     await encoder.evaluate(
-      ([w, h, f]) => window.init(w, h, f),
-      [WIDTH, HEIGHT, FPS]
+      ([w, h, f, a]) => window.init(w, h, f, a),
+      [WIDTH, HEIGHT, FPS, !!audio]
     )
     const frames = Math.round(seconds * FPS)
     for (let i = 0; i < frames; i++) {
@@ -151,6 +212,11 @@ async function renderOne(job, label, target) {
       if (i % FPS === 0)
         process.stdout.write(`\r${label} ${i / FPS}/${Math.ceil(seconds)} s   `)
     }
+    if (audio)
+      await encoder.evaluate((config) => window.encodeAudio(config), {
+        ...audio,
+        seconds: frames / FPS,
+      })
     const mp4 = await encoder.evaluate(() => window.finish())
     writeFileSync(target, Buffer.from(mp4, "base64"))
     console.log(`\r${label}: ${job.out}            `)

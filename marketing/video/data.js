@@ -31,6 +31,22 @@
   /** Params of the page URL. */
   window.PARAMS = new URLSearchParams(location.search)
 
+  // Voice-over: a scene lists its sentences (say), the renderer has them
+  // spoken and reloads the scene with their real durations (?durations=…),
+  // so the scene can time its screens to the voice.
+  const durations = JSON.parse(PARAMS.get("durations") ?? "null")
+  window.voiceScript = []
+  window.voiceTimeline = []
+  /** Seconds the sentence lasts once spoken; 0 without a voice, so the
+   * scene keeps its own pace. */
+  window.voiceLength = (id) => durations?.[id] ?? 0
+  /** Adds a sentence at time `at`; returns when it ends. */
+  window.say = (id, text, at) => {
+    voiceScript.push({ id, text })
+    voiceTimeline.push({ id, at })
+    return at + voiceLength(id)
+  }
+
   const SVG = "http://www.w3.org/2000/svg"
   const el = (name, attrs = {}) => {
     const node = document.createElementNS(SVG, name)
@@ -132,10 +148,7 @@
     <div data-in="${from}" data-fadein="0.3" class="layer dark">
       <div class="bar"><div class="flag"><span></span><span></span><span></span></div></div>
       <div class="layer center">
-        <div data-in="${from + 0.2}" data-fx="zoom" class="logo" style="font-size: 110px">
-          <svg viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z" fill="#e0680a"/><circle cx="17" cy="13.3" r="4" fill="#fff"/></svg>
-          CI-Geo
-        </div>
+        <div data-in="${from + 0.2}" data-fx="zoom" class="brand"><img src="/logo-mark.svg" alt="" /><span>Culture <span class="accent">Ivoire</span></span></div>
         <span data-in="${from + 0.6}" data-fx="pop" class="badge">${line}</span>
         <p data-in="${from + 1}" data-fx="up" class="url">ci-geo-app.vercel.app</p>
         <p data-in="${from + 1.3}" data-fx="fade" style="margin: 0; font-size: 38px; color: #9db0a5">Gratuit · sans inscription</p>

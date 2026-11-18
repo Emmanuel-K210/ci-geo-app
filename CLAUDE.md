@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-CI-Geo : atlas et jeux sur la géographie de la Côte d'Ivoire. SPA **mobile first**.
+Culture Ivoire (anciennement Culture Ivoire) : atlas, récits et jeux sur la Côte d'Ivoire. SPA **mobile first**.
 
 ## Stack
 

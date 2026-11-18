@@ -72,7 +72,7 @@ export const EXPORTS: Record<
     type: "application/sql",
     make: () =>
       [
-        `-- Référentiel CI-Geo ${rawData.version} : schéma geo, une table par niveau.`,
+        `-- Référentiel Culture Ivoire ${rawData.version} : schéma geo, une table par niveau.`,
         "CREATE SCHEMA IF NOT EXISTS geo;",
         "CREATE TABLE geo.district (id text PRIMARY KEY, nom text NOT NULL, autonome boolean NOT NULL);",
         "CREATE TABLE geo.region (id text PRIMARY KEY, nom text NOT NULL, district_id text NOT NULL REFERENCES geo.district, chef_lieu_ville_id text NOT NULL);",

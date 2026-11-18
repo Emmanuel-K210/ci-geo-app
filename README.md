@@ -1,4 +1,4 @@
-# CI-Geo
+# Culture Ivoire
 
 Les villes, communes et quartiers de Côte d'Ivoire : un atlas, une carte et des
 jeux. Pensé d'abord pour le téléphone.

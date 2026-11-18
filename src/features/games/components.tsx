@@ -275,7 +275,9 @@ export function ResultView({
             variant="outline"
             onClick={() =>
               void shareOrCopy(
-                [`CI-Geo · ${share}`, shareUrl()].filter(Boolean).join("\n")
+                [`Culture Ivoire · ${share}`, shareUrl()]
+                  .filter(Boolean)
+                  .join("\n")
               )
             }
           >

@@ -4,19 +4,25 @@
     <meta charset="utf-8" />
     <title>Encodeur</title>
     <script src="mp4-muxer.js"></script>
+    <script src="music.js"></script>
   </head>
   <body>
     <script>
-      // H.264 in an MP4, encoded by the browser (WebCodecs): no ffmpeg needed.
+      // H.264 video and AAC audio in an MP4, encoded by the browser
+      // (WebCodecs): no ffmpeg needed.
+      const RATE = 48000
       let muxer
       let encoder
       let fps
 
-      window.init = (width, height, rate) => {
+      window.init = (width, height, rate, withAudio = false) => {
         fps = rate
         muxer = new Mp4Muxer.Muxer({
           target: new Mp4Muxer.ArrayBufferTarget(),
           video: { codec: "avc", width, height },
+          ...(withAudio
+            ? { audio: { codec: "aac", numberOfChannels: 2, sampleRate: RATE } }
+            : {}),
           fastStart: "in-memory",
         })
         encoder = new VideoEncoder({
@@ -47,6 +53,140 @@
         bitmap.close()
         while (encoder.encodeQueueSize > 10)
           await new Promise((r) => setTimeout(r, 5))
+      }
+
+      /** Where the voice speaks: [start, end] in seconds, from its loudness. */
+      function speech(buffer) {
+        const data = buffer.getChannelData(0)
+        const step = Math.round(buffer.sampleRate * 0.05)
+        const levels = []
+        for (let i = 0; i < data.length; i += step) {
+          let sum = 0
+          for (let j = i; j < Math.min(i + step, data.length); j++)
+            sum += data[j] * data[j]
+          levels.push(Math.sqrt(sum / step))
+        }
+        const threshold = Math.max(...levels) * 0.06
+        const parts = []
+        let start = null
+        let quiet = 0
+        levels.forEach((level, k) => {
+          const t = k * 0.05
+          if (level > threshold) {
+            if (start === null) start = t
+            quiet = 0
+          } else if (start !== null && ++quiet >= 6) {
+            parts.push([start, t - 0.25])
+            start = null
+            quiet = 0
+          }
+        })
+        if (start !== null) parts.push([start, levels.length * 0.05])
+        return parts
+      }
+
+      /**
+       * Mixes the soundtrack and encodes it: an optional voice (file, start
+       * time) over the original music, which gets quieter while the voice
+       * speaks and fades out at the end.
+       */
+      window.encodeAudio = async ({
+        seconds,
+        voice,
+        voiceAt = 0,
+        voices = [],
+        voiceGain = 1,
+        music = true,
+        musicGain = 0.55,
+        transpose = 0,
+        bpm = 104,
+      }) => {
+        const ctx = new OfflineAudioContext(2, Math.ceil(seconds * RATE), RATE)
+        // Gentle compression, make-up gain to TikTok loudness, then a
+        // limiter so nothing clips.
+        const master = ctx.createDynamicsCompressor()
+        master.threshold.value = -18
+        master.ratio.value = 3
+        const makeup = ctx.createGain()
+        makeup.gain.value = 1.6
+        const limiter = ctx.createDynamicsCompressor()
+        limiter.threshold.value = -3
+        limiter.knee.value = 0
+        limiter.ratio.value = 20
+        limiter.attack.value = 0.002
+        limiter.release.value = 0.08
+        master.connect(makeup).connect(limiter).connect(ctx.destination)
+
+        // One recorded voice-over (voice, voiceAt) and/or generated
+        // sentences (voices: [{ src, at }]); parts are where someone speaks.
+        const clips = [
+          ...(voice ? [{ src: voice, at: voiceAt }] : []),
+          ...voices,
+        ]
+        let parts = []
+        for (const clip of clips) {
+          const bytes = await (await fetch(clip.src)).arrayBuffer()
+          const buffer = await ctx.decodeAudioData(bytes)
+          parts.push(
+            ...speech(buffer).map(([a, b]) => [a + clip.at, b + clip.at])
+          )
+          const source = ctx.createBufferSource()
+          source.buffer = buffer
+          const gain = ctx.createGain()
+          gain.gain.value = voiceGain
+          source.connect(gain).connect(master)
+          source.start(clip.at)
+        }
+        if (music) {
+          const bed = ctx.createGain()
+          bed.gain.setValueAtTime(0, 0)
+          bed.gain.linearRampToValueAtTime(musicGain, 0.4)
+          for (const [a, b] of parts.sort((x, y) => x[0] - y[0])) {
+            bed.gain.setTargetAtTime(
+              musicGain * 0.35,
+              Math.max(0, a - 0.15),
+              0.06
+            )
+            bed.gain.setTargetAtTime(musicGain, b + 0.1, 0.25)
+          }
+          bed.gain.setValueAtTime(musicGain, Math.max(0, seconds - 1.4))
+          bed.gain.linearRampToValueAtTime(0, seconds)
+          composeMusic(ctx, bed, seconds, { transpose, bpm })
+          bed.connect(master)
+        }
+        const mix = await ctx.startRendering()
+
+        const audio = new AudioEncoder({
+          output: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
+          error: (error) => console.error(error),
+        })
+        audio.configure({
+          codec: "mp4a.40.2",
+          sampleRate: RATE,
+          numberOfChannels: 2,
+          bitrate: 160_000,
+        })
+        const left = mix.getChannelData(0)
+        const right = mix.getChannelData(1)
+        const SIZE = 4800
+        for (let i = 0; i < mix.length; i += SIZE) {
+          const n = Math.min(SIZE, mix.length - i)
+          const planar = new Float32Array(n * 2)
+          planar.set(left.subarray(i, i + n), 0)
+          planar.set(right.subarray(i, i + n), n)
+          const data = new AudioData({
+            format: "f32-planar",
+            sampleRate: RATE,
+            numberOfFrames: n,
+            numberOfChannels: 2,
+            timestamp: Math.round((i * 1e6) / RATE),
+            data: planar,
+          })
+          audio.encode(data)
+          data.close()
+        }
+        await audio.flush()
+        return parts
       }
 
       window.finish = async () => {

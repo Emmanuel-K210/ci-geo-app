@@ -1,6 +1,6 @@
 # Supabase : sauvegarde en ligne et API du référentiel
 
-Sans configuration, CI-Geo reste 100 % local. Avec un projet Supabase :
+Sans configuration, Culture Ivoire reste 100 % local. Avec un projet Supabase :
 
 - les joueurs se connectent par **lien magique** (ou code reçu par e-mail) et
   retrouvent leur progression sur tous leurs appareils ;
@@ -20,7 +20,7 @@ Sans configuration, CI-Geo reste 100 % local. Avec un projet Supabase :
    _Redirect URLs_.
 4. **Authentication › Email Templates › Magic Link** : ajoutez le code pour
    ceux qui lisent leurs e-mails sur un autre appareil, par exemple
-   `<p>Ou saisissez ce code dans CI-Geo : <b>{{ .Token }}</b></p>`.
+   `<p>Ou saisissez ce code dans Culture Ivoire : <b>{{ .Token }}</b></p>`.
 5. Copiez `.env.example` en `.env` et remplissez `VITE_SUPABASE_URL` et
    `VITE_SUPABASE_ANON_KEY` (**Project Settings › API**). Relancez
    `npm run dev` ou `npm run build`.

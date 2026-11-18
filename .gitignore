@@ -26,3 +26,4 @@ dist-ssr
 .tanstack
 superbasepws.txt
 marketing/video/out/
+marketing/video/audio/cache/

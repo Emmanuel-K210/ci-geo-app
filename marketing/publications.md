@@ -1,4 +1,4 @@
-# Publications CI-Geo
+# Publications Culture Ivoire
 
 Lien : https://ci-geo-app.vercel.app
 
@@ -6,7 +6,7 @@ Lien : https://ci-geo-app.vercel.app
 
 ### Post de lancement (affiche `linkedin-1080x1350.png`)
 
-> 🇨🇮 Je lance CI-Geo, une application gratuite pour (re)découvrir la Côte d'Ivoire.
+> 🇨🇮 Je lance Culture Ivoire, une application gratuite pour (re)découvrir la Côte d'Ivoire.
 >
 > Combien de chefs-lieux de région sauriez-vous placer sur une carte ? Moi, moins que je ne le pensais. C'est de là qu'est parti ce projet.
 >
@@ -30,7 +30,7 @@ Lien : https://ci-geo-app.vercel.app
 >
 > Ou que Grand-Bassam, première capitale de la colonie, a perdu ce titre après l'épidémie de fièvre jaune de 1899 ?
 >
-> Dans CI-Geo, chaque peuple et chaque site a son récit, ses photos et sa place sur la carte. Un récit nouveau chaque jour.
+> Dans Culture Ivoire, chaque peuple et chaque site a son récit, ses photos et sa place sur la carte. Un récit nouveau chaque jour.
 >
 > 👉 https://ci-geo-app.vercel.app
 >
@@ -49,7 +49,7 @@ Lien : https://ci-geo-app.vercel.app
 
 ### Statut « récits » (`whatsapp-statut-recits-1080x1920.png`)
 
-> Tu connais l'histoire de la reine Abla Pokou ? Ou pourquoi Kong a été détruite en 1897 ? Tout est dans CI-Geo 📖
+> Tu connais l'histoire de la reine Abla Pokou ? Ou pourquoi Kong a été détruite en 1897 ? Tout est dans Culture Ivoire 📖
 > https://ci-geo-app.vercel.app
 
 ### Message de groupe (`carre-1080x1080.png`)
@@ -61,7 +61,7 @@ Lien : https://ci-geo-app.vercel.app
 
 ### Relance duel (à envoyer à un ami)
 
-> Je te défie sur CI-Geo : mêmes 10 questions pour nous deux. Lance un duel dans Jeux › Duel entre amis, et envoie-moi ton lien 😉
+> Je te défie sur Culture Ivoire : mêmes 10 questions pour nous deux. Lance un duel dans Jeux › Duel entre amis, et envoie-moi ton lien 😉
 > https://ci-geo-app.vercel.app
 
 ## Calendrier conseillé

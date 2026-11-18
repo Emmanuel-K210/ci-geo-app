@@ -36,7 +36,7 @@ export function shareText(key: string, distances: number[], url?: string) {
   const total = distances.reduce((sum, km) => sum + dailyPoints(km), 0)
   const average = distances.reduce((sum, km) => sum + km, 0) / distances.length
   return [
-    `CI-Geo · Défi du ${formatDay(key)}`,
+    `Culture Ivoire · Défi du ${formatDay(key)}`,
     `${distances.map(square).join("")} ${total}/${DAILY_MAX}`,
     `En moyenne à ${fmtKm(average)} des villes`,
     url,

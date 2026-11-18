@@ -2,7 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>CI-Geo · le saviez-vous</title>
+    <title>Culture Ivoire · le saviez-vous</title>
     <link rel="stylesheet" href="poster.css" />
     <link rel="stylesheet" href="scene.css" />
     <script src="demo.js"></script>
@@ -111,9 +111,12 @@
 
         // The timeline: title, the story paragraph by paragraph, one fact,
         // the page in the app, the end card.
+        // Each card stays at least as long as its sentence is spoken.
+        const hold = (start, minimum, id, text) =>
+          Math.max(start + minimum, say(id, text, start + 0.25) + 0.45)
         let t = 0.4
         const blocks = []
-        const titleEnd = t + 4.2
+        const titleEnd = hold(t, 4.2, "title", `${title}. ${item.resume}`)
         blocks.push(`
           <div data-in="${t}" data-out="${titleEnd}" data-fx="up" class="card" style="top:${photo ? 330 : 560}px">
             ${
@@ -126,8 +129,8 @@
             <p class="story" style="margin-top:18px;font-size:46px;opacity:.85">${item.resume}</p>
           </div>`)
         t = titleEnd
-        for (const paragraph of item.histoire) {
-          const end = t + readingTime(paragraph)
+        for (const [k, paragraph] of item.histoire.entries()) {
+          const end = hold(t, readingTime(paragraph), `p${k}`, paragraph)
           blocks.push(`
             <div data-in="${t}" data-out="${end}" data-fx="up" class="card">
               <p class="story" style="font-size:${size(paragraph)}px">${paragraph}</p>
@@ -135,7 +138,12 @@
           t = end
         }
         if (facts[0]) {
-          const end = t + readingTime(facts[0])
+          const end = hold(
+            t,
+            readingTime(facts[0]),
+            "fact",
+            `À savoir : ${facts[0]}`
+          )
           blocks.push(`
             <div data-in="${t}" data-out="${end}" data-fx="up" class="card">
               <span class="badge" style="font-size:36px">À savoir</span>
@@ -144,9 +152,14 @@
           t = end
         }
         const phoneAt = t
+        say(
+          "cta",
+          `Toute ${kind === "peuple" ? "leur" : "son"} histoire est sur Culture Ivoire.`,
+          phoneAt + 0.4
+        )
         blocks.push(`
           <p data-in="${phoneAt}" data-out="${phoneAt + 5}" data-fx="up" class="caption" style="top:160px;color:#eef2ee">
-            Toute ${kind === "peuple" ? "leur" : "son"} histoire<br>sur <span class="accent">CI-Geo</span>
+            Toute ${kind === "peuple" ? "leur" : "son"} histoire<br>sur <span class="accent">Culture Ivoire</span>
           </p>`)
         blocks.push(`
           <div data-in="0.1" data-out="${phoneAt}" data-fx="up" style="position:absolute;left:80px;top:150px">

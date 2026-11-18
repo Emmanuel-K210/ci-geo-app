@@ -23,7 +23,7 @@ const link = (qrSize, fontSize, dark = false) =>
 
 const out = (name) => new URL(`posters/${name}.html`, import.meta.url)
 
-const PIN = `<svg viewBox="0 0 34 34" aria-hidden="true"><path d="M17 3c-6 0-10.5 4.6-10.5 10.3C6.5 21 17 31 17 31s10.5-10 10.5-17.7C27.5 7.6 23 3 17 3Z" fill="#e0680a"/><circle cx="17" cy="13.3" r="4" fill="#fff"/></svg>`
+const PIN = `<img src="/logo-mark.svg" alt="">`
 const FLAG = (height) =>
   `<div style="position:absolute;inset:0 0 auto 0;height:${height}px"><div class="flag"><span></span><span></span><span></span></div></div>`
 const CREDIT_MAP =
@@ -62,7 +62,7 @@ const POSTERS = {
     `${FLAG(8)}
 <img class="map" src="carte.svg" style="right:-60px;top:20px;width:620px;opacity:.55" alt="">
 <div style="position:absolute;left:64px;top:36px;width:610px;display:flex;flex-direction:column;gap:17px">
-  <div class="logo" style="font-size:30px">${PIN} CI-Geo</div>
+  <div class="logo" style="font-size:30px">${PIN} Culture <span class="accent">Ivoire</span></div>
   <p class="eyebrow" style="font-size:15px">Nouvelle application · gratuite</p>
   <h1 class="display" style="font-size:50px">La Côte d'Ivoire, <span class="accent">ville par ville,</span> peuple par peuple.</h1>
   <p style="margin:0;font-size:20px;line-height:1.45;color:var(--muted)">Un atlas des 14 districts, les récits des peuples et des sites, et 10 jeux pour apprendre la géographie du pays en s'amusant.</p>
@@ -81,7 +81,7 @@ ${phone(945, 112, 236, "/decouvrir/sites/tai", 5)}
     1350,
     `${FLAG(12)}
 <div style="position:absolute;left:80px;top:76px;right:80px;display:flex;flex-direction:column;gap:22px">
-  <div class="logo" style="font-size:36px">${PIN} CI-Geo</div>
+  <div class="logo" style="font-size:36px">${PIN} Culture <span class="accent">Ivoire</span></div>
   <h1 class="display" style="font-size:76px">Connaissez-vous vraiment <span class="accent">la Côte d'Ivoire&nbsp;?</span></h1>
   <p style="margin:0;font-size:26px;line-height:1.45;color:var(--muted);max-width:840px">Atlas, histoire des peuples, sites à visiter et jeux de géographie : une application gratuite, pensée pour le téléphone.</p>
 </div>
@@ -104,7 +104,7 @@ ${phone(730, 560, 290, "/decouvrir/sites", 5)}
     `<div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 12%, rgba(224,104,10,.22), transparent 45%),radial-gradient(circle at 10% 90%, rgba(11,122,75,.18), transparent 45%)"></div>
 ${FLAG(14)}
 <div style="position:absolute;left:80px;right:80px;top:110px;display:flex;flex-direction:column;gap:26px;align-items:flex-start">
-  <div class="logo" style="font-size:40px">${PIN} CI-Geo</div>
+  <div class="logo" style="font-size:40px">${PIN} Culture <span class="accent">Ivoire</span></div>
   <h1 class="display" style="font-size:104px">Tu connais vraiment <span class="accent">ton pays&nbsp;?</span></h1>
   <p style="margin:0;font-size:34px;line-height:1.4;color:var(--muted)">Chaque jour, 5 villes à placer sur la carte. Le même défi pour tout le monde. Partage ton score 🟩🟨🟧</p>
 </div>
@@ -124,7 +124,7 @@ ${phone(320, 670, 440, "/", 0)}
 <img class="map" src="carte.svg" style="left:-120px;top:980px;width:900px;opacity:.16" alt="">
 ${FLAG(14)}
 <div style="position:absolute;left:80px;right:80px;top:110px;display:flex;flex-direction:column;gap:26px;color:#eef2ee">
-  <div class="logo" style="font-size:40px">${PIN} CI-Geo</div>
+  <div class="logo" style="font-size:40px">${PIN} Culture <span class="accent">Ivoire</span></div>
   <p class="eyebrow" style="font-size:26px;color:#4cc28b">Découvrir</p>
   <h1 class="display" style="font-size:90px">Abla Pokou, Kong, Grand-Bassam… <span class="accent">les histoires</span> derrière les lieux.</h1>
   <p style="margin:0;font-size:32px;line-height:1.4;opacity:.8">16 peuples, leurs origines et leurs traditions. 15 sites à visiter, avec leur récit et leurs photos.</p>
@@ -146,7 +146,7 @@ ${phone(590, 830, 380, "/decouvrir/sites/grand-bassam", 5)}
     `${FLAG(12)}
 <img class="map" src="carte.svg" style="right:-60px;top:120px;width:620px;opacity:.6" alt="">
 <div style="position:absolute;left:72px;top:76px;width:540px;display:flex;flex-direction:column;gap:26px">
-  <div class="logo" style="font-size:36px">${PIN} CI-Geo</div>
+  <div class="logo" style="font-size:36px">${PIN} Culture <span class="accent">Ivoire</span></div>
   <h1 class="display" style="font-size:72px">Apprends la Côte d'Ivoire <span class="accent">en jouant.</span></h1>
   <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px;font-size:26px;font-weight:600">
     <li>📍 Les 14 districts sur une vraie carte</li>

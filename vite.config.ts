@@ -18,8 +18,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg", "apple-touch-icon-180x180.png"],
       manifest: {
-        name: "CI-Geo : la Côte d'Ivoire en jeux",
-        short_name: "CI-Geo",
+        name: "Culture Ivoire",
+        short_name: "Culture Ivoire",
         description:
           "Villes, peuples et sites de Côte d'Ivoire : atlas, récits et jeux.",
         lang: "fr",

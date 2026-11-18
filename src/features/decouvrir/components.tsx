@@ -165,7 +165,7 @@ export function StoryNotFound() {
 export function Sources({ wiki }: { wiki: string }) {
   return (
     <p className="text-xs text-muted">
-      Résumé écrit pour CI-Geo. Pour aller plus loin :{" "}
+      Résumé écrit pour Culture Ivoire. Pour aller plus loin :{" "}
       <a
         href={articleUrl(wiki)}
         target="_blank"

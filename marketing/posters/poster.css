@@ -97,6 +97,10 @@ body {
   height: 1.3em;
   width: auto;
 }
+.logo img {
+  height: 1.5em;
+  width: auto;
+}
 
 .chips {
   display: flex;
