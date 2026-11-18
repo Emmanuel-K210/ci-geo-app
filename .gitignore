@@ -27,3 +27,4 @@ dist-ssr
 superbasepws.txt
 marketing/video/out/
 marketing/video/audio/cache/
+marketing/tiktok/.tokens.json

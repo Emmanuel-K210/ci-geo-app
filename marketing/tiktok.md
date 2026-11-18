@@ -88,6 +88,25 @@ s'était arrêté : relancez la même commande.
   gratuites du web risquent d'être coupées par TikTok : préférez la musique
   intégrée ou la bibliothèque de sons de TikTok.
 
+## Publication automatique (API TikTok)
+
+Le script `marketing/tiktok/post.mjs` publie les vidéos sur le compte
+Culture Ivoire avec l'API de TikTok (Content Posting API, Direct Post).
+
+1. Dans `.env` : `TIKTOK_CLIENT_KEY=…` et `TIKTOK_CLIENT_SECRET=…` (portail
+   TikTok for Developers, page de l'app). Ne les partagez jamais.
+2. `npm run tiktok -- login` affiche un lien : ouvrez-le, connecté au compte
+   TikTok Culture Ivoire, et autorisez. La page de retour affiche un code.
+3. `npm run tiktok -- code <CODE>` enregistre l'autorisation (valable un an,
+   renouvelée seule ; fichier `marketing/tiktok/.tokens.json`, hors git).
+4. `npm run tiktok -- due lot-2026-11-19` publie les vidéos du lot dont l'heure
+   est passée, une seule fois chacune (`publie.json` dans le dossier du lot).
+   Une tâche planifiée qui lance cette commande toutes les 30 minutes publie
+   tout le programme sans intervention.
+
+Tant que TikTok n'a pas validé l'app, les vidéos publiées par l'API sont
+privées (visibles par vous seul) : c'est une règle de TikTok.
+
 ## Refaire les vidéos
 
 ```bash

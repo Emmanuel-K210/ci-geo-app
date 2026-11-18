@@ -14,7 +14,8 @@
     "format:check": "prettier --check .",
     "db:seed": "node scripts/supabase-seed.mjs",
     "icons": "pwa-assets-generator",
-    "videos": "node marketing/video/batch.mjs"
+    "videos": "node marketing/video/batch.mjs",
+    "tiktok": "node marketing/tiktok/post.mjs"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.3.0",
