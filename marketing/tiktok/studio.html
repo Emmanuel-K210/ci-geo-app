@@ -187,6 +187,69 @@
         opacity: 0;
         transition: opacity 0.2s;
       }
+      dialog {
+        width: min(560px, calc(100% - 32px));
+        max-height: calc(100% - 32px);
+        padding: 0;
+        border: 0;
+        border-radius: 20px;
+        background: var(--surface);
+        color: var(--ink);
+      }
+      dialog::backdrop {
+        background: rgba(23, 36, 30, 0.5);
+      }
+      .sheet {
+        display: grid;
+        gap: 14px;
+        padding: 20px;
+      }
+      .sheet h3 {
+        margin: 0;
+        font-size: 19px;
+      }
+      .sheet label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .sheet textarea {
+        width: 100%;
+        min-height: 110px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--paper);
+        color: var(--ink);
+        font: inherit;
+        resize: vertical;
+      }
+      .sheet select {
+        width: 100%;
+      }
+      .checks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .checks label,
+      .switch {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        font-weight: 500;
+      }
+      .sheet video {
+        width: 140px;
+        aspect-ratio: 9 / 16;
+        border-radius: 10px;
+        background: #000;
+      }
+      .legal {
+        font-size: 13px;
+        color: var(--muted);
+      }
     </style>
   </head>
   <body>
@@ -232,6 +295,9 @@
         <div id="videos" class="videos"></div>
       </section>
     </main>
+    <dialog id="publish">
+      <form method="dialog" class="sheet" id="sheet"></form>
+    </dialog>
     <div id="toast"></div>
 
     <script>
@@ -350,26 +416,161 @@
             await navigator.clipboard.writeText(rows[copy].caption)
             toast("Légende copiée")
           }
-          if (post !== undefined) {
-            const button = event.target
-            button.disabled = true
-            button.textContent = "Envoi en cours…"
-            try {
-              const result = await call("/api/post", {
-                lot,
-                file: rows[post].file,
-              })
-              toast(
-                result.status === "PUBLISH_COMPLETE"
-                  ? `Publiée (${result.privacy === "SELF_ONLY" ? "privée" : "publique"})`
-                  : "Envoyée : TikTok la traite encore"
-              )
-              renderLot(lot)
-            } catch (error) {
-              toast(error.message)
-              button.disabled = false
-              button.textContent = "Publier"
+          if (post !== undefined) openPublish(lot, rows[post])
+        }
+      }
+
+      // The posting screen, following TikTok's rules for Direct Post: the
+      // account it goes to, a privacy level chosen by the user (no default),
+      // interactions allowed by the user, commercial content disclosure,
+      // and TikTok's consent text.
+      const PRIVACY = {
+        PUBLIC_TO_EVERYONE: "Tout le monde",
+        MUTUAL_FOLLOW_FRIENDS: "Amis (abonnés mutuels)",
+        FOLLOWER_OF_CREATOR: "Abonnés",
+        SELF_ONLY: "Moi uniquement",
+      }
+      const MUSIC =
+        "https://www.tiktok.com/legal/page/global/music-usage-confirmation/en"
+      const BRANDED = "https://www.tiktok.com/legal/page/global/bc-policy/en"
+
+      async function openPublish(lot, row) {
+        const dialog = $("publish")
+        const sheet = $("sheet")
+        sheet.innerHTML = `<p class="muted">Chargement des réglages du compte…</p>`
+        dialog.showModal()
+        let creator
+        try {
+          creator = await call("/api/creator")
+        } catch (error) {
+          sheet.innerHTML = `<p class="notice"></p><div class="row"><button value="cancel" class="ghost">Fermer</button></div>`
+          sheet.querySelector(".notice").textContent = error.message
+          return
+        }
+        const off = (flag) => (flag ? "disabled" : "")
+        sheet.innerHTML = `
+          <h3>Publier sur TikTok</h3>
+          <div class="row account">
+            <img src="${creator.creator_avatar_url}" alt="" style="width:40px;height:40px;border-radius:50%">
+            <div><b>${creator.creator_nickname}</b><br><span class="muted">@${creator.creator_username}</span></div>
+          </div>
+          <div class="row" style="align-items:flex-start">
+            <video src="/video/${lot}/${row.file}" controls muted preload="metadata"></video>
+            <div style="flex:1;min-width:200px">
+              <label for="p-caption">Légende</label>
+              <textarea id="p-caption" maxlength="2200"></textarea>
+              <span class="muted" id="p-count" style="font-size:12px"></span>
+            </div>
+          </div>
+          <div>
+            <label for="p-privacy">Qui peut voir cette vidéo ?</label>
+            <select id="p-privacy" required>
+              <option value="" selected disabled>Choisir…</option>
+              ${creator.privacy_level_options
+                .map((p) => `<option value="${p}">${PRIVACY[p] ?? p}</option>`)
+                .join("")}
+            </select>
+          </div>
+          <div>
+            <label>Autoriser les utilisateurs à :</label>
+            <div class="checks">
+              <label><input type="checkbox" id="p-comment" ${off(creator.comment_disabled)}> Commenter</label>
+              <label><input type="checkbox" id="p-duet" ${off(creator.duet_disabled)}> Duo</label>
+              <label><input type="checkbox" id="p-stitch" ${off(creator.stitch_disabled)}> Collage</label>
+            </div>
+            ${
+              creator.comment_disabled ||
+              creator.duet_disabled ||
+              creator.stitch_disabled
+                ? `<p class="legal" style="margin:6px 0 0">Les options grisées sont désactivées dans les réglages de votre compte TikTok.</p>`
+                : ""
             }
+          </div>
+          <div>
+            <label class="switch"><input type="checkbox" id="p-commercial"> Divulguer le contenu commercial</label>
+            <p class="legal" style="margin:4px 0 0">Indiquez si cette vidéo fait la promotion de vous-même, d'une marque, d'un produit ou d'un service.</p>
+            <div class="checks" id="p-kinds" hidden style="margin-top:8px">
+              <label><input type="checkbox" id="p-yours"> Votre marque</label>
+              <label><input type="checkbox" id="p-branded"> Contenu de marque</label>
+            </div>
+            <p class="legal" id="p-label" style="margin:6px 0 0"></p>
+          </div>
+          <p class="legal" id="p-consent"></p>
+          <p class="notice" id="p-error" hidden style="margin:0"></p>
+          <div class="row" style="justify-content:flex-end">
+            <button value="cancel" class="ghost" id="p-cancel">Annuler</button>
+            <button type="button" class="orange" id="p-send" disabled>Publier</button>
+          </div>`
+
+        const caption = $("p-caption")
+        caption.value = row.caption
+        const count = () =>
+          ($("p-count").textContent = `${caption.value.length} / 2200`)
+        caption.oninput = count
+        count()
+
+        function refresh() {
+          const commercial = $("p-commercial").checked
+          $("p-kinds").hidden = !commercial
+          const yours = commercial && $("p-yours").checked
+          const branded = commercial && $("p-branded").checked
+          // Branded content cannot be private.
+          const selfOnly = $("p-privacy").querySelector(
+            'option[value="SELF_ONLY"]'
+          )
+          if (selfOnly) {
+            selfOnly.disabled = branded
+            if (branded && $("p-privacy").value === "SELF_ONLY")
+              $("p-privacy").value = ""
+          }
+          $("p-label").textContent = branded
+            ? "Votre vidéo sera étiquetée « Partenariat rémunéré »."
+            : yours
+              ? "Votre vidéo sera étiquetée « Contenu promotionnel »."
+              : commercial
+                ? "Choisissez au moins une option pour continuer."
+                : ""
+          $("p-consent").innerHTML = branded
+            ? `En publiant, vous acceptez la <a href="${BRANDED}" target="_blank">Politique relative au contenu de marque</a> et la <a href="${MUSIC}" target="_blank">Confirmation d'utilisation de la musique</a> de TikTok.`
+            : `En publiant, vous acceptez la <a href="${MUSIC}" target="_blank">Confirmation d'utilisation de la musique</a> de TikTok.`
+          $("p-send").disabled =
+            !$("p-privacy").value || (commercial && !yours && !branded)
+        }
+        for (const id of ["p-privacy", "p-commercial", "p-yours", "p-branded"])
+          $(id).onchange = refresh
+        refresh()
+
+        $("p-send").onclick = async () => {
+          $("p-send").disabled = true
+          $("p-cancel").disabled = true
+          $("p-send").textContent = "Envoi en cours… (1 à 3 min)"
+          $("p-error").hidden = true
+          try {
+            const result = await call("/api/post", {
+              lot,
+              file: row.file,
+              caption: caption.value,
+              privacy: $("p-privacy").value,
+              allowComment: $("p-comment").checked,
+              allowDuet: $("p-duet").checked,
+              allowStitch: $("p-stitch").checked,
+              yourBrand: $("p-commercial").checked && $("p-yours").checked,
+              brandedContent:
+                $("p-commercial").checked && $("p-branded").checked,
+            })
+            dialog.close()
+            toast(
+              result.status === "PUBLISH_COMPLETE"
+                ? "Publiée : elle peut mettre quelques minutes à apparaître sur votre profil"
+                : "Envoyée : TikTok la traite encore, elle apparaîtra sous peu"
+            )
+            renderLot(lot)
+          } catch (error) {
+            $("p-error").hidden = false
+            $("p-error").textContent = `Échec : ${error.message}`
+            $("p-send").textContent = "Réessayer"
+            $("p-cancel").disabled = false
+            refresh()
           }
         }
       }

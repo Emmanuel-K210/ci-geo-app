@@ -118,33 +118,82 @@ const PRIVACY_ORDER = [
   "SELF_ONLY",
 ]
 
-/** Uploads a video and publishes it with its caption; returns its status. */
-export async function post(file, caption) {
-  const creator = await api("/post/publish/creator_info/query/")
+/** The account's posting settings: name, avatar, allowed privacy levels,
+ * interactions it has turned off, longest video. */
+export const creatorInfo = () => api("/post/publish/creator_info/query/")
+
+/**
+ * Uploads a video and publishes it. `options` are the choices made in the
+ * Studio (privacy, interactions, commercial content); without them (command
+ * line), the most public level allowed and every interaction are used.
+ */
+export async function post(file, caption, options = {}) {
+  const creator = await creatorInfo()
   const allowed = creator.privacy_level_options ?? ["SELF_ONLY"]
-  const privacy =
-    env("TIKTOK_PRIVACY") ?? PRIVACY_ORDER.find((p) => allowed.includes(p))
+  if (options.privacy && !allowed.includes(options.privacy))
+    throw new Error(
+      "Ce niveau de confidentialité n'est pas proposé pour ce compte"
+    )
+  let privacy =
+    options.privacy ??
+    env("TIKTOK_PRIVACY") ??
+    PRIVACY_ORDER.find((p) => allowed.includes(p))
   const size = statSync(file).size
   if (size > 64 * 1024 * 1024)
     throw new Error(
       "Vidéo de plus de 64 Mo : non prise en charge par ce script"
     )
 
-  const init = await api("/post/publish/video/init/", {
-    post_info: {
-      title: caption,
-      privacy_level: privacy,
-      disable_comment: false,
-      disable_duet: false,
-      disable_stitch: false,
-    },
-    source_info: {
-      source: "FILE_UPLOAD",
-      video_size: size,
-      chunk_size: size,
-      total_chunk_count: 1,
-    },
-  })
+  const start = () =>
+    api("/post/publish/video/init/", {
+      post_info: {
+        title: caption,
+        privacy_level: privacy,
+        disable_comment:
+          creator.comment_disabled || options.allowComment === false,
+        disable_duet: creator.duet_disabled || options.allowDuet === false,
+        disable_stitch:
+          creator.stitch_disabled || options.allowStitch === false,
+        brand_organic_toggle: !!options.yourBrand,
+        brand_content_toggle: !!options.brandedContent,
+      },
+      source_info: {
+        source: "FILE_UPLOAD",
+        video_size: size,
+        chunk_size: size,
+        total_chunk_count: 1,
+      },
+    })
+  let init
+  try {
+    init = await start()
+  } catch (error) {
+    // An app TikTok has not reviewed yet may only post privately (only
+    // retried for the command line: in the Studio the user chose).
+    if (
+      options.privacy &&
+      /private_account|private accounts/i.test(error.message)
+    )
+      throw new Error(
+        "TikTok n'accepte les publications d'une app non validée qu'en « Moi uniquement » et sur un compte privé, le temps de la validation."
+      )
+    if (
+      options.privacy ||
+      !/unaudited|private/i.test(error.message) ||
+      privacy === "SELF_ONLY"
+    )
+      throw error
+    privacy = "SELF_ONLY"
+    try {
+      init = await start()
+    } catch (again) {
+      if (/private_account|private accounts/i.test(again.message))
+        throw new Error(
+          "TikTok n'accepte les publications d'une app non validée que sur un compte privé : passez le compte Culture Ivoire en privé le temps des tests (Paramètres › Confidentialité › Compte privé), ou attendez la validation de l'app."
+        )
+      throw again
+    }
+  }
 
   const upload = await fetch(init.upload_url, {
     method: "PUT",
@@ -202,10 +251,11 @@ export function published(lot) {
 }
 
 /** Posts one video of a batch with its caption, and records it. */
-export async function postFromLot(lot, row) {
+export async function postFromLot(lot, row, options) {
   const result = await post(
     new URL(`marketing/video/out/${lot}/${row.file}`, ROOT),
-    row.caption
+    options?.caption ?? row.caption,
+    options
   )
   const log = published(lot)
   log[row.file] = { ...result, at: new Date().toISOString() }

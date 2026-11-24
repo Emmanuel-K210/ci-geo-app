@@ -19,12 +19,13 @@ import {
   authorize,
   authUrl,
   connected,
+  creatorInfo,
   postFromLot,
   programme,
   published,
 } from "./post.mjs"
 
-const PORT = 3457
+const PORT = Number(process.env.STUDIO_PORT ?? 3457)
 const OUT = new URL("../video/out/", import.meta.url)
 const PAGE = new URL("studio.html", import.meta.url)
 
@@ -112,6 +113,9 @@ const server = createServer(async (req, res) => {
     if (req.method === "GET" && match)
       return video(req, res, match[1], match[2])
 
+    if (req.method === "GET" && url.pathname === "/api/creator")
+      return send(res, 200, await creatorInfo())
+
     if (req.method === "POST" && url.pathname === "/api/login")
       return send(res, 200, { url: authUrl() })
 
@@ -122,16 +126,30 @@ const server = createServer(async (req, res) => {
     }
 
     if (req.method === "POST" && url.pathname === "/api/post") {
-      const { lot, file } = await readJson(req)
+      const { lot, file, ...choices } = await readJson(req)
+      if (!choices.privacy)
+        return send(res, 400, { error: "Choisissez qui peut voir la vidéo" })
       const row =
         lots().includes(lot) && programme(lot).find((r) => r.file === file)
       if (!row)
         return send(res, 404, { error: "Vidéo introuvable dans le programme" })
-      return send(res, 200, await postFromLot(lot, row))
+      console.log(`Publication de ${file}…`)
+      const result = await postFromLot(lot, row, {
+        caption: String(choices.caption ?? row.caption).slice(0, 2200),
+        privacy: choices.privacy,
+        allowComment: !!choices.allowComment,
+        allowDuet: !!choices.allowDuet,
+        allowStitch: !!choices.allowStitch,
+        yourBrand: !!choices.yourBrand,
+        brandedContent: !!choices.brandedContent,
+      })
+      console.log(`  ${result.status} (${result.privacy})`)
+      return send(res, 200, result)
     }
 
     send(res, 404, { error: "Introuvable" })
   } catch (error) {
+    console.log(`Erreur : ${error.message}`)
     send(res, 500, { error: error.message })
   }
 })
