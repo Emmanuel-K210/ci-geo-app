@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="scene.css" />
     <script src="scene.js"></script>
     <script src="data.js"></script>
+    <script src="zeze.js"></script>
     <style>
       #map {
         position: absolute;
@@ -41,6 +42,7 @@
       // ?ville=ci-v-korhogo  — a city to find on the blank map.
       setup.push(async () => {
         const data = await DATA
+        const zeze = await ZEZE
         const ville = data.villes.find((v) => v.id === PARAMS.get("ville"))
         const near = data.villes
           .filter((v) => v !== ville)
@@ -62,7 +64,9 @@
           "Devine la ville ! Tu la trouves en trois secondes ?",
           0.3
         )
-        const K = Math.max(4, introEnd + 0.3) // countdown
+        const helloEnd = zeze.say(1, 0.5, "happy")
+        zeze.mood(helloEnd, "think")
+        const K = Math.max(4, introEnd + 0.3, helloEnd + 0.3) // countdown
         say("trois", "Trois.", K)
         say("deux", "Deux.", K + 1)
         say("un", "Un.", K + 2)
@@ -75,16 +79,16 @@
         effect("ding", R)
         effect("whoosh", R - 0.2)
         const answerEnd = say("answer", `C'est ${ville.nom} !`, R + 0.1)
+        const wowEnd = zeze.say(6, Math.max(R + 0.3, answerEnd + 0.1), "wow")
         const asked = say(
           "comment",
           "Tu avais trouvé ? Dis-le en commentaire !",
           Math.max(R + 1.2, answerEnd + 0.2)
         )
-        const E = Math.max(11, asked + 0.5) // end card
-        const ctaEnd = say(
-          "cta",
-          "Joue au défi du jour sur Culture Ivoire !",
-          E + 0.4
+        const E = Math.max(11, asked + 0.5, wowEnd + 2.5) // end card
+        const ctaEnd = Math.max(
+          say("cta", "Joue au défi du jour sur Culture Ivoire !", E + 0.4),
+          zeze.say(7, E + 0.7, "happy")
         )
 
         document.getElementById("scene").innerHTML = `
@@ -95,7 +99,7 @@
             Tu la trouves en 3&nbsp;secondes&nbsp;?
           </p>
           <svg id="map"></svg>
-          <p data-in="2" data-out="${R}" data-fx="up" class="story" style="position:absolute;left:80px;right:80px;top:1430px;text-align:center;color:#9db0a5;font-size:52px">
+          <p data-in="2" data-out="${R}" data-fx="up" class="story" style="position:absolute;left:330px;right:80px;top:1400px;color:#9db0a5;font-size:50px">
             Indice : ${hint.replace("District : ", "district ")}
           </p>
           <div data-in="${K}" data-out="${K + 0.95}" data-fadein="0.08" data-fx="pop" class="count">3</div>
@@ -106,10 +110,12 @@
             <p class="big accent" style="font-size:${ville.nom.length > 12 ? 112 : 140}px">${ville.nom}</p>
             <p class="story" style="margin-top:22px;color:#eef2ee;font-size:46px">${kind}</p>
           </div>
-          <p data-in="${R + 1.2}" data-out="${E}" data-fx="up" class="story" style="position:absolute;left:80px;right:80px;top:1420px;text-align:center;color:#eef2ee;font-size:50px">
+          <p data-in="${R + 1.2}" data-out="${E}" data-fx="up" class="story" style="position:absolute;left:330px;right:80px;top:1390px;color:#eef2ee;font-size:44px">
             À ${Math.round(near.km)} km ${de(near.v.nom)}.<br><span style="color:#9db0a5">Tu avais trouvé&nbsp;? Dis-le en commentaire 👇</span>
           </p>
-          ${endCard(E, "Joue au défi du jour")}`
+          ${endCard(E, "Joue au défi du jour")}
+          ${zeze.place({ left: 50, top: 1350, size: 250, from: 0.2, to: E, bubble: false })}
+          ${zeze.place({ left: 60, top: 1330, size: 250, from: E + 0.4 })}`
 
         const marks = drawMap(document.getElementById("map"), data, {
           tint: "dark",

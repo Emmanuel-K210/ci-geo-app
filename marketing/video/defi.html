@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="scene.css" />
     <script src="scene.js"></script>
     <script src="data.js"></script>
+    <script src="zeze.js"></script>
     <style>
       .name {
         display: flex;
@@ -49,6 +50,7 @@
 
       setup.push(async () => {
         const data = await DATA
+        const zeze = await ZEZE
         const byId = (id) => data.villes.find((v) => v.id === id)
         const today = PARAMS.get("today").split(",").map(byId)
         const yesterday = PARAMS.get("yesterday").split(",").map(byId)
@@ -72,6 +74,9 @@
         const step = (listEnd - listAt) / names.length
         const B = Math.max(7.2, listEnd + 1) // yesterday's answers
         say("answers", "Et voici les réponses d'hier.", B + 0.2)
+        zeze.say(1, 0.5, "happy")
+        zeze.mood(B - 0.5, "idle")
+        zeze.say(3, B + 0.3, "think")
         const each = 1.5
         const C = B + 1.4 + yesterday.length * each + 1.2
         names.forEach((_, i) =>
@@ -79,10 +84,10 @@
         )
         effect("whoosh", B - 0.15)
         yesterday.forEach((_, i) => effect("pop", B + 1.4 + i * each))
-        const ctaEnd = say(
-          "cta",
-          "Joue au défi du jour sur Culture Ivoire !",
-          C + 0.4
+        zeze.mood(C - 1, "happy")
+        const ctaEnd = Math.max(
+          say("cta", "Joue au défi du jour sur Culture Ivoire !", C + 0.4),
+          zeze.say(7, C + 0.7, "happy")
         )
 
         document.getElementById("scene").innerHTML = `
@@ -101,7 +106,7 @@
               )
               .join("")}
           </div>
-          <p data-in="${Math.min(B - 1, Math.max(A + 3.4, listEnd))}" data-out="${B}" data-fx="up" class="story" style="position:absolute;left:80px;right:80px;top:1260px;text-align:center;color:#9db0a5;font-size:48px">
+          <p data-in="${Math.min(B - 1, Math.max(A + 3.4, listEnd))}" data-out="${B}" data-fx="up" class="story" style="position:absolute;left:330px;right:80px;top:1330px;color:#9db0a5;font-size:42px">
             Le même défi pour tout le monde.<br><span style="color:#eef2ee">Joue avant de lire les commentaires 😉</span>
           </p>
 
@@ -112,7 +117,9 @@
             Tu les avais bien placées&nbsp;?
           </p>
           <svg id="map" data-in="${B}" data-out="${C}" data-fx="zoom"></svg>
-          ${endCard(C, "Joue le défi du jour")}`
+          ${endCard(C, "Joue le défi du jour")}
+          ${zeze.place({ left: 50, top: 1300, size: 250, from: 0.2, to: C, bubble: false })}
+          ${zeze.place({ left: 60, top: 1330, size: 250, from: C + 0.4 })}`
 
         const marks = drawMap(document.getElementById("map"), data, {
           tint: "dark",

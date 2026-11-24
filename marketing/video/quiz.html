@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="scene.css" />
     <script src="scene.js"></script>
     <script src="data.js"></script>
+    <script src="zeze.js"></script>
     <style>
       body {
         background:
@@ -146,16 +147,21 @@
 
       setup.push(async () => {
         const data = await DATA
+        const zeze = await ZEZE
         const list = questions(data, seededRng(Number(PARAMS.get("seed") ?? 1)))
         // The voice opens, reads each answer when it shows, then asks for
         // the score: the timing stretches to fit it.
+        // Zézé says hello, then counts down to the first question.
+        const helloEnd = zeze.say(1, 0.5, "happy")
+        const goEnd = zeze.say(2, helloEnd + 0.2, "wow")
         const INTRO = Math.max(
           2.3,
           say(
             "intro",
             "Quiz éclair ! Cinq questions, trois secondes chacune.",
             0.2
-          ) + 0.2
+          ) + 0.2,
+          goEnd + 0.15
         )
         const starts = []
         let clock = INTRO
@@ -166,11 +172,22 @@
           for (const k of [0.6, 1.6, 2.6]) effect("tick", clock + k)
           effect("ding", clock + ANSWER)
           const letter = "ABCD"[q.options.indexOf(q.good)]
-          const spoken = say(
+          let spoken = say(
             `a${i}`,
             `${letter} : ${q.good} !`,
             clock + ANSWER + 0.05
           )
+          // Zézé thinks with the viewer, then cheers at some answers.
+          zeze.mood(clock, "think")
+          if (i === 2) zeze.say(3, clock + 0.7, "think")
+          const cheer = { 0: 4, 4: 6 }[i]
+          if (cheer)
+            spoken = zeze.say(
+              cheer,
+              Math.max(clock + ANSWER + 0.3, spoken + 0.1),
+              cheer === 6 ? "wow" : "happy"
+            )
+          else zeze.mood(clock + ANSWER, "happy")
           clock = Math.max(clock + 4.2, spoken + 0.25)
         })
         const end = clock
@@ -181,10 +198,10 @@
           end + 0.2
         )
         const finale = Math.max(end + 2.4, scoreEnd + 0.3)
-        const ctaEnd = say(
-          "cta",
-          "Joue au quiz sur Culture Ivoire !",
-          finale + 0.4
+        zeze.mood(end, "idle")
+        const ctaEnd = Math.max(
+          say("cta", "Joue au quiz sur Culture Ivoire !", finale + 0.4),
+          zeze.say(7, finale + 0.7, "happy")
         )
         const html = [
           `<div data-in="0" data-out="${INTRO}" data-fadein="0.01" class="layer center">
@@ -223,6 +240,12 @@
             <p data-in="${end + 0.4}" data-fx="up" class="story" style="font-size:54px">Dis-le en commentaire 👇<br><span style="color:var(--muted)">Et défie tes amis</span></p>
           </div>`)
         html.push(endCard(finale, "Joue au quiz sur Culture Ivoire"))
+        html.push(
+          zeze.place({ left: 60, top: 1190, size: 270, from: 0.2, to: finale })
+        )
+        html.push(
+          zeze.place({ left: 60, top: 1330, size: 250, from: finale + 0.4 })
+        )
         document.getElementById("scene").innerHTML = html.join("")
 
         onFrame.push((t) => {

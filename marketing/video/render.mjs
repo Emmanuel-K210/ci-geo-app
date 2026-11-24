@@ -15,6 +15,7 @@ import {
   writeFileSync,
 } from "node:fs"
 import { execFileSync } from "node:child_process"
+import { stripTypeScriptTypes } from "node:module"
 import { fileURLToPath } from "node:url"
 import { chromium } from "playwright-core"
 
@@ -52,6 +53,13 @@ copyFileSync(
 )
 copyFileSync(new URL("src/geo/ci-geo.json", ROOT), new URL("ci-geo.json", SITE))
 copyFileSync(new URL("src/geo/shapes.json", ROOT), new URL("shapes.json", SITE))
+// Zézé, the app's mascot, as a module the scenes import (zeze.js).
+writeFileSync(
+  new URL("mascot.js", SITE),
+  stripTypeScriptTypes(
+    readFileSync(new URL("src/components/mascot-art.ts", ROOT), "utf8")
+  )
+)
 // Voice-overs (marketing/video/audio/*.mp3), served next to the scenes.
 const AUDIO = new URL("audio/", HERE)
 if (existsSync(AUDIO))
@@ -180,6 +188,10 @@ async function renderOne(job, label, target) {
         voices = timeline.map(({ id, at }) => ({ src: clips[id], at }))
       }
     }
+
+    // Recorded clips the scene places itself (Zézé's lines).
+    if (!args.includes("--silent"))
+      voices.push(...(await scene.evaluate(() => window.clips ?? [])))
 
     const seconds = (await scene.evaluate(() => window.duration)) ?? job.seconds
     // Soundtrack: set by the scene (window.audio) or the job; --silent drops it.
