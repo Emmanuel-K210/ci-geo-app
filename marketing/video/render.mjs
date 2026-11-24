@@ -143,16 +143,34 @@ async function renderOne(job, label, target) {
       !args.includes("--silent") &&
       !args.includes("--no-voice")
     ) {
-      if (!voiceEnabled()) warnNoVoice()
+      if (!job.voices && !voiceEnabled()) warnNoVoice()
       else {
         const durations = {}
         const clips = {}
-        for (const line of script) {
-          const clip = await speak(line.text)
-          copyFileSync(clip.file, new URL(clip.name, SITE))
-          durations[line.id] = Number(clip.seconds.toFixed(2))
-          clips[line.id] = clip.name
-        }
+        if (job.voices) {
+          // Recorded clips (audio/), one per sentence id: measured by
+          // decoding them in the page.
+          Object.assign(clips, job.voices)
+          Object.assign(
+            durations,
+            await scene.evaluate(async (files) => {
+              const context = new OfflineAudioContext(1, 1, 48000)
+              const seconds = {}
+              for (const [id, file] of Object.entries(files)) {
+                const data = await (await fetch(file)).arrayBuffer()
+                const buffer = await context.decodeAudioData(data)
+                seconds[id] = Number(buffer.duration.toFixed(2))
+              }
+              return seconds
+            }, job.voices)
+          )
+        } else
+          for (const line of script) {
+            const clip = await speak(line.text)
+            copyFileSync(clip.file, new URL(clip.name, SITE))
+            durations[line.id] = Number(clip.seconds.toFixed(2))
+            clips[line.id] = clip.name
+          }
         const glue = job.page.includes("?") ? "&" : "?"
         await scene.goto(
           `${BASE}${job.page}${glue}durations=${encodeURIComponent(JSON.stringify(durations))}`
