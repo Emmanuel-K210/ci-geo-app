@@ -72,6 +72,7 @@ export function PinPage() {
               : `En moyenne à ${fmtKm(totalKm / PIN_ROUND)} de la bonne ville.`
           }
           detail={`Record : ${Math.max(best, score)} / ${PIN_ROUND}`}
+          rating={score / PIN_ROUND}
           outcome={outcome}
           share={`Carte à trous : ${score}/${PIN_ROUND}`}
           actions={<Button onClick={restart}>Rejouer</Button>}

@@ -112,6 +112,7 @@ export function CloserPage() {
                   : "Ça arrive aux meilleurs."
           }
           detail={`${streak > 1 ? "bonnes réponses" : "bonne réponse"} d'affilée · record ${Math.max(best, streak)}`}
+          rating={Math.min(1, streak / 10)}
           outcome={outcome}
           share={`Plus près ou plus loin : série de ${streak}`}
           actions={<Button onClick={restart}>Rejouer</Button>}

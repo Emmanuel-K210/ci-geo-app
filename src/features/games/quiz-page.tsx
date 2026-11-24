@@ -136,6 +136,7 @@ function QuizGame({ mode }: { mode: QuizMode }) {
                   ? "Pas mal, encore un tour ?"
                   : "On révise avec l'atlas, puis on recommence."
           }
+          rating={ratio}
           outcome={outcome}
           share={`Quiz ${quizModes[mode].label} : ${score}/${QUIZ_ROUND}`}
           actions={

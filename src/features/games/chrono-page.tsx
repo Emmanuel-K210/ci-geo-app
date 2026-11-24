@@ -79,6 +79,7 @@ export function ChronoPage() {
               : `${plural(score, "bonne réponse")} en 60 secondes.`
           }
           detail={`${plural(wrong, "erreur")} · record ${Math.max(best, score)}`}
+          rating={Math.min(1, score / 15)}
           outcome={outcome}
           share={`Défi chrono : ${plural(score, "bonne réponse")} en 60 s`}
           actions={<Button onClick={start}>Rejouer</Button>}

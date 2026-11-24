@@ -140,6 +140,15 @@ function DuelGame({
               ? undefined
               : `Vous ${score}/${DUEL_ROUND} · votre ami ${against}/${DUEL_ROUND}`
           }
+          rating={
+            against === undefined
+              ? score / DUEL_ROUND
+              : score > against
+                ? 1
+                : score === against
+                  ? 0.6
+                  : 0.2
+          }
           outcome={outcome}
           actions={
             <>

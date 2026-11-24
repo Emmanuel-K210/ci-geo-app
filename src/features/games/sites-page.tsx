@@ -81,6 +81,7 @@ export function SitesGamePage() {
           }
           message={`${total} / ${SITES_MAX} points`}
           detail={`En moyenne à ${fmtKm(distances.reduce((a, b) => a + b, 0) / distances.length)} des sites`}
+          rating={total / SITES_MAX}
           outcome={outcome}
           share={`Où est ce site ? ${distances.map(square).join("")} ${total}/${SITES_MAX}`}
           actions={<Button onClick={restart}>Rejouer</Button>}

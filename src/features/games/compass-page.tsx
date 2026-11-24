@@ -83,6 +83,7 @@ export function CompassPage() {
                 ? "Le nord n'a plus de secret."
                 : "On s'oriente avec la carte, puis on recommence."
           }
+          rating={score / COMPASS_ROUND}
           outcome={outcome}
           share={`La boussole : ${score}/${COMPASS_ROUND}`}
           actions={<Button onClick={restart}>Rejouer</Button>}

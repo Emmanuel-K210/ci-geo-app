@@ -237,7 +237,73 @@
     transform: translateX(5px);
   }
 }
+/* Zézé, the mascot (components/mascot.tsx). */
+.zeze svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.zeze .m-head,
+.zeze .m-ear-l,
+.zeze .m-ear-r {
+  transform-box: fill-box;
+}
+.zeze .m-head {
+  transform-origin: 50% 90%;
+}
+.zeze .m-ear-l {
+  transform-origin: 100% 50%;
+}
+.zeze .m-ear-r {
+  transform-origin: 0% 50%;
+}
+@keyframes zeze-breathe {
+  50% {
+    transform: translateY(2px) rotate(-1.5deg);
+  }
+}
+@keyframes zeze-ear {
+  0%,
+  80%,
+  100% {
+    transform: none;
+  }
+  88% {
+    transform: rotate(-10deg) scaleX(0.92);
+  }
+}
+@keyframes zeze-jump {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-14%);
+  }
+  55% {
+    transform: translateY(0) scaleY(0.94);
+  }
+}
+@keyframes zeze-droop {
+  50% {
+    transform: translateY(3px) rotate(2deg);
+  }
+}
 @media (prefers-reduced-motion: no-preference) {
+  .zeze .m-head {
+    animation: zeze-breathe 3.2s ease-in-out infinite;
+  }
+  .zeze .m-ear-r {
+    animation: zeze-ear 4s ease-in-out infinite;
+  }
+  .zeze[data-mood="happy"] svg,
+  .zeze[data-mood="wow"] svg {
+    animation: zeze-jump 0.7s ease-out 2;
+  }
+  .zeze[data-mood="sad"] .m-head {
+    animation: zeze-droop 4s ease-in-out infinite;
+  }
   .animate-pop {
     animation: pop 0.25s ease-out;
   }

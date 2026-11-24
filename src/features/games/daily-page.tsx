@@ -81,6 +81,7 @@ export function DailyPage() {
           }
           message={`${total} / ${DAILY_MAX} points`}
           detail={`Prochain défi dans ${countdown}`}
+          rating={total / DAILY_MAX}
           outcome={outcome}
           actions={
             <Button

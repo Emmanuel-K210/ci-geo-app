@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router"
 import { ChevronLeft, Share2 } from "lucide-react"
 import { useEffect, useState, type ReactNode } from "react"
 
+import { Zeze } from "@/components/mascot"
+import { zezeReaction } from "@/components/mascot-art"
 import { Button, Pill, ProgressBar } from "@/components/ui"
 import { shareUrl } from "@/features/games/use-countdown"
 import { cn } from "@/lib/cn"
@@ -228,6 +230,7 @@ export function ResultView({
   detail,
   outcome,
   share,
+  rating,
   children,
   actions,
 }: {
@@ -236,13 +239,22 @@ export function ResultView({
   message: ReactNode
   detail?: ReactNode
   outcome: Outcome | null
+  /** How well the game went, 0–1: Zézé reacts to it. */
+  rating: number
   /** One line on the result (« Quiz Chefs-lieux : 8/10 ») adds a share button. */
   share?: string
   children?: ReactNode
   actions: ReactNode
 }) {
+  const zeze = zezeReaction(rating, outcome?.record)
   return (
     <section className="animate-pop flex flex-col gap-4 card p-5">
+      <div className="flex items-end gap-3">
+        <Zeze mood={zeze.mood} className="w-20 flex-none" />
+        <p className="relative mb-4 rounded-2xl rounded-bl-sm bg-paper px-3.5 py-2 font-display text-[15px] leading-snug font-semibold">
+          {zeze.line}
+        </p>
+      </div>
       <p className="eyebrow text-green">{eyebrow}</p>
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
         <div className="font-display text-[56px] leading-none font-bold tracking-tight">

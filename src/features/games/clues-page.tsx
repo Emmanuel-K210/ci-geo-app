@@ -115,6 +115,7 @@ export function CluesPage() {
                   : "La carte vous aidera pour la prochaine."
           }
           detail={`sur ${MAX_POINTS} points · ${plural(firstClue, "ville trouvée", "villes trouvées")} au premier indice`}
+          rating={points / MAX_POINTS}
           outcome={outcome}
           share={`Ville mystère : ${points}/${MAX_POINTS} points`}
           actions={<Button onClick={restart}>Nouvelle enquête</Button>}
