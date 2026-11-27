@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Culture Ivoire · plats à goûter</title>
+    <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="scene.css" />
+    <script src="scene.js"></script>
+    <script src="data.js"></script>
+    <script src="zeze.js"></script>
+    <style>
+      body {
+        background:
+          radial-gradient(
+            circle at 90% 6%,
+            rgba(224, 104, 10, 0.18),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 0% 100%,
+            rgba(11, 122, 75, 0.14),
+            transparent 45%
+          ),
+          var(--paper);
+      }
+      .dish {
+        position: absolute;
+        left: 60px;
+        right: 60px;
+        top: 270px;
+      }
+      .frame {
+        position: relative;
+        height: 860px;
+        overflow: hidden;
+        border-radius: 40px;
+        background: #17241e;
+        box-shadow: 0 24px 60px rgba(23, 36, 30, 0.25);
+      }
+      .frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .num {
+        position: absolute;
+        left: 28px;
+        top: 28px;
+        padding: 10px 26px;
+        border-radius: 999px;
+        background: var(--orange);
+        color: #fff;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 40px;
+      }
+      .credit {
+        position: absolute;
+        left: 18px;
+        bottom: 16px;
+        margin: 0;
+        padding: 5px 12px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.45);
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 21px;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <div id="scene"></div>
+    <script>
+      // Eight dishes, real photos from Wikimedia Commons (photos/plats.json).
+      const DISHES = [
+        {
+          id: "attieke",
+          nom: "Attiéké",
+          texte:
+            "Semoule de manioc fermentée, cuite à la vapeur. Son savoir-faire est inscrit à l'UNESCO depuis 2024.",
+        },
+        {
+          id: "garba",
+          nom: "Garba",
+          texte:
+            "Attiéké et thon frit, piment et oignon : le grand classique des petits restaurants de rue.",
+        },
+        {
+          id: "alloco",
+          nom: "Alloco",
+          texte:
+            "Banane plantain mûre, frite. Son nom vient du baoulé et de l'agni : « banane mûre ».",
+        },
+        {
+          id: "kedjenou",
+          nom: "Kédjénou",
+          texte:
+            "Poulet ou gibier mijoté à l'étouffée dans un canari, une jarre en terre cuite.",
+        },
+        {
+          id: "placali",
+          nom: "Placali",
+          texte:
+            "Pâte de manioc fermentée, souple, servie avec la sauce graine ou la sauce gombo.",
+        },
+        {
+          id: "sauce-graine",
+          nom: "Sauce graine",
+          texte:
+            "Sauce rouge à la pulpe de noix de palme, avec du riz, du foutou ou du placali.",
+        },
+        {
+          id: "sauce-arachide",
+          nom: "Sauce arachide",
+          texte:
+            "Sauce à la pâte d'arachide, souvent au poulet, servie avec du foutou ou du riz.",
+        },
+        {
+          id: "gnamankoudji",
+          nom: "Gnamankoudji",
+          texte:
+            "Pour finir : le jus de gingembre bien frais, parfois relevé de citron ou de piment.",
+        },
+      ]
+      /** Seconds each dish stays on screen. */
+      const EACH = 3.9
+
+      setup.push(async () => {
+        const credits = await fetch("photos/plats.json").then((r) => r.json())
+        const zeze = await ZEZE
+        const INTRO = 2.8
+        effect("pop", 0.1)
+        const html = [
+          `<div data-in="0" data-out="${INTRO}" data-fadein="0.01" class="layer center">
+            <span data-in="0.1" data-fx="pop" class="badge" style="font-size:48px">Cuisine ivoirienne</span>
+            <p data-in="0.4" data-fx="up" class="big" style="font-size:112px">${DISHES.length - 1} plats<br><span class="accent">à goûter</span></p>
+            <p data-in="0.9" data-fx="fade" class="story" style="font-size:48px;color:var(--muted)">… et une boisson 🥤</p>
+          </div>`,
+        ]
+        DISHES.forEach((dish, i) => {
+          const s = INTRO + i * EACH
+          const photo = credits[dish.id]
+          effect("whoosh", s - 0.15)
+          effect("pop", s + 0.35)
+          html.push(`
+            <div data-in="${s}" data-out="${s + EACH}" data-fadein="0.3" data-fx="up" class="dish">
+              <div class="frame">
+                <img id="img${i}" src="photos/${dish.id}.jpg" alt="">
+                <p class="credit">Photo : ${photo.artist} · ${photo.license} · Wikimedia Commons</p>
+                <span class="num">${i < DISHES.length - 1 ? `${i + 1} / ${DISHES.length - 1}` : "Bonus"}</span>
+              </div>
+              <p data-in="${s + 0.3}" data-fx="pop" class="big accent" style="margin-top:34px;font-size:96px">${dish.nom}</p>
+              <p data-in="${s + 0.6}" data-fx="up" class="story" style="margin-top:18px;font-size:46px">${dish.texte}</p>
+            </div>`)
+        })
+        const end = INTRO + DISHES.length * EACH
+        html.push(endCard(end, "Toute la culture ivoirienne"))
+        const byeEnd = zeze.say(7, end + 0.7, "happy")
+        html.push(
+          zeze.place({ left: 60, top: 1330, size: 250, from: end + 0.4 })
+        )
+        document.getElementById("scene").innerHTML = html.join("")
+        await Promise.all(
+          [...document.images].map((img) => img.decode().catch(() => {}))
+        )
+
+        onFrame.push((t) => {
+          DISHES.forEach((_, i) => {
+            const s = INTRO + i * EACH
+            const k = Math.max(0, Math.min(1, (t - s) / EACH))
+            document.getElementById(`img${i}`).style.transform =
+              `scale(${1.04 + 0.1 * k}) translateX(${(i % 2 ? -1 : 1) * 14 * k}px)`
+          })
+        })
+        window.duration = Math.max(end + 3.4, byeEnd + 0.6)
+        window.caption = { plats: DISHES.map((d) => d.nom) }
+      })
+    </script>
+  </body>
+</html>

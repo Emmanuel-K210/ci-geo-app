@@ -1,0 +1,74 @@
+{
+  "attieke": {
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Plat_atti%C3%A9k%C3%A9.jpg/1280px-Plat_atti%C3%A9k%C3%A9.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Plat_atti%C3%A9k%C3%A9.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Zak Le Messager"
+  },
+  "attieke-2": {
+    "src": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Atti%C3%A9k%C3%A9_et_g%C3%A9siers_de_poulet.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Atti%C3%A9k%C3%A9_et_g%C3%A9siers_de_poulet.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Mandanye"
+  },
+  "garba": {
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Le_garba.jpg/1280px-Le_garba.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Le_garba.jpg",
+    "license": "CC BY-SA 3.0",
+    "artist": "Cyriac Gbogou"
+  },
+  "alloco": {
+    "src": "https://upload.wikimedia.org/wikipedia/commons/f/f5/ALLOCO_AUX_OEUFS_BOUILLIS.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:ALLOCO_AUX_OEUFS_BOUILLIS.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Traorejci"
+  },
+  "alloco-2": {
+    "src": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Du_bon_Alloko.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Du_bon_Alloko.JPG",
+    "license": "CC BY-SA 4.0",
+    "artist": "Aboukam"
+  },
+  "kedjenou": {
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Kedjenou.JPG/1280px-Kedjenou.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Kedjenou.JPG",
+    "license": "CC BY-SA 3.0",
+    "artist": "Serein"
+  },
+  "placali": {
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Cuisine_de_C%C3%B4te_d%27Ivoire_-_Du_placali.JPG/1280px-Cuisine_de_C%C3%B4te_d%27Ivoire_-_Du_placali.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Cuisine_de_C%C3%B4te_d%27Ivoire_-_Du_placali.JPG",
+    "license": "CC BY-SA 4.0",
+    "artist": "Afrofoodie"
+  },
+  "placali-2": {
+    "src": "https://upload.wikimedia.org/wikipedia/commons/1/14/Placali_avec_sauce_gombo.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Placali_avec_sauce_gombo.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Kod B"
+  },
+  "sauce-graine": {
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Sauce_graine_accompagn%C3%A9e_de_riz.JPG/1280px-Sauce_graine_accompagn%C3%A9e_de_riz.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Sauce_graine_accompagn%C3%A9e_de_riz.JPG",
+    "license": "CC BY-SA 4.0",
+    "artist": "Likikouet Raïssa"
+  },
+  "sauce-graine-2": {
+    "src": "https://upload.wikimedia.org/wikipedia/commons/5/51/Sauce_graine.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Sauce_graine.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Aboukam"
+  },
+  "sauce-arachide": {
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Fufu_accompagn%C3%A9_d%27une_sauce_arachide_au_poulet.JPG/1280px-Fufu_accompagn%C3%A9_d%27une_sauce_arachide_au_poulet.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Fufu_accompagn%C3%A9_d%27une_sauce_arachide_au_poulet.JPG",
+    "license": "CC BY-SA 4.0",
+    "artist": "Edem228"
+  },
+  "gnamankoudji": {
+    "src": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Jus_de_gingembre-2025.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Jus_de_gingembre-2025.jpg",
+    "license": "CC BY-SA 4.0",
+    "artist": "Cheikh cherif"
+  }
+}

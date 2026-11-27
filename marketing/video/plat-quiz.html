@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Culture Ivoire · devine le plat</title>
+    <link rel="stylesheet" href="poster.css" />
+    <link rel="stylesheet" href="scene.css" />
+    <script src="scene.js"></script>
+    <script src="data.js"></script>
+    <script src="zeze.js"></script>
+    <style>
+      body {
+        background:
+          radial-gradient(
+            circle at 90% 6%,
+            rgba(224, 104, 10, 0.18),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 0% 100%,
+            rgba(11, 122, 75, 0.14),
+            transparent 45%
+          ),
+          var(--paper);
+      }
+      .q {
+        position: absolute;
+        left: 60px;
+        right: 60px;
+        top: 250px;
+      }
+      .frame {
+        position: relative;
+        height: 640px;
+        margin-top: 16px;
+        overflow: hidden;
+        border-radius: 36px;
+        background: #17241e;
+      }
+      .frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .credit {
+        position: absolute;
+        left: 18px;
+        bottom: 16px;
+        margin: 0;
+        padding: 5px 12px;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.45);
+        font-family: "IBM Plex Sans", sans-serif;
+        font-size: 21px;
+        color: #fff;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 18px;
+      }
+      .opt {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        min-height: 112px;
+        padding: 0 24px;
+        border-radius: 28px;
+        border: 3px solid var(--line);
+        background: #fff;
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 600;
+        font-size: 44px;
+        color: var(--ink);
+      }
+      .opt b {
+        display: grid;
+        place-items: center;
+        width: 54px;
+        height: 54px;
+        flex: none;
+        border-radius: 14px;
+        background: var(--green-soft);
+        color: var(--green);
+        font-size: 30px;
+      }
+      .timer {
+        height: 14px;
+        margin-top: 18px;
+        border-radius: 999px;
+        background: #d3ddd5;
+        overflow: hidden;
+      }
+      .timer i {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: var(--orange);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar">
+      <div class="flag"><span></span><span></span><span></span></div>
+    </div>
+    <div id="scene"></div>
+    <script>
+      // Five dishes to recognize from a real photo (photos/plats.json).
+      const NAMES = [
+        "Attiéké",
+        "Garba",
+        "Alloco",
+        "Kédjénou",
+        "Placali",
+        "Sauce graine",
+        "Sauce arachide",
+        "Foutou",
+      ]
+      const QUESTIONS = [
+        { photo: "alloco-2", good: "Alloco" },
+        { photo: "attieke-2", good: "Attiéké" },
+        { photo: "sauce-graine-2", good: "Sauce graine" },
+        { photo: "kedjenou", good: "Kédjénou" },
+        { photo: "garba", good: "Garba" },
+      ]
+      /** Seconds from a question to its answer on screen. */
+      const ANSWER = 3.6
+
+      setup.push(async () => {
+        const credits = await fetch("photos/plats.json").then((r) => r.json())
+        const zeze = await ZEZE
+        const rng = seededRng(Number(PARAMS.get("seed") ?? 7))
+        const list = QUESTIONS.map((q) => ({
+          ...q,
+          options: shuffle(
+            [
+              q.good,
+              ...shuffle(
+                NAMES.filter((n) => n !== q.good),
+                rng
+              ).slice(0, 3),
+            ],
+            rng
+          ),
+        }))
+
+        const helloEnd = zeze.say(1, 0.5, "happy")
+        const goEnd = zeze.say(2, helloEnd + 0.2, "wow")
+        const INTRO = Math.max(2.6, goEnd + 0.15)
+        effect("pop", 0.1)
+        const starts = []
+        let clock = INTRO
+        list.forEach((q, i) => {
+          starts.push(clock)
+          effect("whoosh", clock - 0.15)
+          for (const k of [0.6, 1.6, 2.6]) effect("tick", clock + k)
+          effect("ding", clock + ANSWER)
+          zeze.mood(clock, "think")
+          if (i === 2) zeze.say(3, clock + 0.7, "think")
+          let spoken = clock + ANSWER
+          const cheer = { 0: 4, 4: 6 }[i]
+          if (cheer)
+            spoken = zeze.say(
+              cheer,
+              clock + ANSWER + 0.3,
+              cheer === 6 ? "wow" : "happy"
+            )
+          else zeze.mood(clock + ANSWER, "happy")
+          clock = Math.max(clock + 4.4, spoken + 0.25)
+        })
+        const end = clock
+        effect("whoosh", end - 0.15)
+        zeze.mood(end, "idle")
+        const finale = end + 2.6
+        const byeEnd = zeze.say(7, finale + 0.7, "happy")
+
+        const html = [
+          `<div data-in="0" data-out="${INTRO}" data-fadein="0.01" class="layer center" style="padding-bottom:280px">
+            <span data-in="0.1" data-fx="pop" class="badge" style="font-size:50px">Cuisine ivoirienne</span>
+            <p data-in="0.4" data-fx="up" class="big" style="font-size:118px">Devine<br><span class="accent">le plat</span></p>
+            <p data-in="0.9" data-fx="fade" class="story" style="font-size:46px;color:var(--muted)">5 photos · 3 secondes chacune 👇</p>
+          </div>`,
+        ]
+        list.forEach((q, i) => {
+          const s = starts[i]
+          const next = starts[i + 1] ?? end
+          const photo = credits[q.photo]
+          html.push(`
+            <div data-in="${s}" data-out="${next}" data-fadein="0.25" class="q" id="q${i}">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span class="eyebrow" style="font-size:30px">Quel est ce plat&nbsp;?</span>
+                <span class="eyebrow" style="font-size:30px;color:var(--muted)">${i + 1} / 5</span>
+              </div>
+              <div class="frame"><img id="img${i}" src="photos/${q.photo}.jpg" alt=""><p class="credit">Photo : ${photo.artist} · ${photo.license} · Wikimedia Commons</p></div>
+              <div class="timer"><i id="timer${i}"></i></div>
+              <div class="grid">
+                ${q.options
+                  .map(
+                    (o, k) =>
+                      `<div class="opt" data-in="${s + 0.25 + k * 0.08}" data-fx="pop" data-good="${o === q.good}"><b>${"ABCD"[k]}</b>${o}</div>`
+                  )
+                  .join("")}
+              </div>
+            </div>`)
+        })
+        html.push(`
+          <div data-in="${end}" data-out="${finale}" data-fadein="0.2" class="layer center" style="padding-bottom:280px">
+            <p data-in="${end + 0.1}" data-fx="pop" class="big" style="font-size:110px">Ton score&nbsp;?</p>
+            <p data-in="${end + 0.4}" data-fx="up" class="story" style="font-size:54px">Dis-le en commentaire 👇<br><span style="color:var(--muted)">Et ton plat préféré&nbsp;?</span></p>
+          </div>`)
+        html.push(endCard(finale, "Toute la culture ivoirienne"))
+        html.push(
+          zeze.place({ left: 40, top: 1350, size: 230, from: 0.2, to: finale })
+        )
+        html.push(
+          zeze.place({ left: 60, top: 1330, size: 250, from: finale + 0.4 })
+        )
+        document.getElementById("scene").innerHTML = html.join("")
+        await Promise.all(
+          [...document.images].map((img) => img.decode().catch(() => {}))
+        )
+
+        onFrame.push((t) => {
+          list.forEach((q, i) => {
+            const s = starts[i]
+            const reveal = t >= s + ANSWER
+            document.getElementById(`timer${i}`).style.width =
+              `${(1 - span(t, s + 0.6, s + ANSWER)) * 100}%`
+            document.getElementById(`img${i}`).style.transform =
+              `scale(${1.03 + 0.06 * span(t, s, s + 4.4)})`
+            for (const opt of document.querySelectorAll(`#q${i} .opt`)) {
+              const good = opt.dataset.good === "true"
+              opt.style.background = reveal && good ? "#0b7a4b" : "#fff"
+              opt.style.borderColor = reveal && good ? "#0b7a4b" : "#d3ddd5"
+              opt.style.color = reveal && good ? "#fff" : "#17241e"
+              if (reveal && !good) opt.style.opacity = "0.35"
+            }
+          })
+        })
+        window.duration = Math.max(finale + 3.4, byeEnd + 0.6)
+        window.caption = { plats: list.map((q) => q.good) }
+      })
+    </script>
+  </body>
+</html>

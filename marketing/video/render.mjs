@@ -65,6 +65,15 @@ const AUDIO = new URL("audio/", HERE)
 if (existsSync(AUDIO))
   for (const file of readdirSync(AUDIO).filter((f) => /\.(mp3|wav)$/.test(f)))
     copyFileSync(new URL(file, AUDIO), new URL(file, SITE))
+// Photos (marketing/video/photos/), served under photos/.
+const PHOTOS = new URL("photos/", HERE)
+if (existsSync(PHOTOS)) {
+  mkdirSync(new URL("photos/", SITE), { recursive: true })
+  for (const file of readdirSync(PHOTOS).filter((f) =>
+    /\.(jpe?g|png|json)$/.test(f)
+  ))
+    copyFileSync(new URL(file, PHOTOS), new URL(`photos/${file}`, SITE))
+}
 // The Découvrir texts, straight from the app's sources (Node strips the types).
 const { GROUPES, PEUPLES } = await import(
   new URL("src/culture/peuples.ts", ROOT).href
